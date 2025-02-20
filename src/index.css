@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* Tailwind dark mode */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--color-text);
+  background-color: var(--color-background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  /* Colors */
+  --bg-col-dark: #101828;
+  --text-col-dark: #dbeafe;
+  --bg-col-light: #dbeafe;
+  --text-col-light: rgb(25, 25, 25);
+  /* Durations dark/light mode */
+  --transition-colors-dark-light: 700ms;
+}
+
+body, html {
+  box-sizing: border-box;
+}
+
+body {
+  @apply m-0 p-0 bg-[var(--bg-col-light)] dark:bg-[var(--bg-col-dark)] text-[var(--text-col-light)] dark:text-[var(--text-col-dark)] transition-colors duration-[var(--transition-colors-dark-light)] min-w-80;
+}
+
+.container {
+  @apply mx-auto max-w-[1300px] px-7 sm:px-10;
+}
+
