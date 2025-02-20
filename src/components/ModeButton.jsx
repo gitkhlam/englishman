@@ -1,13 +1,8 @@
 export default function ModeButton({ onClick, children, isActive }) {
-    const colors = {
-        bgColDark: "bg-[var(--bg-col-dark)]",
-        textColDark: "text-[var(--text-col-dark)]",
-        bgColLight: "bg-[var(--bg-col-light)]",
-        textColLight: "text-[var(--text-col-light)]"
-    };
-            
-    const activeClasses = `${colors.bgColDark} ${colors.textColDark} dark:${colors.bgColLight} dark:${colors.textColLight}`;
-    const inactiveClasses = `bg-transparent ${colors.textColLight} dark:${colors.textColDark} hover:${colors.bgColDark} hover:${colors.textColDark} dark:hover:${colors.bgColLight} dark:hover:${colors.textColLight}`;
+    
+        
+    const activeClasses = `bg-[var(--bg-col-dark)] text-[var(--text-col-dark)] dark:bg-[var(--bg-col-light)] dark:text-[var(--text-col-light)]`;
+    const inactiveClasses = `bg-transparent text-[var(--text-col-light)] dark:text-[var(--text-col-dark)] hover:bg-[var(--bg-col-dark)] hover:text-[var(--text-col-dark)] dark:hover:bg-[var(--bg-col-light)] dark:hover:text-[var(--text-col-light)]`;
     
     return (
         <button

@@ -6,6 +6,9 @@ import { useState } from 'react';
 
 export default function App() {
     const [mode, setMode] = useState(null);
+    const resetAll = () => {
+        setMode(null)
+    }
     return (
         <div className='flex flex-col min-h-screen'>
             <Header>EnglishMan</Header>
