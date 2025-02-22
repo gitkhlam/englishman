@@ -1,45 +1,54 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Tailwind dark mode */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
 
-  color-scheme: light dark;
-  color: var(--color-text);
-  background-color: var(--color-background);
+	color-scheme: light dark;
+	color: var(--color-text);
+	background-color: var(--color-background);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 
-  /* Colors */
-  --bg-col-dark: #101828;
-  --text-col-dark: #dbeafe;
-  --bg-col-light: #dbeafe;
-  --text-col-light: rgb(25, 25, 25);
-  /* Durations dark/light mode */
-  --transition-colors-dark-light: 700ms;
+	/* Colors */
+	--dark: #101828;
+	--light: #dbeafe;
 }
 
-body, html {
-  box-sizing: border-box;
+body,
+html {
+	box-sizing: border-box;
 }
 
 body {
-  @apply m-0 p-0 bg-[var(--bg-col-light)] dark:bg-[var(--bg-col-dark)] text-[var(--text-col-light)] dark:text-[var(--text-col-dark)] transition-colors duration-[var(--transition-colors-dark-light)] min-w-80;
+	@apply m-0 p-0 bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--light)] dark:text-[var(--dark)] transition-colors duration-700 min-w-80;
+}
+
+.animation {
+	transition: all 0.3s ease-in;
 }
 
 .container {
-  @apply mx-auto max-w-[1300px] px-7 sm:px-10;
+	@apply mx-auto max-w-[1300px] px-7 sm:px-10;
 }
 
+@media(max-width: 380px) {
+	.logo-text {
+		font-size: 30px;
+	}
+
+	.container {
+		padding-inline: 20px;
+	}
+}
