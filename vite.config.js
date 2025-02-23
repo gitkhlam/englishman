@@ -8,6 +8,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+
+  base: '/Englishman/', // Укажи название репозитория
+
   server: {
     host: true, // Открывает сервер на локальной сети
     port: 5173, // Можно изменить порт, если нужно
