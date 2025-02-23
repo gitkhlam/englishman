@@ -43,6 +43,8 @@ export default function MainSection({
     );
 
     const processInput = () => {
+        if (input === "") return
+        
         if (input.trim().toLowerCase() === workArray[currentItem].word.toLowerCase()) {
             setCurrentItem(cur => (cur + 1 >= workArray.length ? 0 : cur += 1)); // Исправлено обновление состояния
             setInput("");
