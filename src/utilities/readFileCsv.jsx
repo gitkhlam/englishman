@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 export default async function ReadFileCsv() {    
     let wordsData = [];
     
-    const response = await fetch("/english.csv");
+    const response = await fetch(import.meta.env.BASE_URL + "english.csv");
     const text = await response.text();
     // Простая обработка CSV (можно заменить на вашу логику)
     const delimiter = text.includes(";") ? ";" : ",";
