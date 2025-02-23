@@ -1,4 +1,5 @@
 import ModeButton from './ModeButton'
+import setFullSizeMobile from '../utilities/setFullSizeMobile'
 import { memo, useMemo, useState, useEffect } from "react";
 
 export default function MainSection({
@@ -107,6 +108,8 @@ export default function MainSection({
         }, 500); // Показываем на 0.5 секунды
     };
 
+    const windowHeight = setFullSizeMobile();
+
     return (
         <section className='container'>
             <div className="max-w-150 mx-auto flex flex-col space-y-4 justify-center items-center">
@@ -206,8 +209,9 @@ export default function MainSection({
                     </div>
                 )}
             </div>
-            {visible && <div className='z-50 flex items-center justify-center absolute top-0 left-0 w-screen h-screen bg-[var(--dark)] text-[var(--light)] text-4xl'>
-                Correct! ✅
+            {visible && <div className='z-50 flex items-center justify-center absolute top-0 left-0 bottom-0 right-0 min-h-screen w-full bg-[var(--dark)] text-[var(--light)] text-4xl overflow-hidden' >
+                Correct! ✅ 
+                {/* style={{ height: windowHeight }} */}
             </div>}
         </section>
     )
