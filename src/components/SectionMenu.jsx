@@ -53,7 +53,7 @@ export default function MainSection({
                 setSelectedPart("all");
                 setSelectedTheme("all");
             } else {
-                alert(true);
+                showElement()
             }
         } else {
             alert(false);
@@ -206,7 +206,7 @@ export default function MainSection({
                     </div>
                 )}
             </div>
-            {visible && <div className='flex items-center justify-center absolute top-0 left-0 w-screen h-screen bg-[var(--dark)] text-[var(--light)] text-4xl'>
+            {visible && <div className='z-50 flex items-center justify-center absolute top-0 left-0 w-screen h-screen bg-[var(--dark)] text-[var(--light)] text-4xl'>
                 Correct! ✅
             </div>}
         </section>
