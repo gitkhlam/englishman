@@ -7,7 +7,7 @@ export default function ModeButton({ onClick, children, isActive }) {
     return (
         <button
             onClick={onClick}
-            className={`px-2 py-1 text-2xl font-medium rounded-lg transition duration-500 cursor-pointer ${isActive ? activeClasses : inactiveClasses}`}
+            className={`px-4 py-2 text-3xl font-medium rounded-lg transition duration-500 cursor-pointer ${isActive ? activeClasses : inactiveClasses}`}
         
         >
             {children}
