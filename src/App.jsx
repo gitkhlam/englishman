@@ -1,6 +1,5 @@
-import React, { useState, useEffect, memo, useMemo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Header from "./components/Header";
-import setFullSizeMobile from "./utilities/setFullSizeMobile";
 import ReadFileCsv from "./utilities/readFileCsv";
 import MainSection from './components/SectionMenu';
 
@@ -15,7 +14,6 @@ export default function App() {
     const [currentItem, setCurrentItem] = useState(0); // array to know current item (word)
     const [trigger, setTrigger] = useState(false); // switcher for refreshing work array from MainSection
     
-    const windowHeight = setFullSizeMobile();
     
     // get data from csv file
     useEffect(() => {
@@ -44,8 +42,10 @@ export default function App() {
     }
 
     return (
-        <div className='flex flex-col min-h-screen' style={{minHeight:inputMode!== null ? "":windowHeight}}>
-            <Header logoClick={() => resetAll()}>EnglishMan</Header>
+        // <div className='flex flex-col min-h-screen' style={{minHeight:inputMode!== null ? "":windowHeight}}>
+        <div className='flex flex-col min-h-[100dvh]'>
+
+<Header logoClick={() => resetAll()}>EnglishMan</Header>
             <main className='flex flex-col items-center justify-center grow'>
                 <MemoMainSection
                     setInputMode={setInputMode}
