@@ -11,16 +11,19 @@ export default function MainSection({
     selectedTheme,
     setSelectedPart,
     setSelectedTheme,
-
+    currentItem,
+    setCurrentItem,
+    trigger
 }) {
 
     const [input, setInput] = useState("");
-    const [currentItem, setCurrentItem] = useState(0);
     const [randomFourWords, setRandomFourWords] = useState([]);
+    const [workArray, setWorkArray] = useState([]);
 
     const MemoModeButton = memo(ModeButton);
     
     const handleClickMode = useMemo(() => (mode) => {
+        //getRandomWords(); 
         setInputMode(mode);
         setUniqueParts([...new Set(wordsData.map(word => word.partOfSpeech))]);
     }, [wordsData]);
@@ -31,11 +34,17 @@ export default function MainSection({
             : wordsData.filter(word => word.partOfSpeech === selectedPart);
     }, [selectedPart, wordsData]);
     
-    const workArray = useMemo(() => {
-        return selectedTheme === "all"
-            ? filteredWords.sort(() => 0.5 - Math.random())
-            : filteredWords.sort(() => 0.5 - Math.random()).filter(word => word.theme === selectedTheme);
-    }, [selectedTheme, filteredWords]);
+    useEffect(() => {
+        const shuffledWords = [...filteredWords].sort(() => 0.5 - Math.random());
+        const newArray = selectedTheme === "all"
+            ? shuffledWords
+            : shuffledWords.filter(word => word.theme === selectedTheme);
+        setWorkArray(newArray);
+    }, [selectedTheme, filteredWords, trigger]); // trigger state from App component, changes on click on Logo
+
+    useEffect(() => {
+        console.log("workArray updated:", workArray);
+    }, [workArray]);
 
     const themeArray = useMemo(() =>
         [...new Set(filteredWords.map(word => word.theme))],
@@ -44,7 +53,7 @@ export default function MainSection({
 
     const processInput = () => {
         if (input === "") return
-        
+
         if (input.trim().toLowerCase() === workArray[currentItem].word.toLowerCase()) {
             setCurrentItem(cur => (cur + 1 >= workArray.length ? 0 : cur += 1)); // Исправлено обновление состояния
             setInput("");

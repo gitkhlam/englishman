@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 export default async function ReadFileCsv() {    
     let wordsData = [];
     
