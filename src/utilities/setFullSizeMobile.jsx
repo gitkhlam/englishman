@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 export default function setFullSizeMobile() {
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-    
+
     const handleResize = () => {
         setWindowHeight(window.innerHeight);
     };

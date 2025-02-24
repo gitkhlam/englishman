@@ -1,5 +1,5 @@
 import ModeButton from './ModeButton'
-import { memo, useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 export default function MainSection({
     setInputMode,
@@ -18,80 +18,63 @@ export default function MainSection({
 
     const [input, setInput] = useState("");
     const [randomFourWords, setRandomFourWords] = useState([]);
-    const [workArray, setWorkArray] = useState([]);
+    //const [workArray, setWorkArray] = useState([]);
 
-    const MemoModeButton = memo(ModeButton);
     
+    // processes click on one of mode buttons
     const handleClickMode = useMemo(() => (mode) => {
-        //getRandomWords(); 
         setInputMode(mode);
         setUniqueParts([...new Set(wordsData.map(word => word.partOfSpeech))]);
     }, [wordsData]);
 
+    // sets array of selected parts of speech
     const filteredWords = useMemo(() => {
         return selectedPart === "all"
             ? wordsData
             : wordsData.filter(word => word.partOfSpeech === selectedPart);
     }, [selectedPart, wordsData]);
     
-    useEffect(() => {
-        const shuffledWords = [...filteredWords].sort(() => 0.5 - Math.random());
-        const newArray = selectedTheme === "all"
-            ? shuffledWords
-            : shuffledWords.filter(word => word.theme === selectedTheme);
-        setWorkArray(newArray);
-    }, [selectedTheme, filteredWords, trigger]); // trigger state from App component, changes on click on Logo
+    // sets final work array of selected theme
+    const workArray = useMemo(() => {
+        return selectedTheme === "all"
+            // [...filteredWords] to prevent mutation of filteredWords!
+            ? [...filteredWords].sort(() => 0.5 - Math.random()) 
+            : [...filteredWords].sort(() => 0.5 - Math.random()).filter(word => word.theme === selectedTheme);
+    }, [selectedTheme, filteredWords, trigger]); // trigger form App is a switcher value to recognize Logo is clicked or not
 
-    useEffect(() => {
-        console.log("workArray updated:", workArray);
-    }, [workArray]);
-
+    // sets array of themes if filteredWords has changed
     const themeArray = useMemo(() =>
         [...new Set(filteredWords.map(word => word.theme))],
         [filteredWords]
     );
-
-    const processInput = () => {
-        if (input === "") return
-
-        if (input.trim().toLowerCase() === workArray[currentItem].word.toLowerCase()) {
-            setCurrentItem(cur => (cur + 1 >= workArray.length ? 0 : cur += 1)); // Исправлено обновление состояния
-            setInput("");
-            
-            // Используем cur вместо currentItem, так как currentItem еще не обновился
-            if (currentItem + 1 >= workArray.length) {
-                alert("Well done!");
-                setSelectedPart("all");
-                setSelectedTheme("all");
-            } else {
-                showElement()
-            }
-        } else {
-            alert(false);
-        }
-    };
-
     
+    // refreshes RandomFourWords if currentItem or workArray changed
     useEffect(() => {
         getRandomWords();
     }, [currentItem, workArray]);
 
+    // function processes click on answer-button and/or manual input
     const processChoice = (word) => {
+        if (inputMode === "manual" && input === "") return // exit if input is empty
+        
         if (word.trim().toLowerCase() === workArray[currentItem].word.toLowerCase()) {
-            setCurrentItem(cur => (cur + 1 >= workArray.length ? 0 : cur += 1)); // Исправлено обновление состояния
+            setCurrentItem(cur => (cur + 1 >= workArray.length ? 0 : cur += 1));
+            setInput("");
 
+            // if user have done all words of selected theme
             if (currentItem + 1 >= workArray.length) {
                 alert("Well done!");
                 setSelectedPart("all");
                 setSelectedTheme("all");
             } else {
-                showElement()
+                showResultWindow(); // show full-screen size window with answer
             }
         } else {
-            alert(false);
+            alert("Wrong answer!❌");
         }
     }
-
+    
+    // function set RandomFourWords array
     const getRandomWords = () => {
         if (workArray.length <= 4) {
             setRandomFourWords(workArray);
@@ -100,22 +83,23 @@ export default function MainSection({
 
         const filteredArray = workArray.filter((_, index) => index !== currentItem);
         const shuffled = filteredArray.sort(() => 0.5 - Math.random()).slice(0, 3);
-        
 
-        shuffled.push(workArray[currentItem]);
+        shuffled.push(workArray[currentItem]); // add right answer
         setRandomFourWords(shuffled.sort(() => 0.5 - Math.random()));
     };
 
+    // styles for buttons answer-words
     const buttonStyle = "p-2 self-center rounded-lg cursor-pointer hover:opacity-70 bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)]";
 
 
     const [visible, setVisible] = useState(false);
 
-    const showElement = () => {
+    // function shows full-sized window with result of answer
+    const showResultWindow = () => {
         setVisible(true);
         setTimeout(() => {
             setVisible(false);
-        }, 500); // Показываем на 0.5 секунды
+        }, 500); // 0.5 sec
     };
 
     return (
@@ -132,13 +116,13 @@ export default function MainSection({
                 )}
                 <div className="flex justify-center gap-5">
                     {["manual", "choice"].map(mode => (
-                        <MemoModeButton
+                        <ModeButton
                             key={mode}
                             onClick={() => handleClickMode(mode)}
                             isActive={inputMode === mode}
                         >
                             {mode === "manual" ? "Manual Type" : "Choice Mode"}
-                        </MemoModeButton>
+                        </ModeButton>
                     ))}
                 </div>
                 {inputMode && uniqueParts.length > 1 && (
@@ -187,13 +171,13 @@ export default function MainSection({
                                 value={input}
                                 placeholder='Type translation and press "Enter"'
                                 onChange={e => setInput(e.target.value)}
-                                onKeyDown={e => e.key === "Enter" && processInput()}
+                                onKeyDown={e => e.key === "Enter" && processChoice(input)}
 
                             />
                             <div className='flex items-center gap-5'>
                                 <button
                                     className={buttonStyle}
-                                    onClick={() => processInput()}
+                                    onClick={() => processChoice(input)}
                                 >
                                     Check
                                 </button>

@@ -1,27 +1,27 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, memo, useMemo } from "react";
 import Header from "./components/Header";
 import setFullSizeMobile from "./utilities/setFullSizeMobile";
 import ReadFileCsv from "./utilities/readFileCsv";
 import MainSection from './components/SectionMenu';
 
-// Мемоизация компонентов
-const MemoHeader = memo(Header);
-
+const MemoMainSection = memo(MainSection);
 
 export default function App() {
-    const [inputMode, setInputMode] = useState(null);
-    const [selectedPart, setSelectedPart] = useState("all");
-    const [selectedTheme, setSelectedTheme] = useState("all");
-    const [uniqueParts, setUniqueParts] = useState([]); // unique parts of speech array
-    const [wordsData, setWordsData] = useState(null); // Состояние для данных
-    const [currentItem, setCurrentItem] = useState(0);
-    const [trigger, setTrigger] = useState(false);
+    const [inputMode, setInputMode] = useState(null); // sets input mode: manual or choice
+    const [selectedPart, setSelectedPart] = useState("all"); // sets part of speech
+    const [selectedTheme, setSelectedTheme] = useState("all"); // sets theme
+    const [uniqueParts, setUniqueParts] = useState([]); // unique parts of speech array to prevent repeating
+    const [wordsData, setWordsData] = useState(null); // main array from file
+    const [currentItem, setCurrentItem] = useState(0); // array to know current item (word)
+    const [trigger, setTrigger] = useState(false); // switcher for refreshing work array from MainSection
+    
     const windowHeight = setFullSizeMobile();
     
+    // get data from csv file
     useEffect(() => {
         async function loadData() {
             try {
-                const data = await ReadFileCsv(); // Предполагаем, что это промис
+                const data = await ReadFileCsv(); 
                 setWordsData(data);
             } catch (error) {
                 console.error("Error loading CSV:", error);
@@ -41,15 +41,13 @@ export default function App() {
         setSelectedTheme("all");
         setUniqueParts([]);
         setCurrentItem(0);
-        //setWordsData(curData => curData.sort(() => 0.5 - Math.random()));
     }
 
     return (
-        // <div className='flex flex-col min-h-screen' style={{ minHeight: windowHeight }}>
-        <div className='flex flex-col min-h-screen'>
-            <MemoHeader logoClick={() => resetAll()}>EnglishMan</MemoHeader>
+        <div className='flex flex-col min-h-screen' style={{minHeight:inputMode!== null ? "":windowHeight}}>
+            <Header logoClick={() => resetAll()}>EnglishMan</Header>
             <main className='flex flex-col items-center justify-center grow'>
-                <MainSection
+                <MemoMainSection
                     setInputMode={setInputMode}
                     setUniqueParts={setUniqueParts}
                     wordsData={wordsData}
