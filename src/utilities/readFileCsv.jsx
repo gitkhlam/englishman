@@ -3,7 +3,7 @@ export default async function ReadFileCsv() {
     
     const response = await fetch(import.meta.env.BASE_URL + "english.csv");
     const text = await response.text();
-    // Простая обработка CSV (можно заменить на вашу логику)
+
     const delimiter = text.includes(";") ? ";" : ",";
     const rows = text.split("\n").map((row) => row.split(delimiter));
 
@@ -24,7 +24,7 @@ export default async function ReadFileCsv() {
             theme: row[themeIndex]?.trim(),
             partOfSpeech: row[partIndex]?.trim(),
         }))
-        .filter((word) => word.translation); // Исключаем пустые строки
+        .filter((word) => word.translation && word.word); 
 
     return wordsData;
 }

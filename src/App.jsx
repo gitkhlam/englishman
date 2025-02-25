@@ -1,6 +1,5 @@
 import React, { useState, useEffect, memo } from "react";
 import Header from "./components/Header";
-import ReadFileCsv from "./utilities/readFileCsv";
 import MainSection from './components/SectionMenu';
 
 const MemoMainSection = memo(MainSection);
@@ -10,27 +9,9 @@ export default function App() {
     const [selectedPart, setSelectedPart] = useState("all"); // sets part of speech
     const [selectedTheme, setSelectedTheme] = useState("all"); // sets theme
     const [uniqueParts, setUniqueParts] = useState([]); // unique parts of speech array to prevent repeating
-    const [wordsData, setWordsData] = useState(null); // main array from file
     const [currentItem, setCurrentItem] = useState(0); // array to know current item (word)
     const [trigger, setTrigger] = useState(false); // switcher for refreshing work array from MainSection
     
-    
-    // get data from csv file
-    useEffect(() => {
-        async function loadData() {
-            try {
-                const data = await ReadFileCsv(); 
-                setWordsData(data);
-            } catch (error) {
-                console.error("Error loading CSV:", error);
-            }
-        }
-        loadData();
-    }, []);
-
-    if (!wordsData) {
-        return <div>Loading...</div>;
-    }
 
     function resetAll() {
         setTrigger(prev => !prev)
@@ -50,7 +31,6 @@ export default function App() {
                 <MemoMainSection
                     setInputMode={setInputMode}
                     setUniqueParts={setUniqueParts}
-                    wordsData={wordsData}
                     inputMode={inputMode}
                     uniqueParts={uniqueParts}
                     selectedPart={selectedPart}
