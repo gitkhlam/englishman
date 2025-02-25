@@ -18,8 +18,6 @@ export default function MainSection({
 
     const [input, setInput] = useState("");
     const [randomFourWords, setRandomFourWords] = useState([]);
-    //const [workArray, setWorkArray] = useState([]);
-
     
     // processes click on one of mode buttons
     const handleClickMode = useMemo(() => (mode) => {
@@ -108,21 +106,24 @@ export default function MainSection({
                 {!inputMode && (
                     <>
                         <h1 className="text-2xl sm:text-3xl font-semibold dark:text-[var(--light)] text-[var(--dark)] text-center mb-5">
-                            Hello! Glad to welcome you to EnglishMan! <br />
+                            Hello! Glad to welcome you to EnglishMan! <br className=' hidden sm:block'/>
                             Start learning new words right now!
                         </h1>
                         <p className='text-[var(--dark)] dark:text-[var(--light)] text-2xl font-medium'>Choose mode:</p>
                     </>
                 )}
-                <div className="flex justify-center gap-5">
+                <div className="flex justify-center gap-5 flex-wrap">
                     {["manual", "choice"].map(mode => (
                         <ModeButton
                             key={mode}
                             onClick={() => handleClickMode(mode)}
                             isActive={inputMode === mode}
                         >
-                            {mode === "manual" ? "Manual Type" : "Choice Mode"}
-                        </ModeButton>
+                            <span className="sm:hidden">{mode === "manual" ? "Manual" : "Choice"}</span>
+                            <span className="hidden sm:inline">
+                                {mode === "manual" ? "Manual Type" : "Choice Mode"}
+                            </span>                        
+                            </ModeButton>
                     ))}
                 </div>
                 {inputMode && uniqueParts.length > 1 && (
