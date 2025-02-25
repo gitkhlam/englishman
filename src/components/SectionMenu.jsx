@@ -92,7 +92,9 @@ export default function MainSection({
                 showResultWindow(); // show full-screen size window with answer
             }
         } else {
-            alert("Wrong answer!❌");
+            playSound("wrong.mp3", () => {
+                alert("Wrong answer! ❌");
+            });
         }
     }
     
@@ -115,10 +117,11 @@ export default function MainSection({
 
 
     // play sound function
-    const playSound = (src) => {
+    const playSound = (src, callback = function(){}) => {
         const audio = new Audio(src);
         audio.currentTime = 0; 
         audio.play();
+        audio.onended = callback;
     };
 
     // function shows full-sized window with result of answer
