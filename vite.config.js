@@ -9,11 +9,11 @@ export default defineConfig({
     tailwindcss(),
   ],
 
-  base: '/Englishman/', // Укажи название репозитория
+  base: '/Englishman/', // name of repository
 
   server: {
-    host: true, // Открывает сервер на локальной сети
-    port: 5173, // Можно изменить порт, если нужно
+    host: true, // open server on localhost
+    port: 5173, 
   }
   
 })

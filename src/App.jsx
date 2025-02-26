@@ -1,8 +1,8 @@
 import React, { useState, useEffect, memo } from "react";
 import Header from "./components/Header";
-import MainSection from './components/SectionMenu';
+import TestSection from './components/SectionMenu';
 
-const MemoMainSection = memo(MainSection);
+const MemoTestSection = memo(TestSection);
 
 export default function App() {
     const [inputMode, setInputMode] = useState(null); // sets input mode: manual or choice
@@ -28,7 +28,7 @@ export default function App() {
 
 <Header logoClick={() => resetAll()}>EnglishMan</Header>
             <main className='flex flex-col items-center justify-center grow'>
-                <MemoMainSection
+                <MemoTestSection
                     setInputMode={setInputMode}
                     setUniqueParts={setUniqueParts}
                     inputMode={inputMode}

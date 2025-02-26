@@ -2,7 +2,7 @@ import ModeButton from './ModeButton'
 import ReadFileCsv from '../utilities/readFileCsv';
 import { useMemo, useState, useEffect, useCallback } from "react";
 
-export default function MainSection({
+export default function TestSection({
     setInputMode,
     setUniqueParts,
     inputMode,
@@ -21,7 +21,8 @@ export default function MainSection({
     const [wordsData, setWordsData] = useState([]); // main array from file
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [visible, setVisible] = useState(false);
+    const [visibleNotification, setVisibleNotification] = useState(false); // notification window
+    const [currentNotificationMessage, setCurrentNotificationMessage] = useState("");
 
     
     // get data from csv file
@@ -87,14 +88,12 @@ export default function MainSection({
             if (currentItem + 1 >= workArray.length) {
                 setSelectedPart("all");
                 setSelectedTheme("all");
-                showResultWindow("welldone.mp3", 1500)
+                showResultWindow("welldone.mp3", 1500, "Well done! Congratulations!🏆")
             } else {
                 showResultWindow(); // show full-screen size window with answer
             }
         } else {
-            playSound("wrong.mp3", () => {
-                alert("Wrong answer! ❌");
-            });
+            showResultWindow("wrong.mp3", 500, "Wrong answer! ❌")
         }
     }
     
@@ -117,30 +116,36 @@ export default function MainSection({
 
 
     // play sound function
-    const playSound = (src, callback = function(){}) => {
+    const playSound = (src) => {
         const audio = new Audio(src);
         audio.currentTime = 0; 
         audio.play();
-        audio.onended = callback;
     };
 
     // function shows full-sized window with result of answer
-    const showResultWindow = (src = "correct.mp3", time = 500) => {
-        setVisible(true);
+    const showResultWindow = (src = "correct.mp3", time = 500, message = "Correct ✅") => {
+        setCurrentNotificationMessage(message);
+        setVisibleNotification(true);
         playSound(import.meta.env.BASE_URL + src);
         setTimeout(() => {
-            setVisible(false);
+            setVisibleNotification(false);
         }, time);
     };
 
     // pronunciation words 
     const speak = (word) => {
-        let kek = word.split(' ');
-        for (let k of kek) {
-            const utterance = new SpeechSynthesisUtterance(k);
-            utterance.lang = "en-US";
-            speechSynthesis.speak(utterance);
-        }
+        // let kek = word.split(' ');
+        // for (let k of kek) {
+        //     const utterance = new SpeechSynthesisUtterance(k);
+        //     utterance.lang = "en-US";
+        //     speechSynthesis.speak(utterance);
+        // }
+
+        const apiKey = "563c07f863a04525bbf03651c9dff98b";
+        const url = `https://api.voicerss.org/?key=${apiKey}&hl=en-us&src=${encodeURIComponent(word)}`;
+
+        const audio = new Audio(url);
+        audio.play();
     };
 
     return (<>
@@ -164,9 +169,9 @@ export default function MainSection({
                             onClick={() => handleClickMode(mode)}
                             isActive={inputMode === mode}
                         >
-                            <span className="sm:hidden">{mode === "manual" ? "Manual" : "Choice"}</span>
+                            <span className="sm:hidden">{mode === "manual" ? "Manual ⌨️" : "Choice ✅"}</span>
                             <span className="hidden sm:inline">
-                                {mode === "manual" ? "Manual Type" : "Choice Mode"}
+                                {mode === "manual" ? "Manual Type ⌨️" : "Choice Mode ✅"}
                             </span>
                         </ModeButton>
                     ))}
@@ -252,10 +257,11 @@ export default function MainSection({
                     </div>
                 )}
             </div>
-            {visible && <div className='z-50 flex items-center justify-center fixed inset-0 min-h-screen w-full bg-[var(--dark)] text-[var(--light)] text-4xl overflow-hidden'>
-                Correct! ✅
+            {visibleNotification && <div className='z-50 flex items-center justify-center fixed inset-0 min-h-screen w-full bg-[var(--dark)] text-[var(--light)] text-4xl overflow-hidden'>
+                {currentNotificationMessage}
             </div>}
         </section>
     </> 
     )
 }
+
