@@ -1,11 +1,11 @@
-import ModeButton from './ModeButton'
-import ReadFileCsv from '../utilities/readFileCsv';
+import ModeButton from '../ModeButton'
 import { useMemo, useState, useEffect, useCallback } from "react";
 
 export default function TestSection({
-    setInputMode,
+    wordsData,
+    setTestMode,
     setUniqueParts,
-    inputMode,
+    testMode,
     uniqueParts,
     selectedPart,
     selectedTheme,
@@ -17,33 +17,14 @@ export default function TestSection({
 }) {
 
     const [input, setInput] = useState("");
-    const [randomFourWords, setRandomFourWords] = useState([]);
-    const [wordsData, setWordsData] = useState([]); // main array from file
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [randomFourWords, setRandomFourWords] = useState([]); // array for four answer button
     const [visibleNotification, setVisibleNotification] = useState(false); // notification window
     const [currentNotificationMessage, setCurrentNotificationMessage] = useState("");
 
-    
-    // get data from csv file
-    useEffect(() => {
-        async function loadData() {
-            try {
-                setIsLoading(true);
-                const data = await ReadFileCsv();
-                setWordsData(data);
-            } catch (error) {
-                setError("Failed to load data. Please try again later.");
-            } finally {
-                setIsLoading(false);
-            }
-        }
-        loadData();
-    }, []);
 
     // processes click on one of mode buttons
     const handleClickMode = useCallback((mode) => {
-        setInputMode(mode);
+        setTestMode(mode);
         // set of unique parts of speech, exclude empty string
         setUniqueParts([...new Set(wordsData.map(word => word.partOfSpeech))].filter(word => word.trim() !== ""));
     }, [wordsData]);
@@ -55,22 +36,22 @@ export default function TestSection({
             ? wordsData
             : wordsData.filter(word => word.partOfSpeech === selectedPart);
     }, [selectedPart, wordsData]);
-        
+
     // sets final work array of selected theme
     const workArray = useMemo(() => {
         if (!wordsData.length) return [];
         return selectedTheme === "all"
             // [...filteredWords] to prevent mutation of filteredWords!
-            ? [...filteredWords].sort(() => 0.5 - Math.random()) 
+            ? [...filteredWords].sort(() => 0.5 - Math.random())
             : [...filteredWords].sort(() => 0.5 - Math.random()).filter(word => word.theme === selectedTheme);
     }, [selectedTheme, filteredWords, trigger]); // trigger form App is a switcher value to recognize Logo is clicked or not
 
     // sets array of themes if filteredWords has changed
-    const themeArray = useMemo(() =>{
+    const themeArray = useMemo(() => {
         if (!wordsData.length) return []; // Добавлена проверка
         return [...new Set(filteredWords.map(word => word.theme))].filter(theme => theme.trim() !== "")
     }, [filteredWords]);
-    
+
     // refreshes RandomFourWords if currentItem or workArray changed
     useEffect(() => {
         getRandomWords();
@@ -78,8 +59,8 @@ export default function TestSection({
 
     // function processes click on answer-button and/or manual input
     const processChoice = (word) => {
-        if (inputMode === "manual" && input === "") return // exit if input is empty
-        
+        if (testMode === "manual" && input === "") return // exit if input is empty
+
         if (word.trim().toLowerCase() === workArray[currentItem].word.toLowerCase()) {
             setCurrentItem(cur => (cur + 1 >= workArray.length ? 0 : cur += 1));
             setInput("");
@@ -96,7 +77,7 @@ export default function TestSection({
             showResultWindow("wrong.mp3", 500, "Wrong answer! ❌")
         }
     }
-    
+
     // function set RandomFourWords array
     const getRandomWords = () => {
         if (workArray.length <= 4) {
@@ -118,7 +99,7 @@ export default function TestSection({
     // play sound function
     const playSound = (src) => {
         const audio = new Audio(src);
-        audio.currentTime = 0; 
+        audio.currentTime = 0;
         audio.play();
     };
 
@@ -149,25 +130,17 @@ export default function TestSection({
     };
 
     return (<>
-        { isLoading && <div className="text-center">Loading...</div> }
-        { error && <div className="text-center text-red-500">{error}</div>}
         <section className='container'>
-            <div className="max-w-150 mx-auto flex flex-col space-y-4 justify-center items-center">
-                {!inputMode && (
-                    <>
-                        <h1 className="text-2xl sm:text-3xl font-semibold dark:text-[var(--light)] text-[var(--dark)] text-center mb-5">
-                            Hello! Glad to welcome you to EnglishMan! <br className=' hidden sm:block' />
-                            Start learning new words right now!
-                        </h1>
-                        <p className='text-[var(--dark)] dark:text-[var(--light)] text-2xl font-medium'>Choose mode:</p>
-                    </>
+            <div className="max-w-170 mx-auto flex flex-col space-y-4 justify-center items-center">
+                {!testMode && (
+                    <p className='text-[var(--dark)] dark:text-[var(--light)] text-2xl font-medium text-center'>Choose test mode:</p>
                 )}
                 <div className="flex justify-center gap-5 flex-wrap">
                     {["manual", "choice"].map(mode => (
                         <ModeButton
                             key={mode}
                             onClick={() => handleClickMode(mode)}
-                            isActive={inputMode === mode}
+                            isActive={testMode === mode}
                         >
                             <span className="sm:hidden">{mode === "manual" ? "Manual ⌨️" : "Choice ✅"}</span>
                             <span className="hidden sm:inline">
@@ -176,7 +149,7 @@ export default function TestSection({
                         </ModeButton>
                     ))}
                 </div>
-                {inputMode && (
+                {testMode && (
                     <div className='mt-5 w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7'>
                         {uniqueParts.length > 1 && (
                             <>
@@ -201,7 +174,7 @@ export default function TestSection({
                                     <div className='mt-4 flex gap-2 flex-nowrap font-medium items-center'>
                                         <p>Choose theme:</p>
                                         <select
-                                            className='flex-1 max-w-full min-w-20 truncate cursor-pointer bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] p-1 rounded-lg outline-none hover:opacity-70'
+                                            className='flex-1 max-w-full min-w-10 truncate cursor-pointer bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] p-1 rounded-lg outline-none hover:opacity-70'
                                             value={selectedTheme}
                                             onChange={(e) => { setSelectedTheme(e.target.value); setCurrentItem(0); }}
                                         >
@@ -216,11 +189,11 @@ export default function TestSection({
                             </>
                         )}
 
-                        <p>{workArray[currentItem].translation}</p>
-                        <p onClick={() => speak(workArray[currentItem].word)}>{workArray[currentItem].word}</p>
+                        <div className='mt-6 mb-2'><p className='w-full text-3xl font-semibold break-words'>{workArray[currentItem].translation}</p></div>
+                        {/* <p onClick={() => speak(workArray[currentItem].word)}>{workArray[currentItem].word}</p> */}
 
 
-                        {inputMode === "manual" && <div>
+                        {testMode === "manual" && <div>
                             <input
                                 className='my-4 w-full border py-3 px-5 rounded-lg border-[var(--dark)] dark:border-[var(--light)] outline-blue-300'
                                 type="text"
@@ -241,7 +214,7 @@ export default function TestSection({
                             </div>
                         </div>}
                         {
-                            inputMode === "choice" && <><div className='mt-5 flex gap-4 flex-wrap justify-around sm:justify-start items-center'>
+                            testMode === "choice" && <><div className='mt-5 flex gap-4 flex-wrap justify-around sm:justify-start items-center'>
                                 {randomFourWords.map((word, ind) => (
                                     <button
                                         key={ind}
@@ -250,7 +223,7 @@ export default function TestSection({
                                     >{word.word}</button>
                                 ))}
                             </div>
-                                <p className='pt-4'>{currentItem}/{workArray.length}</p>
+                                <p className='pt-4'>{currentItem + 1}/{workArray.length}</p>
                             </>
                         }
 
@@ -261,7 +234,7 @@ export default function TestSection({
                 {currentNotificationMessage}
             </div>}
         </section>
-    </> 
+    </>
     )
 }
 
