@@ -568,7 +568,7 @@ dark;темный;;adjective;цвета;;;;;;;;;;;;;;;;;;;;;
 light;светлый;;adjective;цвета;;;;;;;;;;;;;;;;;;;;;
 bright;яркий;;adjective;цвета;;;;;;;;;;;;;;;;;;;;;
 pale;бледный;;adjective;цвета;;;;;;;;;;;;;;;;;;;;;
-flat;плоский;;adjective;Форма;;;;;;;;;;;;;;;;;;;;;
+flat;плоский;here are some example of flat;adjective;Форма;;;;;;;;;;;;;;;;;;;;;
 straight;прямой;;adjective;Форма;;;;;;;;;;;;;;;;;;;;;
 curved;кривой;;adjective;Форма;;;;;;;;;;;;;;;;;;;;;
 square;квадратный;;adjective;Форма;;;;;;;;;;;;;;;;;;;;;

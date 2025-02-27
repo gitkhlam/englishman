@@ -132,8 +132,8 @@ export default function StudySection({
                         </p>
                         {workArray[currentItem].example !== "" && (
                             <p className="break-words">
-                                Example: <span className="text-2xl font-semibold">
-                                    {workArray[currentItem].example !== ""}
+                                Example: <span className="text-2xl font-semibold" onClick={() => speak(workArray[currentItem].example)}>
+                                    {workArray[currentItem].example}
                                 </span>
                             </p>
                         )}
@@ -141,7 +141,7 @@ export default function StudySection({
                             <>
                                 {loadingSentences ? <div>Loading examples...</div> : (
                                     exampleSentences.length > 0 && <p className="break-words">
-                                        Example: {exampleSentences.map((example, index) => <span onClick={() => speak(example)} key={index}>{example} </span>)}
+                                        Example: {exampleSentences.slice(0, 3).map((example, index) => <span className="text-2xl font-semibold" onClick={() => speak(example)} key={index}>{example} </span>)}
                                     </p>
                                 )}
                             </>
