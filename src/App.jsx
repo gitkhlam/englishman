@@ -3,7 +3,7 @@ import HeaderSection from "./components/sections/HeaderSection";
 import TestSection from './components/sections/TestSection';
 import ModeButton from './components/ModeButton';
 import ReadFileCsv from './utilities/readFileCsv';
-import WorkComponent from './components/WorkComponent'
+import StudyComponent from './components/StudyComponent'
 
 const MemoTestSection = memo(TestSection);
 
@@ -87,7 +87,7 @@ export default function App() {
                     <MemoTestSection {...settings} />
                 }
                 {workMode === "study" &&
-                    <WorkComponent {...settings}/>
+                    <StudyComponent {...settings}/>
                 }
             </main>
             <footer className="grow-0 text-[var(--dark)] dark:text-[var(--light)] text-s p-5 w-full text-center font-semibold">
@@ -96,3 +96,5 @@ export default function App() {
         </div>
     );
 }
+
+
