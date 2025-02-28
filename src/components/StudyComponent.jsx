@@ -26,32 +26,34 @@ export default function StudySection({
     });
 
 
-    const [exampleSentences, setExampleSentences] = useState([]); // Состояние для примеров
+    const [exampleSentences, setExampleSentences] = useState([]); // state for examples
     const [loadingSentences, setLoadingSentences] = useState(false);
     
-    // Функция для получения примеров из API
+    // fetching examples 
     const fetchExampleSentences = async (word) => {
         try {
+            setLoadingSentences(true);
             const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
             if (!response.ok) throw new Error("Failed to fetch examples");
-            setLoadingSentences(true);
             const data = await response.json();
             const examples =
                 data[0]?.meanings[0]?.definitions
                     .filter((def) => def.example)
-                    .map((def) => def.example) || ["No examples found"];
+                    .map((def) => def.example) || [];
             setExampleSentences(examples);
-            setLoadingSentences(false);
         } catch (err) {
+            console.error(err);
             setExampleSentences([]);
+        } finally {
+            setLoadingSentences(false);
         }
     };
     
 
-    // Запрос примеров при изменении текущего слова
+    // fetch when currentItem or workArray have changed
     useEffect(() => {
         if (workArray[currentItem]?.word) {
-            setExampleSentences([]); // Сбрасываем состояние перед новым запросом
+            setExampleSentences([]);
             fetchExampleSentences(workArray[currentItem].word);
         }
     }, [workArray, currentItem]);
@@ -68,13 +70,39 @@ export default function StudySection({
         setCurrentItem(current);
     };
 
+    const [voices, setVoices] = useState([]);
+
+    // get new available voices
+    useEffect(() => {
+        const updateVoices = () => {
+            setVoices(window.speechSynthesis.getVoices());
+        };
+
+        updateVoices();
+        window.speechSynthesis.onvoiceschanged = updateVoices;
+
+        return () => {
+            window.speechSynthesis.onvoiceschanged = null;
+        };
+    }, []);
+
     // function speak of word
     const speak = (word) => {
-        const apiKey = "563c07f863a04525bbf03651c9dff98b";
-        const url = `https://api.voicerss.org/?key=${apiKey}&hl=en-us&src=${encodeURIComponent(word)}`;
-        const audio = new Audio(url);
-        audio.currentTime = 0;
-        audio.play();
+        // const apiKey = "563c07f863a04525bbf03651c9dff98b";
+        // const url = `https://api.voicerss.org/?key=${apiKey}&hl=en-us&src=${encodeURIComponent(word)}`;
+        // const audio = new Audio(url);
+        // audio.currentTime = 0;
+        // audio.play();
+
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-UK';
+
+        const englishVoice = voices.find(voice => voice.lang === 'en-UK');
+        if (englishVoice) {
+            utterance.voice = englishVoice;
+        }
+
+        window.speechSynthesis.speak(utterance);
     };
 
     return (
@@ -140,9 +168,13 @@ export default function StudySection({
                         {workArray[currentItem].example === "" && (
                             <>
                                 {loadingSentences ? <div>Loading examples...</div> : (
-                                    exampleSentences.length > 0 && <p className="break-words">
-                                        Example: {exampleSentences.slice(0, 3).map((example, index) => <span className="text-2xl font-semibold" onClick={() => speak(example)} key={index}>{example} </span>)}
-                                    </p>
+                                    exampleSentences.length > 0 && <div className="break-words">
+                                        {exampleSentences.length > 1 ? "Examples:" : "Example:"}<ul>
+                                            {exampleSentences.slice(0, 3).map((example, index) =>
+                                                <li className="cursor-pointer text-2xl font-semibold" onClick={() => speak(example)} key={index}>‒ {example} </li>
+                                            )}
+                                        </ul>
+                                    </div>
                                 )}
                             </>
                         )}
