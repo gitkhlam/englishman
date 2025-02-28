@@ -28,6 +28,7 @@ export default function StudySection({
 
     const [exampleSentences, setExampleSentences] = useState([]); // state for examples
     const [loadingSentences, setLoadingSentences] = useState(false);
+    const [accordionOpen, setAccordionOpen] = useState(false);
     
     // fetching examples 
     const fetchExampleSentences = async (word) => {
@@ -158,27 +159,33 @@ export default function StudySection({
                         <p className="break-words">
                             Translation: <span className="text-2xl font-semibold">{workArray[currentItem].translation}</span>
                         </p>
-                        {workArray[currentItem].example !== "" && (
-                            <p className="break-words">
-                                Example: <span className="text-2xl font-semibold" onClick={() => speak(workArray[currentItem].example)}>
-                                    {workArray[currentItem].example}
-                                </span>
-                            </p>
-                        )}
-                        {workArray[currentItem].example === "" && (
-                            <>
-                                {loadingSentences ? <div>Loading examples...</div> : (
-                                    exampleSentences.length > 0 && <div className="break-words">
-                                        {exampleSentences.length > 1 ? "Examples:" : "Example:"}<ul>
-                                            {exampleSentences.slice(0, 3).map((example, index) =>
-                                                <li className="cursor-pointer text-2xl font-semibold" onClick={() => speak(example)} key={index}>‒ {example} </li>
-                                            )}
-                                        </ul>
-                                    </div>
+                        {loadingSentences ? <div>Loading examples...</div> :
+                        <div>
+                                {workArray[currentItem].example !== "" && (
+                                    <p className="break-words">
+                                        Example: <span className="text-2xl font-semibold" onClick={() => speak(workArray[currentItem].example)}>
+                                            {workArray[currentItem].example}
+                                        </span>
+                                    </p>
                                 )}
-                            </>
-                        )}
+                                {workArray[currentItem].example === "" && exampleSentences.length > 0 && 
+                                <div className="break-words">
+                                    <span 
+                                        className='cursor-pointer'
+                                        onClick={() => setAccordionOpen(prev => !prev)}>{exampleSentences.length > 1 ? "Examples..:" : "Example..:"}</span>
+                                    
+                                    {accordionOpen && 
+                                        <ul>
+                                            {exampleSentences.slice(0, 3).map((example, index) =>
+                                                <li className="cursor-pointer text-2xl font-semibold" onClick={() => speak(example)} key={index}>‒ {example} </li>)}
+                                        </ul>
+                                    }
+                                </div>
+                                }
+                        </div>
+                        }     
                     </div>
+
                     <div className="flex justify-center items-center mt-4 gap-5">
                         <button
                             className="buttonStyle"

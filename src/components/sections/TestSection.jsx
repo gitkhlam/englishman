@@ -192,7 +192,7 @@ export default function TestSection({
                 )}
             </div>
             {visibleNotification && (
-                <div className="z-50 flex items-center justify-center fixed inset-0 min-h-screen w-full bg-[var(--dark)] text-[var(--light)] text-4xl overflow-hidden">
+                <div className="z-50 px-10 flex items-center justify-center fixed inset-0 min-h-screen w-full bg-[var(--dark)] text-[var(--light)] text-4xl overflow-hidden">
                     {currentNotificationMessage}
                 </div>
             )}
