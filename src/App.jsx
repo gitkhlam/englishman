@@ -156,7 +156,7 @@ const SettingsWindow = ({
                         setSound((prev) => !prev);
                     }}
                 >
-                    {sound ? "Sound DISABLED 🔇" : "Sound ENABLED 🔊"}
+                    {sound ? "Sound ENABLED 🔊" : "Sound DISABLED 🔇" }
                 </button>
                 <button
                     className="buttonStyle text-4xl sm:text-4xl"
@@ -166,8 +166,9 @@ const SettingsWindow = ({
                     }}
                 >
                     {showApiExamples
-                        ? "Examples from API DISABLED ❌"
-                        : "Examples from API ENABLED ✅"}
+                        ? "Examples from API ENABLED ✅"
+                        : "Examples from API DISABLED ❌" 
+                    }
                 </button>
             </div>
         </div>
