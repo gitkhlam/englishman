@@ -150,7 +150,7 @@ const SettingsWindow = ({
                 onClick={handleBackgroundClick}
             >
                 <button
-                    className="buttonStyle text-4xl"
+                    className="buttonStyle text-4xl font-bold"
                     onClick={(e) => {
                         e.stopPropagation();
                         setSound((prev) => !prev);
@@ -159,7 +159,7 @@ const SettingsWindow = ({
                     {sound ? "Sound ENABLED 🔊" : "Sound DISABLED 🔇" }
                 </button>
                 <button
-                    className="buttonStyle text-4xl sm:text-4xl"
+                    className="buttonStyle text-4xl sm:text-4xl font-bold"
                     onClick={(e) => {
                         e.stopPropagation();
                         setShowApiExamples((prev) => !prev);
