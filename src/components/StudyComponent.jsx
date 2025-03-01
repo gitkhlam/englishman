@@ -12,6 +12,9 @@ export default function StudySection({
     setUniqueParts,
     currentItem,
     setCurrentItem,
+    sound,
+    setSound,
+    showApiExamples,
     trigger,
 }) {
     const { workArray, themeArray, handlePartChange, handleThemeChange } = useWordFilter({
@@ -55,9 +58,9 @@ export default function StudySection({
     useEffect(() => {
         if (workArray[currentItem]?.word) {
             setExampleSentences([]);
-            fetchExampleSentences(workArray[currentItem].word);
+            showApiExamples && fetchExampleSentences(workArray[currentItem].word); // if enabled fetch
         }
-    }, [workArray, currentItem]);
+    }, [workArray, currentItem, showApiExamples]);
 
     // function processes click on next/prev button in study mode
     const handleSwitchButton = (nav) => {
@@ -67,7 +70,7 @@ export default function StudySection({
         } else {
             current = currentItem - 1 <= 0 ? 0 : currentItem - 1
         }
-        speak(workArray[current].word);
+        sound && speak(workArray[current].word); // if sound enable speak
         setCurrentItem(current);
     };
 
@@ -107,9 +110,9 @@ export default function StudySection({
     };
 
     return (
-        <section className="container">
+        <section className='w-full'>
             <div className="max-w-170 mx-auto flex flex-col space-y-4 justify-center items-center">
-                <div className="mt-5 w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7">
+                <div className="w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7">
                     {uniqueParts.length > 1 && (
                         <>
                             <div className="flex gap-2 font-medium flex-wrap items-center">
@@ -159,7 +162,7 @@ export default function StudySection({
                         <p className="break-words">
                             Translation: <span className="text-2xl font-semibold">{workArray[currentItem].translation}</span>
                         </p>
-                        {loadingSentences ? <div>Loading examples...</div> :
+                        {loadingSentences ? <div>Loading examples... ⏳</div> :
                         <div>
                                 {workArray[currentItem].example !== "" && (
                                     <p className="break-words">
@@ -169,23 +172,33 @@ export default function StudySection({
                                     </p>
                                 )}
                                 {workArray[currentItem].example === "" && exampleSentences.length > 0 && 
-                                <div className="break-words">
-                                    <span 
-                                        className='cursor-pointer'
-                                        onClick={() => setAccordionOpen(prev => !prev)}>{exampleSentences.length > 1 ? "Examples..:" : "Example..:"}</span>
-                                    
-                                    {accordionOpen && 
-                                        <ul>
-                                            {exampleSentences.slice(0, 3).map((example, index) =>
-                                                <li className="cursor-pointer text-2xl font-semibold" onClick={() => speak(example)} key={index}>‒ {example} </li>)}
+                                    <div className="break-words mt-4">
+                                        <span
+                                            className="cursor-pointer bg-[var(--light)] text-[var(--dark)] font-medium p-2 rounded-lg"
+                                            onClick={() => setAccordionOpen(prev => !prev)}
+                                        >
+                                            {exampleSentences.length > 1 ? "Examples.. 👈" : "Example 👈"}
+                                        </span>
+
+                                        <ul
+                                            className={`mt-5 transition-all duration-300 ease-in-out ${accordionOpen ? "opacity-100 max-h-full" : "opacity-0 max-h-0 overflow-hidden"
+                                                }`}
+                                        >
+                                            {exampleSentences.slice(0, 3).map((example, index) => (
+                                                <li
+                                                    className="cursor-pointer text-2xl font-semibold"
+                                                    onClick={() => speak(example)}
+                                                    key={index}
+                                                >
+                                                    {index+1 + ") " + example}
+                                                </li>
+                                            ))}
                                         </ul>
-                                    }
-                                </div>
+                                    </div>
                                 }
                         </div>
                         }     
                     </div>
-
                     <div className="flex justify-center items-center mt-4 gap-5">
                         <button
                             className="buttonStyle"
@@ -205,6 +218,15 @@ export default function StudySection({
                             next
                         </button>
                     </div>
+                    <div className='mt-3 w-full flex justify-center'>
+                        <span 
+                            className='cursor-pointer hover:opacity-70'
+                            onClick={() => setSound(prev => !prev)}
+                        >
+                            {sound ? "🔊" : "🔇"}
+                        </span>
+                    </div>
+
                     {currentItem === workArray.length - 1 && (
                         <div className="mt-7 flex justify-center">
                             <button

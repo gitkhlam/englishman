@@ -14,6 +14,8 @@ export default function TestSection({
     setSelectedTheme,
     currentItem,
     setCurrentItem,
+    sound,
+    setSound,
     trigger,
 }) {
     const [input, setInput] = useState("");
@@ -58,7 +60,7 @@ export default function TestSection({
                 showResultWindow(); // show full-screen size window with answer
             }
         } else {
-            showResultWindow("wrong.mp3", 500, "Wrong answer! ❌");
+            showResultWindow("wrong.mp3", 500, "Wrong! ❌");
         }
     };
 
@@ -85,12 +87,12 @@ export default function TestSection({
     const showResultWindow = (src = "correct.mp3", time = 500, message = "Correct ✅") => {
         setCurrentNotificationMessage(message);
         setVisibleNotification(true);
-        playSound(import.meta.env.BASE_URL + src);
+        sound && playSound(import.meta.env.BASE_URL + src); // answer sound plays if sound enabled
         setTimeout(() => setVisibleNotification(false), time);
     };
 
     return (
-        <section className="container">
+        <section className='w-full'>
             <div className="max-w-170 mx-auto flex flex-col space-y-4 justify-center items-center">
                 {!testMode && (
                     <p className="text-[var(--dark)] dark:text-[var(--light)] text-2xl font-medium text-center">
@@ -183,9 +185,17 @@ export default function TestSection({
                                         </button>
                                     ))}
                                 </div>
-                                <p className="pt-4">
-                                    {currentItem + 1}/{workArray.length}
-                                </p>
+                                <div className='mt-7 flex gap-5 items-center'>
+                                    <p>
+                                        {currentItem + 1}/{workArray.length}
+                                    </p>
+                                    <span
+                                        className='cursor-pointer hover:opacity-70'
+                                        onClick={() => setSound(prev => !prev)}
+                                    >
+                                        {sound ? "🔊" : "🔇"}
+                                    </span>
+                                </div>
                             </>
                         )}
                     </div>

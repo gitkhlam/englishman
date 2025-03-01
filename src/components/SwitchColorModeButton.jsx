@@ -1,10 +1,10 @@
 import { SunIcon, MoonIcon } from '@heroicons/react/24/solid';
 import { useDarkMode } from '../utilities/useDarkMode';
 
-export default function SwitchModeButton() {
+export default function SwitchModeButton({theme, setTheme}) {
     // theme: "dark" or "light" 
     // toggleTheme: function to switch theme dark/light
-    const { theme, toggleTheme } = useDarkMode();
+    const toggleTheme = useDarkMode({theme, setTheme});
 
     return(
         <button
