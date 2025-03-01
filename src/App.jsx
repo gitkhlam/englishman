@@ -146,7 +146,7 @@ const SettingsWindow = ({
                 EnglishMan
             </MemoHeaderSection>
             <div 
-                className="grow flex flex-col gap-5 justify-center items-center"
+                className="grow flex flex-col gap-5 justify-center items-center w-full"
                 onClick={handleBackgroundClick}
             >
                 <button
