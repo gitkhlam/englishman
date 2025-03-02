@@ -7,12 +7,12 @@ export default async function ReadFileCsv() {
     const delimiter = text.includes(";") ? ";" : ",";
     const rows = text.split("\n").map((row) => row.split(delimiter));
 
-    const headers = rows[0].map((h) => h.trim());
-    const wordIndex = headers.indexOf("Word");
-    const translationIndex = headers.indexOf("Translation");
-    const exampleIndex = headers.indexOf("Example");
-    const partIndex = headers.indexOf("Part of speech");
-    const themeIndex = headers.indexOf("Theme");
+    const headers = rows[0].map((h) => h.trim().toLowerCase());
+    const wordIndex = headers.indexOf("word");
+    const translationIndex = headers.indexOf("translation");
+    const exampleIndex = headers.indexOf("example");
+    const partIndex = headers.indexOf("part of speech");
+    const themeIndex = headers.indexOf("theme");
 
     if ([wordIndex, translationIndex, exampleIndex, partIndex, themeIndex].includes(-1)) alert('No columns');
 

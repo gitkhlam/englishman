@@ -4,7 +4,7 @@ import TestSection from './components/sections/TestSection';
 import ModeButton from './components/ModeButton';
 import ReadFileCsv from './utilities/readFileCsv';
 import StudyComponent from './components/StudyComponent'
-import SpreadsheetParser from './components/SpreadSheetParse';
+import SpreadsheetParser from './utilities/SpreadSheetParse';
 
 const MemoTestSection = memo(TestSection);
 const MemoHeaderSection = memo(HeaderSection);
@@ -24,9 +24,10 @@ export default function App() {
         return storedValue === null ? true : storedValue === 'true';
     }); 
     const [showApiExamples, setShowApiExamples] = useState(false); // state for examples from api
+    const [googleSpread, setGoogleSpread] = useState(false); // state for switch to googleSpread
+    const [loadingData, setLoadingData] = useState(false); // state for loading data, to show full-screen window
 
-
-
+    const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSBClUrqZ5TXINgJMwcCqelXPGIjSRoeOJoD8Yfe22a2XJMXuyewITYNrPvJ3NVEB3njzKMv8JOA1OG/pub?output=csv"
 
     // defines system theme
     const getSystemTheme = () =>
@@ -38,14 +39,21 @@ export default function App() {
     useEffect(() => {
         async function loadData() {
             try {
-                const data = await ReadFileCsv();
+                setCurrentItem(0);
+                setLoadingData(true);
+                const data = googleSpread
+                    ? await SpreadsheetParser(url)
+                    : await ReadFileCsv();
+                
                 setWordsData(data);
+
             } catch (error) {
                 console.log("Failed to load data. Please try again later.");
-            }
+            } finally { setLoadingData(false) } 
         }
         loadData();
-    }, []);
+        
+    }, [googleSpread]);
 
     function resetAll() {
         setTrigger(prev => !prev)
@@ -77,45 +85,58 @@ export default function App() {
         showApiExamples,
         trigger
     }
-
+    
     return (
-        <>
-            {settingsVisible && <SettingsWindow showApiExamples={showApiExamples} setShowApiExamples={setShowApiExamples} sound={sound} setSound={setSound} theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} resetAll={resetAll} /> }
-            <div className='flex flex-col min-h-[100dvh] container'>
-                <MemoHeaderSection theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} logoClick={() => resetAll()}>EnglishMan</MemoHeaderSection>
-                <main className='flex flex-col items-center justify-center grow'>
-                    {!workMode && <div>
-                        <h1 className="text-2xl sm:text-3xl font-semibold dark:text-[var(--light)] text-[var(--dark)] text-center mb-5">
-                            Hello! Glad to welcome you to EnglishMan! <br className=' hidden sm:block' />
-                            Start learning new words right now!
-                        </h1>
-                        <div className="mt-7 flex justify-center gap-5 flex-wrap">
-                            {["study", "test"].map(mode => (
-                                <ModeButton
-                                    key={mode}
-                                    onClick={() => setWorkMode(mode)}
-                                    isActive={workMode === mode}
-                                >
-                                    <span className="sm:hidden">{mode === "study" ? "Study 📚" : "Test ✍️"}</span>
-                                    <span className="hidden sm:inline">
-                                        {mode === "study" ? "Study Mode 📚" : "Test Mode ✍️"}
-                                    </span>
-                                </ModeButton>
-                            ))}
-                        </div>
-                    </div>}
-                    {workMode === "test" &&
-                        <MemoTestSection {...settings} />
-                    }
-                    {workMode === "study" &&
-                        <StudyComponent {...settings} />
-                    }
-                    <SpreadsheetParser />
-                </main>
-                <footer className="grow-0 text-[var(--dark)] dark:text-[var(--light)] text-s p-5 w-full text-center font-semibold">
-                    Kyiv {new Date().getFullYear()}
-                </footer>
-            </div>  
+        <> { loadingData && <div className='absolute inset-0 w-[100dvw] h-[100dvh] bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] flex items-center justify-center z-99 text-5xl font-bold'>Loading...⏳</div>}
+            { settingsVisible &&
+                <SettingsWindow
+                    showApiExamples={showApiExamples} 
+                    setShowApiExamples={setShowApiExamples} 
+                    sound={sound} 
+                    setSound={setSound} 
+                    theme={theme} 
+                    setTheme={setTheme} 
+                    setSettingsVisible={setSettingsVisible} 
+                    resetAll={resetAll}
+                    googleSpread={googleSpread}
+                    setGoogleSpread={setGoogleSpread}
+                    />
+            }
+                <div className='flex flex-col min-h-[100dvh]'>
+                {!settingsVisible && <MemoHeaderSection theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} logoClick={() => resetAll()}>EnglishMan</MemoHeaderSection>}
+                    <main className='flex flex-col items-center justify-center grow container'>
+                        {!workMode && <div>
+                            <h1 className="text-2xl sm:text-3xl font-semibold dark:text-[var(--light)] text-[var(--dark)] text-center mb-5">
+                                Hello! Glad to welcome you to EnglishMan! <br className=' hidden sm:block' />
+                                Start learning new words right now!
+                            </h1>
+                            <div className="mt-7 flex justify-center gap-5 flex-wrap">
+                                {["study", "test"].map(mode => (
+                                    <ModeButton
+                                        key={mode}
+                                        onClick={() => setWorkMode(mode)}
+                                        isActive={workMode === mode}
+                                    >
+                                        <span className="sm:hidden">{mode === "study" ? "Study 📚" : "Test ✍️"}</span>
+                                        <span className="hidden sm:inline">
+                                            {mode === "study" ? "Study Mode 📚" : "Test Mode ✍️"}
+                                        </span>
+                                    </ModeButton>
+                                ))}
+                            </div>
+                        </div>}
+                        {workMode === "test" &&
+                            <MemoTestSection {...settings} />
+                        }
+                        {workMode === "study" &&
+                            <StudyComponent {...settings} />
+                        }
+                    </main>
+                    <footer className="grow-0 text-[var(--dark)] dark:text-[var(--light)] text-s p-5 w-full text-center font-semibold container">
+                        Kyiv {new Date().getFullYear()}
+                    </footer>
+                </div>  
+            
         </>
     );
 }
@@ -130,6 +151,8 @@ const SettingsWindow = ({
     setSound,
     showApiExamples,
     setShowApiExamples,
+    googleSpread,
+    setGoogleSpread
 }) => {
     const handleBackgroundClick = (e) => {
         if (e.target === e.currentTarget) {
@@ -139,7 +162,7 @@ const SettingsWindow = ({
 
     return (
         <div
-            className="fixed z-51 inset-0 flex flex-col justify-center items-center w-full min-h-[100dvh] backdrop-blur-lg container overflow-hidden"
+            className="absolute z-51 inset-0 flex flex-col min-w-[320px] w-full min-h-[300px] backdrop-blur-lg"
         >
             <MemoHeaderSection
                 theme={theme}
@@ -154,7 +177,7 @@ const SettingsWindow = ({
                 EnglishMan
             </MemoHeaderSection>
             <div 
-                className="grow flex flex-col gap-5 justify-center items-center w-full"
+                className="grow flex flex-col gap-5 justify-center items-center w-full container"
                 onClick={handleBackgroundClick}
             >
                 <button
@@ -176,6 +199,18 @@ const SettingsWindow = ({
                     {showApiExamples
                         ? "Examples from API ENABLED ✅"
                         : "Examples from API DISABLED ❌" 
+                    }
+                </button>
+                <button
+                    className="buttonStyle text-4xl sm:text-4xl font-bold"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setGoogleSpread((prev) => !prev);
+                    }}
+                >
+                    {googleSpread
+                        ? "Current data: Google Sheet📄"
+                        : "Current data: Default🗂️"
                     }
                 </button>
             </div>

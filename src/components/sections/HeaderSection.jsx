@@ -4,7 +4,7 @@ import { CogIcon } from '@heroicons/react/24/solid';
 export default function HeaderSection({ setSettingsVisible, logoClick, theme, setTheme, children }) {
     return (
         <>
-            <header className='sticky top-0 left-0 w-full z-10 bg-[rgba(10, 10, 10, 0.8)] backdrop-blur-lg border-white/10'>
+            <header className='sticky top-0 left-0 w-full z-10 bg-[rgba(10, 10, 10, 0.8)] backdrop-blur-lg border-white/10 container'>
                 {/* <div>&#8203;</div> Лютый костыль чтобы работали paddings: в первом элементе в body не будет корректно работать курсор, если есть padding. */}
 
                 <div className="flex justify-between items-center py-6 gap-x-4">

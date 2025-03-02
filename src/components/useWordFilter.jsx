@@ -37,7 +37,7 @@ export function useWordFilter({
             : [...filteredWords]
                 .sort(() => 0.5 - Math.random())
                 .filter((word) => word.theme === selectedTheme);
-    }, [selectedTheme, filteredWords, trigger]); // trigger form App is a switcher value to recognize Logo is clicked or not
+    }, [selectedTheme, filteredWords, trigger]); // trigger from App is a switcher value to recognize Logo is clicked or not
 
     // sets array of themes if filteredWords has changed
     const themeArray = useMemo(() => {
