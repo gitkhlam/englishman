@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
   ],
 
-  base: '/Englishman/', // name of repository
+  base: '/englishman/', // name of repository
 
   server: {
     host: true, // open server on localhost

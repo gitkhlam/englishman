@@ -169,6 +169,12 @@ export default function TestSection({
                                     <p>
                                         {currentItem}/{workArray.length}
                                     </p>
+                                    <span
+                                        className='cursor-pointer hover:opacity-70'
+                                        onClick={() => setSound(prev => !prev)}
+                                    >
+                                        {sound ? "🔊" : "🔇"}
+                                    </span>
                                 </div>
                             </div>
                         )}

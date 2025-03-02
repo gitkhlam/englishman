@@ -76,19 +76,22 @@ export default function StudySection({
 
     const [voices, setVoices] = useState([]);
 
-    // get new available voices
+    // loading voices
     useEffect(() => {
-        const updateVoices = () => {
-            setVoices(window.speechSynthesis.getVoices());
+        const loadVoices = () => {
+            const availableVoices = window.speechSynthesis.getVoices();
+            setVoices(availableVoices);
+
+            if (availableVoices.length === 0) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    setVoices(window.speechSynthesis.getVoices());
+                };
+            }
         };
 
-        updateVoices();
-        window.speechSynthesis.onvoiceschanged = updateVoices;
-
-        return () => {
-            window.speechSynthesis.onvoiceschanged = null;
-        };
+        loadVoices();
     }, []);
+    
 
     // function speak of word
     const speak = (word) => {
@@ -98,16 +101,36 @@ export default function StudySection({
         // audio.currentTime = 0;
         // audio.play();
 
-        const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-UK';
+        // const utterance = new SpeechSynthesisUtterance(word);
+        // utterance.lang = 'en-UK';
 
-        const englishVoice = voices.find(voice => voice.lang === 'en-UK');
-        if (englishVoice) {
-            utterance.voice = englishVoice;
+        // const englishVoice = voices.find(voice => voice.lang === 'en-UK');
+        // if (englishVoice) {
+        //     utterance.voice = englishVoice;
+        // }
+
+        // window.speechSynthesis.speak(utterance);
+
+        window.speechSynthesis.cancel(); // if prev speech doesn't stop
+
+        if (!word) return;
+
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US';
+
+        // choose en-US, if exists else first voices[0]
+        const preferredVoice = voices.find(voice => voice.lang === 'en-US') || voices[0];
+        if (preferredVoice) {
+            utterance.voice = preferredVoice;
+            console.log(`Picked voice: ${preferredVoice.name} (${preferredVoice.lang})`);
+        } else {
+            console.warn('Voice en-US didn\'t find! Default voice is using.');
         }
 
+        // speak
         window.speechSynthesis.speak(utterance);
     };
+    
 
     return (
         <section className='w-full'>
@@ -221,14 +244,14 @@ export default function StudySection({
                     <div className='mt-3 w-full flex justify-center'>
                         <span 
                             className='cursor-pointer hover:opacity-70'
-                            onClick={() => setSound(prev => !prev)}
+                            onClick={() => { setSound(prev => !prev) }}
                         >
                             {sound ? "🔊" : "🔇"}
                         </span>
                     </div>
 
                     {currentItem === workArray.length - 1 && (
-                        <div className="mt-7 flex justify-center">
+                        <div className="mt-4 flex justify-center">
                             <button
                                 className="buttonStyle"
                                 onClick={() => {

@@ -11,21 +11,25 @@ const MemoHeaderSection = memo(HeaderSection);
 export default function App() {
     const [testMode, setTestMode] = useState(null); // sets test mode: manual or choice
     const [selectedPart, setSelectedPart] = useState("all"); // sets part of speech
-    const [selectedTheme, setSelectedTheme] = useState("all"); // sets theme
+    const [selectedTheme, setSelectedTheme] = useState("all"); // sets theme of speech
     const [uniqueParts, setUniqueParts] = useState([]); // unique parts of speech array to prevent repeating
     const [currentItem, setCurrentItem] = useState(0); // array to know current item (word)
     const [trigger, setTrigger] = useState(false); // switcher for refreshing work array from MainSection
     const [workMode, setWorkMode] = useState(null); // work mode: test or study
     const [wordsData, setWordsData] = useState([]); // main array from file
     const [settingsVisible, setSettingsVisible] = useState(false); // state to show/hide settings window
-    const [sound, setSound] = useState(true); // state for speak function on buttons prev/next in study mode
-    const [showApiExamples, setShowApiExamples] = useState(false);
+    const [sound, setSound] = useState(() => { // state for speak function on buttons prev/next in study mode and on answers correct wrong
+        const storedValue = localStorage.getItem('soundStatus');
+        return storedValue === null ? true : storedValue === 'true';
+    }); 
+    const [showApiExamples, setShowApiExamples] = useState(false); // state for examples from api
+
 
     // defines system theme
     const getSystemTheme = () =>
         window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 
-    const [theme, setTheme] = useState(document.documentElement.getAttribute("data-theme") || getSystemTheme());
+    const [theme, setTheme] = useState(localStorage.getItem('themeColor') || getSystemTheme());
 
     // get data from csv file
     useEffect(() => {
@@ -153,7 +157,7 @@ const SettingsWindow = ({
                     className="buttonStyle text-4xl font-bold"
                     onClick={(e) => {
                         e.stopPropagation();
-                        setSound((prev) => !prev);
+                        setSound((prev) => { localStorage.setItem('soundStatus', `${!prev}`); return !prev;});
                     }}
                 >
                     {sound ? "Sound ENABLED 🔊" : "Sound DISABLED 🔇" }
