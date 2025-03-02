@@ -4,6 +4,7 @@ import TestSection from './components/sections/TestSection';
 import ModeButton from './components/ModeButton';
 import ReadFileCsv from './utilities/readFileCsv';
 import StudyComponent from './components/StudyComponent'
+import SpreadsheetParser from './components/SpreadSheetParse';
 
 const MemoTestSection = memo(TestSection);
 const MemoHeaderSection = memo(HeaderSection);
@@ -23,6 +24,8 @@ export default function App() {
         return storedValue === null ? true : storedValue === 'true';
     }); 
     const [showApiExamples, setShowApiExamples] = useState(false); // state for examples from api
+
+
 
 
     // defines system theme
@@ -107,6 +110,7 @@ export default function App() {
                     {workMode === "study" &&
                         <StudyComponent {...settings} />
                     }
+                    <SpreadsheetParser />
                 </main>
                 <footer className="grow-0 text-[var(--dark)] dark:text-[var(--light)] text-s p-5 w-full text-center font-semibold">
                     Kyiv {new Date().getFullYear()}

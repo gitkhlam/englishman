@@ -186,39 +186,27 @@ export default function StudySection({
                             Translation: <span className="text-2xl font-semibold">{workArray[currentItem].translation}</span>
                         </p>
                         {loadingSentences ? <div>Loading examples... ⏳</div> :
-                        <div>
-                                {workArray[currentItem].example !== "" && (
-                                    <p className="break-words">
-                                        Example: <span className="text-2xl font-semibold" onClick={() => speak(workArray[currentItem].example)}>
-                                            {workArray[currentItem].example}
-                                        </span>
-                                    </p>
-                                )}
-                                {workArray[currentItem].example === "" && exampleSentences.length > 0 && 
-                                    <div className="break-words mt-4">
-                                        <span
-                                            className="cursor-pointer bg-[var(--light)] text-[var(--dark)] font-medium p-2 rounded-lg"
-                                            onClick={() => setAccordionOpen(prev => !prev)}
-                                        >
-                                            {exampleSentences.length > 1 ? "Examples.. 👈" : "Example 👈"}
-                                        </span>
+                            <div>
+                            { !showApiExamples && workArray[currentItem].example.length >= 1 &&
+                                <ExamplesComponent 
+                                    setAccordionOpen={setAccordionOpen} 
+                                    exampleArray={workArray[currentItem].example.split("+")} 
+                                    accordionOpen={accordionOpen}
+                                    speak={speak} 
+                                />
+                            }
 
-                                        <ul
-                                            className={`mt-5 transition-all duration-300 ease-in-out ${accordionOpen ? "opacity-100 max-h-full" : "opacity-0 max-h-0 overflow-hidden"
-                                                }`}
-                                        >
-                                            {exampleSentences.slice(0, 3).map((example, index) => (
-                                                <li
-                                                    className="cursor-pointer text-2xl font-semibold"
-                                                    onClick={() => speak(example)}
-                                                    key={index}
-                                                >
-                                                    {index+1 + ") " + example}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                }
+                            { exampleSentences.length > 0 && 
+                                <>
+                                    <p>API example</p>
+                                    <ExamplesComponent
+                                        accordionOpen={accordionOpen}
+                                        setAccordionOpen={setAccordionOpen}
+                                        exampleArray={exampleSentences.slice(0, 3)}
+                                        speak={speak}
+                                    />
+                                </>
+                            }
                         </div>
                         }     
                     </div>
@@ -267,4 +255,32 @@ export default function StudySection({
             </div>
         </section>
     );
+}
+
+
+function ExamplesComponent({ setAccordionOpen, exampleArray, accordionOpen, speak }) {
+    return (
+        <div className="break-words mt-4 transition-all duration-300 ease-in-out">
+            <button
+                className="cursor-pointer bg-[var(--dark)] dark:bg-[var(--light)] text-[var(--light)] dark:text-[var(--dark)] font-medium p-2 rounded-lg"
+                onClick={() => setAccordionOpen(prev => !prev)}
+            >
+                {exampleArray.length > 1 ? "Examples.. 👈" : "Example 👈"}
+            </button>
+
+            <ul
+                className={`transition-all duration-300 ease-in-out ${accordionOpen ? "mt-3 opacity-100 max-h-full" : "opacity-0 max-h-0 overflow-hidden"}`}
+            >
+                {exampleArray.map((example, index) => (
+                    <li
+                        className="cursor-pointer text-2xl font-semibold"
+                        onClick={() => speak(example)}
+                        key={index}
+                    >
+                        {index + 1 + ") " + example}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    )
 }
