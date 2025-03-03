@@ -15,13 +15,13 @@ const SpreadsheetParser = async (url) => {
 
                         return {
                             word: (normalizedRow.word || '').trim(), 
-                            translation: normalizedRow.translation || '',
-                            example: normalizedRow.example || '',
-                            partOfSpeech: normalizedRow["part of speech"] || '', 
-                            theme: normalizedRow.theme || '',
+                            translation: (normalizedRow.translation).trim() || '',
+                            example: (normalizedRow.example).trim() || '',
+                            partOfSpeech: (normalizedRow["part of speech"]).trim() || '', 
+                            theme: (normalizedRow.theme).trim() || '',
                         };
                     });
-                    resolve(parsedData);
+                    resolve(parsedData.filter((word) => word.translation && word.word));
                 },
                 error: (error) => reject(error),
                 skipEmptyLines: true,
