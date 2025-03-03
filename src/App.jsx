@@ -50,7 +50,6 @@ export default function App() {
             try {
                 setCurrentItem(0);
                 setLoadingData(true);
-                console.log(googleSpread);
                 
                 const isGoogle = googleSpread && googleLink;
                 const data = isGoogle 
@@ -196,7 +195,6 @@ const SettingsWindow = ({
         
         if (inputLink !== "") {
             const rightData = await loadData();
-            console.log("Right Data", rightData);
             
             if (rightData) {
                 setGoogleLink(inputLink);
@@ -210,7 +208,6 @@ const SettingsWindow = ({
         try {    
             setLoading(true);
             const data = await SpreadsheetParser(inputLink);
-            console.log("Data: ", data);
             setLoading(false);
             return data !== null;
         } catch (error) {
