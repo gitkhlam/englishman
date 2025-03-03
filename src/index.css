@@ -32,15 +32,11 @@ html {
 }
 
 body {
-	@apply m-0 p-0 bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--light)] dark:text-[var(--dark)] transition-all duration-300 min-w-80;
+	@apply m-0 p-0 bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--light)] dark:text-[var(--dark)] transition-all duration-700 min-w-80;
 }
 
 .buttonStyle {
-	@apply p-2 self-center rounded-lg cursor-pointer hover:opacity-70 bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] disabled:bg-gray-400 disabled:cursor-not-allowed;
-}
-
-.animation {
-	transition: all 0.3s ease-in;
+	@apply p-2 self-center rounded-lg cursor-pointer hover:opacity-70 bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] disabled:bg-gray-400 disabled:cursor-not-allowed select-none;
 }
 
 .container {

@@ -1,15 +1,15 @@
 import SwitchColorModeButton from '../SwitchColorModeButton';
 import { CogIcon } from '@heroicons/react/24/solid';
 
-export default function HeaderSection({ setSettingsVisible, logoClick, theme, setTheme, children }) {
+export default function HeaderSection({ settingsVisible, setSettingsVisible, logoClick, theme, setTheme, children }) {
     return (
         <>
-            <header className='sticky top-0 left-0 w-full z-10 bg-[rgba(10, 10, 10, 0.8)] backdrop-blur-lg border-white/10 container'>
+            <header className={`${settingsVisible ? "opacity-0":"opacity-100"} sticky top-0 left-0 w-full z-10 bg-[rgba(10, 10, 10, 0.8)] backdrop-blur-3xl border-white/10 container`}>
                 {/* <div>&#8203;</div> Лютый костыль чтобы работали paddings: в первом элементе в body не будет корректно работать курсор, если есть padding. */}
 
                 <div className="flex justify-between items-center py-6 gap-x-4">
                     <span
-                        className="text-4xl font-bold text-[var(--dark)] dark:text-[var(--light)] !cursor-pointer break-all inline-block transition-all duration-500 hover:translate-x-[1px] hover:translate-y-[1px] hover:[text-shadow:2px_2px_5px_rgba(213,213,213,0.3)] hover:scale-108 logo-text hover:opacity-30"
+                        className="select-none text-4xl font-bold text-[var(--dark)] dark:text-[var(--light)] !cursor-pointer break-all inline-block transition-all duration-500 hover:translate-x-[1px] hover:translate-y-[1px] hover:[text-shadow:2px_2px_5px_rgba(213,213,213,0.3)] hover:scale-108 logo-text hover:opacity-30"
                         onClick={logoClick}
                     >
                         {children}
