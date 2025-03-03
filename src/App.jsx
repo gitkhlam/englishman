@@ -53,13 +53,9 @@ export default function App() {
                 console.log(googleSpread);
                 
                 const isGoogle = googleSpread && googleLink;
-                let data;
-                if (isGoogle) {
-                    data = await SpreadsheetParser(googleLink);
-                } else {
-                    // if localstorage is empty
-                    data = await ReadFileCsv();
-                }
+                const data = isGoogle 
+                    ? await SpreadsheetParser(googleLink) 
+                    : await ReadFileCsv();
                 
                 setWordsData(data);
 
