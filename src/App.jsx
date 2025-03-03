@@ -200,6 +200,7 @@ const SettingsWindow = ({
         
         if (inputLink !== "") {
             const rightData = await loadData();
+            console.log("Right Data", rightData);
             
             if (rightData) {
                 setGoogleLink(inputLink);
@@ -212,7 +213,7 @@ const SettingsWindow = ({
     async function loadData() {
         try {    
             setLoading(true);
-            const data = await SpreadsheetParser(inputLink)
+            const data = await SpreadsheetParser(inputLink);
             console.log(data);
             setLoading(false);
             return true;
