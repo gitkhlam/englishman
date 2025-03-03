@@ -214,9 +214,9 @@ const SettingsWindow = ({
         try {    
             setLoading(true);
             const data = await SpreadsheetParser(inputLink);
-            console.log(data);
+            console.log("Data: ", data);
             setLoading(false);
-            return true;
+            return data !== null;
         } catch (error) {
             console.log("Failed to load data. Please try again later.");
             setLoading(false);
