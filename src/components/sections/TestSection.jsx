@@ -167,7 +167,7 @@ export default function TestSection({
                                         Check
                                     </button>
                                     <p>
-                                        {currentItem}/{workArray.length}
+                                        {currentItem + 1}/{workArray.length}
                                     </p>
                                     <span
                                         className='cursor-pointer hover:opacity-70'

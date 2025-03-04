@@ -36,7 +36,7 @@ body {
 }
 
 .buttonStyle {
-	@apply p-2 self-center rounded-lg cursor-pointer hover:opacity-70 bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] disabled:bg-gray-400 disabled:cursor-not-allowed select-none;
+	@apply p-2 self-center rounded-lg cursor-pointer hover:opacity-70 bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] disabled:bg-gray-400 disabled:cursor-not-allowed select-none break-all;
 }
 
 .container {

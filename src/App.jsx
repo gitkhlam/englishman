@@ -5,6 +5,8 @@ import ModeButton from './components/ModeButton';
 import ReadFileCsv from './utilities/readFileCsv';
 import StudyComponent from './components/StudyComponent'
 import SpreadsheetParser from './utilities/SpreadSheetParse';
+import { ChevronDown } from "lucide-react";
+
 
 const MemoTestSection = memo(TestSection);
 const MemoHeaderSection = memo(HeaderSection);
@@ -31,10 +33,6 @@ export default function App() {
     const [loadingData, setLoadingData] = useState(false); // state for loading data, to show full-screen window
 
 
-    
-
-    const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSBClUrqZ5TXINgJMwcCqelXPGIjSRoeOJoD8Yfe22a2XJMXuyewITYNrPvJ3NVEB3njzKMv8JOA1OG/pub?output=csv"
-
     // defines system theme
     const getSystemTheme = () =>
         window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -52,14 +50,32 @@ export default function App() {
                 setLoadingData(true);
                 
                 const isGoogle = googleSpread && googleLink;
-                const data = isGoogle 
-                    ? await SpreadsheetParser(googleLink) 
-                    : await ReadFileCsv();
-                
-                setWordsData(data);
+                try {
+                    const data = isGoogle
+                        ? await SpreadsheetParser(googleLink)
+                        : await ReadFileCsv();
 
+                    if (data.length > 0) {
+                        setWordsData(data);
+                    } else {
+                        alert("Your google sheet is empty!");
+                        setWordsData(await ReadFileCsv());
+                        setGoogleSpread(false);
+                        // setGoogleLink(null);
+                        localStorage.setItem("googleSpread", false);
+                        // localStorage.removeItem("googleLink");
+                    }
+                } catch { 
+                    alert("Your google sheet has some problems! Check it!")
+                    setWordsData(await ReadFileCsv());
+                    setGoogleSpread(false);
+                    //setGoogleLink(null);
+                    localStorage.setItem("googleSpread", false);
+                    //localStorage.removeItem("googleLink");
+
+                }
             } catch (error) {
-                console.log("Failed to load data. Please try again later.");
+                console.log("TOTAL PROBLEM! WITH FILE");
             } finally { setLoadingData(false) } 
         }
         loadData();
@@ -96,7 +112,7 @@ export default function App() {
         showApiExamples,
         trigger
     }
-    
+
     return (
         <> { loadingData && <div className='absolute inset-0 w-[100dvw] h-[100dvh] bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] flex items-center justify-center z-99 text-5xl font-bold'>Loading...⏳</div>}
             { settingsVisible &&
@@ -209,13 +225,16 @@ const SettingsWindow = ({
             setLoading(true);
             const data = await SpreadsheetParser(inputLink);
             setLoading(false);
-            return data !== null;
+            alert(data.length)
+            return data !== null && data.length > 0;
         } catch (error) {
             console.log("Failed to load data. Please try again later.");
             setLoading(false);
             return false;
         }
     }
+
+    const [openAcc, setOpenAcc] = useState(false);
 
     return (
         <div
@@ -276,7 +295,7 @@ const SettingsWindow = ({
                         >
                         {googleLink ? "Edit Google Sheet📄" : "Add Google Sheet📄"}
                         </button>
-                        { googleLink  && <button
+                        { googleLink && <button
                             className="buttonStyle text-4xl sm:text-4xl font-bold"
                             onClick={(e) => {
                                 e.stopPropagation();
@@ -297,34 +316,51 @@ const SettingsWindow = ({
                         <span className=' font-semibold text-2xl sm:text-3xl'>
                             Если вы хотите изучать свои слова, можно использовать Google Таблицы.
                         </span>
-                        <ul className='text-xl'>
-                            <li>
-                                1. Создайте новый документ в Google Sheets.
-                            </li>
-                                <li>
-                                    2. В первой строке укажите названия колонок: Word, Translation, Example, Part of speech, Theme (ВАЖНО! Названия должны совпадать).
-                                </li>
-                            <li>
-                                3. Заполните таблицу своими данными:
-                                    <ul className='list-disc pl-4'>
-                                        <li>
-                                            Word и Translation — обязательные поля, они не могут быть пустыми.
-                                        </li>
-                                        <li>
-                                            Part of speech должно содержать одно из следующих значений: NOUN, PRONOUN, VERB,ADJECTIVE, ADVERB, PREPOSITION, CONJUNCTION, INTERJECTION.
-                                        </li>
-                                        <li>
-                                            Example — если у слова несколько примеров, разделяйте их знаком "+", например: go to bed + go on foot.
-                                        </li>
-                                    </ul>
-                            </li>
-                            <li>
-                                4. Опубликуйте таблицу в формате CSV: Файл → Опубликовать в интернете → CSV.
-                            </li>
-                            <li>
-                                5. Скопируйте полученную ссылку и вставьте её в соответствующее поле на сайте Englishman.
-                            </li>
-                        </ul>
+                            <div className="my-3 border rounded-lg shadow-md overflow-hidden duration-300 ease-in-out">
+                                <button
+                                    className="w-full flex justify-between items-center p-2 transition duration-300 ease-in-out"
+                                    onClick={() => setOpenAcc(prev => !prev)}
+                                >
+                                    <span className="font-bold text-xl">Инструкция!</span>
+                                    <ChevronDown
+                                        className={`duration-300 ease-in-out transform transition-transform ${openAcc ? "rotate-180" : "rotate-0"}`}
+                                    />
+                                </button>
+                                {openAcc && (
+                                    <div className="p-4 border-t text-[var(--light)] dark:text-gray-700">
+                                        <ul className='text-xl'>
+                                            <li>
+                                                1. Создайте новый документ в Google Sheets.
+                                            </li>
+                                            <li>
+                                                2. В первой строке укажите названия колонок: Word, Translation, Example, Part of speech, Theme (ВАЖНО! Названия должны совпадать).
+                                            </li>
+                                            <li>
+                                                3. Заполните таблицу своими данными:
+                                                <ul className='list-disc pl-4'>
+                                                    <li>
+                                                        Word и Translation — обязательные поля, они не могут быть пустыми.
+                                                    </li>
+                                                    <li>
+                                                        Part of speech должно содержать одно из следующих значений: NOUN, PRONOUN, VERB,ADJECTIVE, ADVERB, PREPOSITION, CONJUNCTION, INTERJECTION.
+                                                    </li>
+                                                    <li>
+                                                        Example — если у слова несколько примеров, разделяйте их знаком "+", например: go to bed + go on foot.
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                4. Опубликуйте таблицу в формате CSV: Файл → Опубликовать в интернете → CSV.
+                                            </li>
+                                            <li>
+                                                5. Скопируйте полученную ссылку и вставьте её в соответствующее поле на сайте Englishman.
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        
+                        <span className='text-xl font-bold'>ВАЖНО! Если данные в Google Sheet обновились, нужно подождать несколько минут, чтобы подтягивало новые данные.</span>
                         {
                             googleLink !== null && 
                             <div className='mt-5 text-xl font-medium underline'>

@@ -73,44 +73,10 @@ export default function StudySection({
         sound && speak(workArray[current].word); // if sound enable speak
         setCurrentItem(current);
     };
-
-    const [voices, setVoices] = useState([]);
-
-    // loading voices
-    useEffect(() => {
-        const loadVoices = () => {
-            const availableVoices = window.speechSynthesis.getVoices();
-            setVoices(availableVoices);
-
-            if (availableVoices.length === 0) {
-                window.speechSynthesis.onvoiceschanged = () => {
-                    setVoices(window.speechSynthesis.getVoices());
-                };
-            }
-        };
-
-        loadVoices();
-    }, []);
-    
-
+ 
     // function speak of word
     const speak = (word) => {
-        // const apiKey = "563c07f863a04525bbf03651c9dff98b";
-        // const url = `https://api.voicerss.org/?key=${apiKey}&hl=en-us&src=${encodeURIComponent(word)}`;
-        // const audio = new Audio(url);
-        // audio.currentTime = 0;
-        // audio.play();
-
-        // const utterance = new SpeechSynthesisUtterance(word);
-        // utterance.lang = 'en-UK';
-
-        // const englishVoice = voices.find(voice => voice.lang === 'en-UK');
-        // if (englishVoice) {
-        //     utterance.voice = englishVoice;
-        // }
-
-        // window.speechSynthesis.speak(utterance);
-
+        
         window.speechSynthesis.cancel(); // if prev speech doesn't stop
 
         if (!word) return;
@@ -118,14 +84,7 @@ export default function StudySection({
         const utterance = new SpeechSynthesisUtterance(word);
         utterance.lang = 'en-US';
 
-        // choose en-US, if exists else first voices[0]
-        const preferredVoice = voices.find(voice => voice.lang === 'en-US') || voices[0];
-        if (preferredVoice) {
-            utterance.voice = preferredVoice;
-            console.log(`Picked voice: ${preferredVoice.name} (${preferredVoice.lang})`);
-        } else {
-            console.warn('Voice en-US didn\'t find! Default voice is using.');
-        }
+        utterance.voice = window.speechSynthesis.getVoices().find(voice => (voice.name === "Samantha" || voice.name.includes("Google")) && voice.lang === "en-US");
 
         // speak
         window.speechSynthesis.speak(utterance);
