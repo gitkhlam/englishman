@@ -1,3 +1,5 @@
+import { motion, AnimatePresence } from 'framer-motion';
+
 export default function StudySwitchButtons({ currentItem, workArray, speak, sound, setCurrentItem, setSound, setWorkMode }) {
 
     // function processes click on next/prev button in study mode
@@ -14,48 +16,56 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
 
     return (
         <>
-            <div className="flex justify-center items-center mt-2 gap-5 border-t pt-4">
+            <div className="flex justify-center items-center mt-2 gap-5">
+
                 <button
-                    className="buttonStyle"
+                    className="buttonStyle flex-1 sm:flex-none"
                     disabled={currentItem === 0}
                     onClick={() => handleSwitchButton("prev")}
                 >
-                    prev
+                    <span className='sm:hidden'>⬅️</span>
+                    <span className='hidden sm:block'>⬅️ prev</span>
                 </button>
                 <p>
                     {currentItem + 1}/{workArray.length}
                 </p>
-                <button
-                    className="buttonStyle"
-                    disabled={currentItem === workArray.length - 1}
-                    onClick={() => handleSwitchButton("next")}
-                >
-                    next
-                </button>
-            </div>
-
-            <div className='w-full flex justify-center'>
                 <span
                     className='cursor-pointer hover:opacity-70'
-                    onClick={() => { setSound(prev => !prev) }}
+                    onClick={() => setSound(prev => !prev)}
                 >
                     {sound ? "🔊" : "🔇"}
                 </span>
+                <button
+                    className="buttonStyle flex-1 sm:flex-none"
+                    disabled={currentItem === workArray.length - 1}
+                    onClick={() => handleSwitchButton("next")}
+                >
+                    <span className='sm:hidden'>➡️</span>
+                    <span className='hidden sm:block'>next ➡️</span>
+                </button>
             </div>
 
-            {currentItem === workArray.length - 1 && (
-                <div className="mt-4 flex justify-center">
-                    <button
-                        className="buttonStyle"
-                        onClick={() => {
-                            setCurrentItem(0);
-                            setWorkMode("test");
-                        }}
-                    >
-                        Start test
-                    </button>
-                </div>
-            )}
+
+
+                {currentItem === workArray.length - 1 && (
+                    <motion.div
+                        key="start test"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.7, ease: "easeOut" }}
+                        className="mt-4 flex justify-center">
+                        <button
+                            className="buttonStyle"
+                            onClick={() => {
+                                setCurrentItem(0);
+                                setWorkMode("test");
+                            }}
+                        >
+                            Start test
+                        </button>
+                    </motion.div>
+                )}
         </>
     )
 }

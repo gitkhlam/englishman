@@ -23,7 +23,7 @@ export default function HeaderSection({ settingsVisible, setSettingsVisible, log
                     <SwitchColorModeButton theme={theme} setTheme={setTheme} />
 
                     <button
-                        className="cursor-pointer transition-transform duration-700 hover:opacity-30 hover:rotate-[360deg] hover:scale-110"
+                        className="cursor-pointer transition-all duration-700 hover:opacity-30 hover:rotate-[360deg] hover:scale-110"
                         onClick={toggleSettings}
                         aria-label="Toggle settings"
                     >

@@ -32,7 +32,7 @@ html {
 }
 
 body {
-	@apply m-0 p-0 bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--light)] dark:text-[var(--dark)] transition-all duration-700 min-w-80;
+	@apply m-0 p-0 bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--light)] dark:text-[var(--dark)] min-w-80 transition-colors duration-700;
 }
 
 .buttonStyle {
