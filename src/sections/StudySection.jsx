@@ -63,7 +63,7 @@ export default function StudySection({
             showApiExamples && fetchExampleSentences(workArray[currentItem].word); // if enabled - fetch
         }
     }, [workArray, currentItem, showApiExamples]);
-    
+
     // function speak of word
     const speak = (word) => {
 
@@ -106,12 +106,12 @@ export default function StudySection({
                         currentItem={currentItem}
                         workArray={workArray}
                         speak={speak}
-                        sound={sound} 
+                        sound={sound}
                         setSound={setSound}
                         setCurrentItem={setCurrentItem}
                         setWorkMode={setWorkMode}
                     />
-                    
+
                 </div>
             </div>
         </section>
