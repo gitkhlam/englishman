@@ -14,13 +14,14 @@ const SpreadsheetParser = async (url) => {
                         );
 
                         return {
-                            word: (normalizedRow.word || '').trim(), 
+                            word: (normalizedRow.word).trim() || '', 
                             translation: (normalizedRow.translation).trim() || '',
                             example: (normalizedRow.example).trim() || '',
                             partOfSpeech: (normalizedRow["part of speech"]).trim() || '', 
                             theme: (normalizedRow.theme).trim() || '',
                         };
                     });
+                    
                     resolve(parsedData.filter((word) => word.translation && word.word));
                 },
                 error: (error) => reject(error),

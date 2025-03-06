@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown } from "lucide-react";
 import { motion } from 'framer-motion';
-
+import SpreadsheetParser from '../../utilities/SpreadSheetParse';
 export default function GoogleSettings({ googleLink, setGoogleLink, setLoading }) {
 
     const [inputLink, setInputLink] = useState(""); // state for input link
@@ -24,6 +24,8 @@ export default function GoogleSettings({ googleLink, setGoogleLink, setLoading }
         try {
             setLoading(true);
             const data = await SpreadsheetParser(inputLink);
+            console.log(data);
+            
             setLoading(false);
             return data !== null && data.length > 0;
         } catch (error) {
