@@ -33,6 +33,7 @@ export default function App() {
             localStorage.getItem("googleSpread") === 'true'));
     const [loadingData, setLoadingData] = useState(false); // state for loading data, to show full-screen window
 
+    const [wrongWords, setWrongwords] = useState(localStorage.getItem("wrongWords"));
 
     // defines system theme
     const getSystemTheme = () =>
@@ -119,7 +120,7 @@ export default function App() {
             <AnimatePresence mode="wait">
             { loadingData && 
                 <motion.div 
-                    initial={{ opacity: 1 }} 
+                    initial={{ opacity: 0 }} 
                     animate={{ opacity: 1 }} 
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
@@ -130,24 +131,27 @@ export default function App() {
             }
             </AnimatePresence>
 
+
+            <AnimatePresence mode="wait">
                 {settingsVisible && (
-                        <SettingsWindow
-                            showApiExamples={showApiExamples}
-                            setShowApiExamples={setShowApiExamples}
-                            sound={sound}
-                            setSound={setSound}
-                            theme={theme}
-                            setTheme={setTheme}
-                            setSettingsVisible={setSettingsVisible}
-                            resetAll={resetAll}
-                            googleSpread={googleSpread}
-                            setGoogleSpread={setGoogleSpread}
-                            googleLink={googleLink}
-                            setGoogleLink={setGoogleLink}
-                            settingsVisible={settingsVisible}
-                        />
+                    <SettingsWindow
+                        key="settings" // Добавляем уникальный ключ для AnimatePresence
+                        showApiExamples={showApiExamples}
+                        setShowApiExamples={setShowApiExamples}
+                        sound={sound}
+                        setSound={setSound}
+                        theme={theme}
+                        setTheme={setTheme}
+                        setSettingsVisible={setSettingsVisible}
+                        resetAll={resetAll}
+                        googleSpread={googleSpread}
+                        setGoogleSpread={setGoogleSpread}
+                        googleLink={googleLink}
+                        setGoogleLink={setGoogleLink}
+                    />
                 )}
-            
+            </AnimatePresence>
+
             <div className={`flex flex-col ${settingsVisible ? "h-[100dvh]" : "min-h-[100dvh]"}`}>
                 
                 <HeaderSection settingsVisible={settingsVisible} theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} logoClick={() => resetAll()}>EnglishMan</HeaderSection>

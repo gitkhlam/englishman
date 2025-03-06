@@ -26,6 +26,7 @@ export default function TestSection({
     const [randomFourWords, setRandomFourWords] = useState([]); // array for four answer button
     const [visibleNotification, setVisibleNotification] = useState(false); // notification full-screen window visibility
     const [currentNotificationMessage, setCurrentNotificationMessage] = useState("");
+    const [currentProgress, setCurrentProgress] = useState([]);
 
     const { workArray, themeArray, handlePartChange, handleThemeChange } = useWordFilter({
         wordsData,
@@ -38,10 +39,16 @@ export default function TestSection({
         setCurrentItem,
     });
 
+    const workArrayLength = workArray.length;
+    
     // processes click on one of mode buttons
     const handleClickMode = useCallback((mode) => {
         setTestMode(mode);
     }, [setTestMode]);
+
+    useEffect(() => {
+        setCurrentProgress([]);
+    }, [workArray]);
 
     // refreshes RandomFourWords if currentItem or workArray have changed
     useEffect(() => {
@@ -57,13 +64,22 @@ export default function TestSection({
             setInput("");
             // if user have done all words of selected theme
             if (currentItem + 1 >= workArray.length) {
-                setSelectedPart("all");
-                setSelectedTheme("all");
-                showResultWindow("welldone.mp3", 1500, "Well done! Congratulations!🏆");
+                // setSelectedPart("all");
+                // setSelectedTheme("all");
+                showResultWindow("welldone.mp3", 0, "result");
             } else {
-                showResultWindow(); // show full-screen size window with answer
+                showResultWindow(); // show full-screen size window with correct answer
             }
         } else {
+            setCurrentProgress(prev => {
+                const filtered = prev.filter(obj => obj.word !== workArray[currentItem].word);
+                return [...filtered, workArray[currentItem]];
+            });
+            
+            localStorage.setItem("wordsToLearn", JSON.stringify(workArray[currentItem]));
+            const storedWords = JSON.parse(localStorage.getItem("wordsToLearn") || "[]");
+            console.log(storedWords); // [{ word: "apple", translation: "яблоко" }, { word: "book", translation: "книга" }]
+            
             showResultWindow("wrong.mp3", 500, "Wrong! ❌");
         }
     };
@@ -92,7 +108,7 @@ export default function TestSection({
         setCurrentNotificationMessage(message);
         setVisibleNotification(true);
         sound && playSound(import.meta.env.BASE_URL + src); // answer sound plays if sound enabled
-        setTimeout(() => setVisibleNotification(false), time);
+        time !== 0 && setTimeout(() => setVisibleNotification(false), time);
     };
 
     return (
@@ -225,14 +241,99 @@ export default function TestSection({
                     )}
                 </AnimatePresence>
 
+            <AnimatePresence>   
                 {visibleNotification && (
-                    <div className="z-50 px-10 flex items-center justify-center fixed inset-0 min-h-screen w-full bg-[var(--dark)] text-[var(--light)] text-4xl overflow-hidden">
-                        {currentNotificationMessage}
-                    </div>
+                    <Notifications 
+                        setSelectedPart={setSelectedPart}
+                        setSelectedTheme={setSelectedTheme}
+                        setCurrentProgress={setCurrentProgress}
+                        setVisibleNotification={setVisibleNotification}
+                        isResult={currentNotificationMessage === "result"}>
+                        { 
+                            currentNotificationMessage === "result" 
+                            ?  
+                            <motion.div 
+                                key="result"
+                                initial={{ opacity: 0, y: -50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 50 }}
+                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                                className='flex flex-col gap-4'>                                    
+                                <span className='font-bold text-4xl'>
+                                    {(() => {
+                                        const percentage = ((workArrayLength - currentProgress.length) * 100) / workArrayLength;
+
+                                        if (percentage === 100) return "Excellent! Congratulations! 🏆";
+                                        if (percentage >= 80) return "Well done! Keep going! 📑";
+                                            if (percentage >= 50) return "Not great ☹️, but you're getting there! Keep pushing!";
+                                        return "That's really bad! 🙅‍♂️ You need to push harder!";
+                                    })()}
+                                </span>
+
+                                <span className='text-3xl font-bold'>
+                                    Your score is {` `} 
+                                    <span className='bg-[var(--light)] text-[var(--dark)] p-1 rounded-lg'>
+                                            {`${Math.round((workArrayLength - currentProgress.length) * 100 / workArrayLength)}%.`}
+                                    </span>
+                                </span> 
+                                <span className='text-2xl'>
+                                    {`You got ${workArrayLength - currentProgress.length} out of ${workArrayLength} words correct.`}
+                                </span>
+                            </motion.div>
+                            : <motion.span 
+                                key="result-wrong-right"
+                                initial={{ opacity: 0.9, x: -200 }}
+                                animate={{ opacity: 1, x:0 }}
+                                exit={{ opacity: 0, x: 200}}
+                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                                className='text-4xl'>
+                                { currentNotificationMessage }
+                            </motion.span>
+                        }
+                    </Notifications>
                 )}
+                </AnimatePresence>
             </div>
         </section>
     );
 }
 
+
+function Notifications({ isResult, setCurrentProgress, setSelectedPart, setSelectedTheme, setVisibleNotification, children}) {
+    const handleClick = (e) => {
+        if (e.target === e.currentTarget) {
+            setSelectedPart("all");
+            setSelectedTheme("all");
+            setCurrentProgress([]);
+            setVisibleNotification(false);
+        }
+    };
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, []);
+
+    return(
+        <div
+            className="z-50 px-2 flex items-center justify-center fixed inset-0 min-h-screen w-full text-[var(--dark)] dark:text-[var(--light)] overflow-hidden backdrop-blur-xl"
+        >
+        
+        <div
+            className="grow flex flex-col justify-center items-center container"
+        >
+        { children }
+        { isResult &&
+            <button 
+                onClick={handleClick}
+                className='mt-4 text-3xl font-medium bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] py-1 px-3 rounded-lg cursor-pointer hover:opacity-70'>
+                Close
+            </button>
+        }
+        </div>
+    </div>
+    )
+}
 

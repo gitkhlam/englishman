@@ -4,11 +4,10 @@ import SettingsMenu from '../components/settings/SettingsMenu';
 import GoogleSettings from '../components/settings/GoogleSettings';
 import { AnimatePresence, motion } from 'framer-motion';
 
-export default function SettingsWindow ({
+export default function SettingsWindow({
     theme,
     setTheme,
     setSettingsVisible,
-    settingsVisible,
     resetAll,
     sound,
     setSound,
@@ -25,87 +24,78 @@ export default function SettingsWindow ({
         }
     };
 
-    // to prevent scrolling bottom window
     useEffect(() => {
-        document.body.style.overflow = "hidden";
-
+        document.body.style.overflow = 'hidden';
         return () => {
-            document.body.style.overflow = "";
+            document.body.style.overflow = '';
         };
     }, []);
 
-    const [loading, setLoading] = useState(false); // state for loading sheet to check
-    const [showGoogleSettings, setShowGoogleSettings] = useState(false); // state to show/hide google settings
-
-    
+    const [loading, setLoading] = useState(false);
+    const [showGoogleSettings, setShowGoogleSettings] = useState(false);
 
     return (
-        <AnimatePresence mode="wait">
-            {settingsVisible && (
-                <motion.div
-                    key="settings-window" // Ключ можно сделать статичным, так как управление идёт через settingsVisible
-                    initial={{ opacity: 0, y: -200 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                    className="fixed z-51 inset-0 flex flex-col min-w-[320px] backdrop-blur-xs overflow-auto"
-                >
-                    {loading && (
-                        <div className="fixed inset-0 w-[100dvw] h-[100dvh] bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] flex items-center justify-center z-99 text-5xl font-bold">
-                            Loading...⏳
-                        </div>
-                    )}
-                    <HeaderSection
-                        settingsVisible={!settingsVisible} // Здесь логика осталась прежней
-                        theme={theme}
-                        setTheme={setTheme}
-                        setSettingsVisible={setSettingsVisible}
-                        logoClick={(e) => {
-                            e.stopPropagation();
-                            resetAll();
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="flex flex-col items-center">
-                            EnglishMan <br />
-                            <span className="text-xl">settings</span>
-                        </div>
-                    </HeaderSection>
-                    <div
-                        className="grow flex flex-col gap-5 justify-center items-center w-full container pb-5"
-                        onClick={handleBackgroundClick}
-                    >
-                        {!showGoogleSettings && (
-                            <SettingsMenu
-                                showApiExamples={showApiExamples}
-                                sound={sound}
-                                setSound={setSound}
-                                setShowApiExamples={setShowApiExamples}
-                                setGoogleSpread={setGoogleSpread}
-                                googleLink={googleLink}
-                                googleSpread={googleSpread}
-                                setShowGoogleSettings={setShowGoogleSettings}
-                            />
-                        )}
-                        <AnimatePresence mode='wait'>
-                            {showGoogleSettings && (
-                                <motion.div
-                                    key="google-settings-window"
-                                    initial={{ opacity: 0, y: 200 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, ease: "easeOut" }}
-                                >
-                                    <GoogleSettings
-                                        googleLink={googleLink}
-                                        setGoogleLink={setGoogleLink}
-                                        setLoading={setLoading}
-                                    />
-                                </motion.div>
-
-                            )}
-                        </AnimatePresence>
-                    </div>
-                </motion.div>
+        <motion.div
+            initial={{ opacity: 0, y: -200 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -200 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="fixed z-51 inset-0 flex flex-col min-w-[320px] backdrop-blur-xs overflow-auto"
+        >
+            {loading && (
+                <div className="fixed inset-0 w-[100dvw] h-[100dvh] bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] flex items-center justify-center z-99 text-5xl font-bold">
+                    Loading...⏳
+                </div>
             )}
-        </AnimatePresence>
+            <HeaderSection
+                theme={theme}
+                setTheme={setTheme}
+                setSettingsVisible={setSettingsVisible}
+                logoClick={(e) => {
+                    e.stopPropagation();
+                    resetAll();
+                }}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex flex-col items-center">
+                    EnglishMan <br />
+                    <span className="text-xl">settings</span>
+                </div>
+            </HeaderSection>
+            <div
+                className="grow flex flex-col gap-5 justify-center items-center w-full container pb-5"
+                onClick={handleBackgroundClick}
+            >
+                {!showGoogleSettings && (
+                    <SettingsMenu
+                        showApiExamples={showApiExamples}
+                        sound={sound}
+                        setSound={setSound}
+                        setShowApiExamples={setShowApiExamples}
+                        setGoogleSpread={setGoogleSpread}
+                        googleLink={googleLink}
+                        googleSpread={googleSpread}
+                        setShowGoogleSettings={setShowGoogleSettings}
+                    />
+                )}
+                <AnimatePresence mode="wait">
+                    {showGoogleSettings && (
+                        <motion.div
+                            key="google-settings"
+                            initial={{ opacity: 0, y: 200 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 200 }}
+                            transition={{ duration: 0.5, ease: 'easeOut' }}
+                        >
+                            <GoogleSettings
+                                googleLink={googleLink}
+                                setGoogleLink={setGoogleLink}
+                                setLoading={setLoading}
+                            />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+        </motion.div>
     );
 }
