@@ -78,7 +78,7 @@ export default function TestSection({
             
             localStorage.setItem("wordsToLearn", JSON.stringify(workArray[currentItem]));
             const storedWords = JSON.parse(localStorage.getItem("wordsToLearn") || "[]");
-            console.log(storedWords); // [{ word: "apple", translation: "яблоко" }, { word: "book", translation: "книга" }]
+            console.log(storedWords); 
             
             showResultWindow("wrong.mp3", 500, "Wrong! ❌");
         }
@@ -286,7 +286,7 @@ export default function TestSection({
                                 animate={{ opacity: 1, x:0 }}
                                 exit={{ opacity: 0, x: 200}}
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                                className='text-4xl'>
+                                className='text-4xl font-medium'>
                                 { currentNotificationMessage }
                             </motion.span>
                         }
