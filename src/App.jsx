@@ -82,7 +82,9 @@ export default function App() {
                 }
             } catch (error) {
                 console.log("TOTAL PROBLEM! WITH FILE");
-            } finally { setLoadingData(false) }
+            } finally {
+                setLoadingData(false);       
+            }
         }
         loadData();
 
@@ -126,10 +128,14 @@ export default function App() {
     const [isLoaded, setIsLoaded] = useState(false);
     const handleComplete = useCallback(() => {
         setIsLoaded(true);
-    }, [])
+    }, []);
+    
 
     return (
         <>
+            {(console.log('ew'))
+            }
+
             <AnimatePresence mode="wait">
                 {!isLoaded && (
                     <motion.div
@@ -189,6 +195,7 @@ export default function App() {
                 
                 <HeaderSection settingsVisible={settingsVisible} theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} logoClick={() => resetAll()}>EnglishMan</HeaderSection>
                 <main className="flex flex-col items-center justify-center grow container">
+                    { !mistakeMode &&
                     <AnimatePresence mode="wait">
                         {!workMode && (
                             <motion.div
@@ -244,6 +251,14 @@ export default function App() {
                                 <StudySection { ...settings } />
                             </motion.div>
                         )}
+                    </AnimatePresence>
+                    }
+                    <AnimatePresence mode='wait'>
+                        { mistakeMode && 
+                            <div className='bg-amber-800'>
+                                hwlfsd
+                            </div> 
+                        }
                     </AnimatePresence>
                 </main>
                 <footer className="grow-0 text-[var(--dark)] dark:text-[var(--light)] text-s p-5 w-full text-center font-semibold container">
