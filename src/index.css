@@ -9,8 +9,6 @@
 	font-weight: 400;
 
 	color-scheme: light dark;
-	color: var(--color-text);
-	background-color: var(--color-background);
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -51,4 +49,32 @@ body {
 	.container {
 		padding-inline: 20px;
 	}
+}
+
+
+@keyframes blink {
+    0%,
+    100% {
+		opacity: 1;
+    }
+    50% {
+		opacity: 0;
+    }
+}
+
+.animate-blink {
+    animation: blink 0.8s step-end infinite;
+}
+
+@keyframes loading {
+	0% {
+		transform: translateX(-100%);
+    }
+    100% {
+		transform: translateX(250%);
+    }
+}
+
+.animate-loading-bar {
+    animation: loading 0.8s ease infinite;
 }

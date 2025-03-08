@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, memo } from "react";
+import React, { useState, useEffect, useCallback, memo, useMemo } from "react";
 import HeaderSection from "./sections/HeaderSection";
 import TestSection from './sections/TestSection';
 import ModeButton from './components/WorkModeButton';
@@ -6,6 +6,8 @@ import ReadFileCsv from './utilities/readFileCsv';
 import StudySection from './sections/StudySection'
 import SpreadsheetParser from './utilities/SpreadSheetParse';
 import SettingsWindow from './sections/SettingsWindow';
+import Preloader from './sections/Preloader';
+
 import { motion, AnimatePresence } from "framer-motion";
 
 const MemoTestSection = memo(TestSection);
@@ -33,7 +35,12 @@ export default function App() {
             localStorage.getItem("googleSpread") === 'true'));
     const [loadingData, setLoadingData] = useState(false); // state for loading data, to show full-screen window
 
-    const [wrongWords, setWrongwords] = useState(localStorage.getItem("wrongWords"));
+    // state for wrong words 
+    const [wrongWords, setWrongWords] = useState(() => {
+        return JSON.parse(localStorage.getItem("wrongWords") || "[]");
+    });
+
+    const [mistakeMode, setMistakeMode] = useState(false); // state to work with mistakes
 
     // defines system theme
     const getSystemTheme = () =>
@@ -48,6 +55,8 @@ export default function App() {
     useEffect(() => {
         async function loadData() {
             try {
+                setSelectedPart("all");
+                setSelectedTheme("all");
                 setCurrentItem(0);
                 setLoadingData(true);
 
@@ -63,18 +72,13 @@ export default function App() {
                         alert("Your google sheet is empty!");
                         setWordsData(await ReadFileCsv());
                         setGoogleSpread(false);
-                        // setGoogleLink(null);
                         localStorage.setItem("googleSpread", false);
-                        // localStorage.removeItem("googleLink");
                     }
                 } catch {
                     alert("Your google sheet has some problems! Check it!")
                     setWordsData(await ReadFileCsv());
                     setGoogleSpread(false);
-                    //setGoogleLink(null);
                     localStorage.setItem("googleSpread", false);
-                    //localStorage.removeItem("googleLink");
-
                 }
             } catch (error) {
                 console.log("TOTAL PROBLEM! WITH FILE");
@@ -93,10 +97,11 @@ export default function App() {
         setCurrentItem(0);
         setWorkMode(null);
         setSettingsVisible(false);
+        setMistakeMode(false);
     }
 
     // props for components
-    const settings = {
+    const settings = useMemo(() => ({
         setWorkMode,
         wordsData,
         setUniqueParts,
@@ -112,13 +117,38 @@ export default function App() {
         sound,
         setSound,
         showApiExamples,
-        trigger
-    }
+        trigger,
+        setWrongWords,
+        mistakeMode
+    }), [setWorkMode, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeMode]);
+
+
+    const [isLoaded, setIsLoaded] = useState(false);
+    const handleComplete = useCallback(() => {
+        setIsLoaded(true);
+    }, [])
 
     return (
-        <> 
+        <>
             <AnimatePresence mode="wait">
-            { loadingData && 
+                {!isLoaded && (
+                    <motion.div
+                        key="preloader"
+                        className="fixed z-101 w-screen h-screen inset-0 dark:bg-[var(--dark)] bg-[var(--light)]"
+                        initial={{ opacity: 1 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, y: "-100vh" }}
+                        transition={{ duration: 0.7, ease: "easeInOut" }}
+                    >
+                        <Preloader loadingData={loadingData} onComplete={handleComplete} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+
+
+            <AnimatePresence mode="wait">
+            { loadingData &&
                 <motion.div 
                     initial={{ opacity: 0 }} 
                     animate={{ opacity: 1 }} 
@@ -148,6 +178,9 @@ export default function App() {
                         setGoogleSpread={setGoogleSpread}
                         googleLink={googleLink}
                         setGoogleLink={setGoogleLink}
+                        wrongWords={wrongWords}
+                        setMistakeMode={setMistakeMode}
+                        mistakeMode={mistakeMode}
                     />
                 )}
             </AnimatePresence>
@@ -195,7 +228,7 @@ export default function App() {
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
                                 className="w-full"
                             >
-                                <MemoTestSection {...settings} />
+                                <MemoTestSection { ...settings } />
                             </motion.div>
                         )}
 
@@ -208,7 +241,7 @@ export default function App() {
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
                                 className="w-full"
                             >
-                                <StudySection {...settings} />
+                                <StudySection { ...settings } />
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -221,3 +254,5 @@ export default function App() {
         </>
     )
 };
+
+

@@ -76,7 +76,7 @@ export default function StudyWordComponent({
                 >
                     Word:{" "}
                     <motion.span
-                        className="cursor-pointer py-1 px-2 rounded-lg bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] text-2xl font-semibold"
+                        className="cursor-pointer py-1 px-2 rounded-lg bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] text-2xl font-semibold hover:opacity-70"
                         onClick={() => speak(workArray[currentItem].word)}
                     >
                         {workArray[currentItem].word}

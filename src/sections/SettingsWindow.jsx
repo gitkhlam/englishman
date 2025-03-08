@@ -17,10 +17,14 @@ export default function SettingsWindow({
     setGoogleSpread,
     googleLink,
     setGoogleLink,
+    wrongWords,
+    mistakeMode,
+    setMistakeMode
 }) {
     const handleBackgroundClick = (e) => {
         if (e.target === e.currentTarget) {
             setSettingsVisible(false);
+            setMistakeMode(false);
         }
     };
 
@@ -66,7 +70,7 @@ export default function SettingsWindow({
                 className="grow flex flex-col gap-5 justify-center items-center w-full container pb-5"
                 onClick={handleBackgroundClick}
             >
-                {!showGoogleSettings && (
+                {!showGoogleSettings && !mistakeMode && (
                     <SettingsMenu
                         showApiExamples={showApiExamples}
                         sound={sound}
@@ -76,6 +80,8 @@ export default function SettingsWindow({
                         googleLink={googleLink}
                         googleSpread={googleSpread}
                         setShowGoogleSettings={setShowGoogleSettings}
+                        wrongWords={wrongWords}
+                        setMistakeMode={setMistakeMode}
                     />
                 )}
                 <AnimatePresence mode="wait">
@@ -95,7 +101,30 @@ export default function SettingsWindow({
                         </motion.div>
                     )}
                 </AnimatePresence>
+                { mistakeMode && 
+                    <MistakeComponent 
+                        wrongWords={wrongWords}
+                    />
+                }
             </div>
         </motion.div>
     );
+}
+
+function MistakeComponent({ wrongWords }) {
+    
+    useEffect(() => {
+        document.body.style.userSelect = 'none';
+        return () => {
+            document.body.style.userSelect = '';
+        };
+    }, []);
+
+    return (
+        <div className=' select-auto'>
+            <ul>
+                { wrongWords.map((el, ind) => <li key={ind}>{el.word}</li>)}
+            </ul>
+        </div>
+    )
 }

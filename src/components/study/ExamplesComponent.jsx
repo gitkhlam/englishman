@@ -12,7 +12,7 @@ export default function ExamplesComponent({ exampleArray, speak, isApi }) {
     return (
         <div className="break-words">
             <button
-                className="cursor-pointer bg-[var(--dark)] dark:bg-[var(--light)] text-[var(--light)] dark:text-[var(--dark)] font-medium p-2 rounded-lg"
+                className="cursor-pointer bg-[var(--dark)] dark:bg-[var(--light)] text-[var(--light)] dark:text-[var(--dark)] font-medium p-2 rounded-lg hover:opacity-70"
                 onClick={() => setAccordionOpen((prev) => !prev)}
             >
                 {exampleArray.length > 1
@@ -50,7 +50,7 @@ export default function ExamplesComponent({ exampleArray, speak, isApi }) {
                     {exampleArray.map((example, index) => (
                         <li
                             key={index}
-                            className="cursor-pointer text-2xl font-semibold"
+                            className="cursor-pointer text-2xl font-semibold hover:opacity-70"
                             onClick={() => speak(example)}
                         >
                             {`${exampleArray.length > 1 ? index + 1 + ". " : ""}${example}`}

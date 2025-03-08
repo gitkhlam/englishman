@@ -21,6 +21,8 @@ export default function TestSection({
     sound,
     setSound,
     trigger,
+    setWrongWords,
+    mistakeMode
 }) {
     const [input, setInput] = useState("");
     const [randomFourWords, setRandomFourWords] = useState([]); // array for four answer button
@@ -76,10 +78,6 @@ export default function TestSection({
                 return [...filtered, workArray[currentItem]];
             });
             
-            localStorage.setItem("wordsToLearn", JSON.stringify(workArray[currentItem]));
-            const storedWords = JSON.parse(localStorage.getItem("wordsToLearn") || "[]");
-            console.log(storedWords); 
-            
             showResultWindow("wrong.mp3", 500, "Wrong! ❌");
         }
     };
@@ -123,13 +121,13 @@ export default function TestSection({
                         transition={{ duration: 0.5, ease: "easeInOut" }}
                     >
                         <span className={`${testMode ? "p-4" : ""} text-[var(--dark)] dark:text-[var(--light)] text-4xl font-semibold text-center`}>
-                            Test Mode ✍️
+                            { mistakeMode ? "Mistake mode" : "Test Mode ✍️" }
                         </span>
-                        {!testMode && (
+                        { !testMode && (
                             <p className="text-[var(--dark)] dark:text-[var(--light)] text-2xl font-medium text-center">
                                 Choose test mode:
                             </p>
-                        )}
+                        ) }
                     </motion.div>
                 </AnimatePresence>
 
@@ -161,7 +159,7 @@ export default function TestSection({
                 </AnimatePresence>
 
                 <AnimatePresence mode="wait">
-                    {testMode && (
+                    { testMode && (
                         <motion.div
                             layout
                             key="test-content" 
@@ -171,26 +169,27 @@ export default function TestSection({
                             transition={{ duration: 0.5, ease: "easeInOut" }}
                             className="mt-3 sm:mt-5 w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7 transition-colors duration-700 overflow-hidden"
                         >
-                            {uniqueParts.length > 1 && (
-                                <div className="flex flex-col gap-3">
+                            <div className="flex flex-col gap-3">
+                                {uniqueParts.length >= 1 && (
                                     <ThemesDropdown
                                         label="Choose part of speech:"
                                         value={selectedPart}
                                         options={uniqueParts}
                                         onChange={handlePartChange}
                                         className="h-12"
+                                    />                                    
+                                )}
+                                {themeArray.length >= 1 && (
+                                    <ThemesDropdown
+                                        label="Choose theme:"
+                                        value={selectedTheme}
+                                        options={themeArray}
+                                        onChange={handleThemeChange}
+                                        className="h-12"
                                     />
-                                    {themeArray.length > 1 && (
-                                        <ThemesDropdown
-                                            label="Choose theme:"
-                                            value={selectedTheme}
-                                            options={themeArray}
-                                            onChange={handleThemeChange}
-                                            className="h-12"
-                                        />
-                                    )}
-                                </div>
-                            )}
+                                )}
+                            </div>
+
                             <div className="mt-3">
                                 <p className="w-full text-3xl font-semibold break-words">
                                     {workArray[currentItem].translation}
@@ -217,7 +216,7 @@ export default function TestSection({
                                         />
                                     </motion.div>
                                 )}
-                                {testMode === "choice" && (
+                                { testMode === "choice" && (
                                     <motion.div
                                         layout
                                         key={`test-choice-${currentItem}`} 
@@ -248,6 +247,8 @@ export default function TestSection({
                         setSelectedTheme={setSelectedTheme}
                         setCurrentProgress={setCurrentProgress}
                         setVisibleNotification={setVisibleNotification}
+                        setWrongWords={setWrongWords}
+                        currentProgress={currentProgress}
                         isResult={currentNotificationMessage === "result"}>
                         { 
                             currentNotificationMessage === "result" 
@@ -282,9 +283,9 @@ export default function TestSection({
                             </motion.div>
                             : <motion.span 
                                 key="result-wrong-right"
-                                initial={{ opacity: 0.9, x: -200 }}
-                                animate={{ opacity: 1, x:0 }}
-                                exit={{ opacity: 0, x: 200}}
+                                initial={{ opacity: 0.1 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
                                 className='text-4xl font-medium'>
                                 { currentNotificationMessage }
@@ -299,13 +300,31 @@ export default function TestSection({
 }
 
 
-function Notifications({ isResult, setCurrentProgress, setSelectedPart, setSelectedTheme, setVisibleNotification, children}) {
+function Notifications({ currentProgress, setWrongWords, isResult, setCurrentProgress, setSelectedPart, setSelectedTheme, setVisibleNotification, children}) {
+    
+    const addWords = (newArray) => {
+        setWrongWords(prevWords => {
+            const updatedWords = [
+                ...prevWords,
+                ...newArray.filter(newWord =>
+                    !prevWords.some(prevWord => prevWord.word === newWord.word)
+                )
+            ];
+
+            localStorage.setItem("wrongWords", JSON.stringify(updatedWords));
+
+            return updatedWords;
+        });
+    };
+
+    
     const handleClick = (e) => {
         if (e.target === e.currentTarget) {
+            addWords(currentProgress);
             setSelectedPart("all");
             setSelectedTheme("all");
             setCurrentProgress([]);
-            setVisibleNotification(false);
+            setVisibleNotification(false);    
         }
     };
 
@@ -318,7 +337,7 @@ function Notifications({ isResult, setCurrentProgress, setSelectedPart, setSelec
 
     return(
         <div
-            className="z-50 px-2 flex items-center justify-center fixed inset-0 min-h-screen w-full text-[var(--dark)] dark:text-[var(--light)] overflow-hidden backdrop-blur-xl"
+            className={`z-50 px-2 flex items-center justify-center fixed inset-0 min-h-screen w-full text-[var(--dark)] dark:text-[var(--light)] overflow-hidden ${isResult ? "backdrop-blur-xl":"bg-[var(--light)] dark:bg-[var(--dark)]"}`}
         >
         
         <div
