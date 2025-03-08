@@ -40,7 +40,8 @@ export default function App() {
         return JSON.parse(localStorage.getItem("wrongWords") || "[]");
     });
 
-    const [mistakeMode, setMistakeMode] = useState(false); // state to work with mistakes
+    const [mistakeSection, setMistakeSection] = useState(false); // state to work with mistakes
+    const [mistakeTest, setMistakeTest] = useState(false); // state to work with mistakes
 
     // defines system theme
     const getSystemTheme = () =>
@@ -99,7 +100,8 @@ export default function App() {
         setCurrentItem(0);
         setWorkMode(null);
         setSettingsVisible(false);
-        setMistakeMode(false);
+        setMistakeSection(false);
+        setMistakeTest(false);
     }
 
     // props for components
@@ -122,8 +124,9 @@ export default function App() {
         trigger,
         setWrongWords,
         wrongWords,
-        mistakeMode
-    }), [setWorkMode, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeMode]);
+        mistakeTest,
+        resetAll
+    }), [setWorkMode, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeTest, resetAll]);
 
 
     const [isLoaded, setIsLoaded] = useState(false);
@@ -183,8 +186,8 @@ export default function App() {
                         googleLink={googleLink}
                         setGoogleLink={setGoogleLink}
                         wrongWords={wrongWords}
-                        setMistakeMode={setMistakeMode}
-                        mistakeMode={mistakeMode}
+                        setMistakeSection={setMistakeSection}
+                        setMistakeTest={setMistakeTest}
                     />
                 )}
             </AnimatePresence>
@@ -193,9 +196,8 @@ export default function App() {
                 
                 <HeaderSection settingsVisible={settingsVisible} theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} logoClick={() => resetAll()}>EnglishMan</HeaderSection>
                 <main className="flex flex-col items-center justify-center grow container">
-                    { !mistakeMode &&
                     <AnimatePresence mode="wait">
-                        {!workMode && (
+                        {!workMode && !mistakeSection && !mistakeTest && (
                             <motion.div
                                 key="welcome"
                                 initial={{ opacity: 0, scale: 0.55 }} 
@@ -224,7 +226,7 @@ export default function App() {
                             </motion.div>
                         )}
 
-                        {workMode === "test" && (
+                        {workMode === "test" && !mistakeSection && !mistakeTest && (
                             <motion.div
                                 key="test-section" 
                                 initial={{ opacity: 0, x: 120 }}
@@ -237,7 +239,7 @@ export default function App() {
                             </motion.div>
                         )}
 
-                        {workMode === "study" && (
+                        {workMode === "study" && !mistakeSection && !mistakeTest && (
                             <motion.div
                                 key="study-section" 
                                 initial={{ opacity: 0, x: -20 }}
@@ -249,13 +251,18 @@ export default function App() {
                                 <StudySection { ...settings } />
                             </motion.div>
                         )}
-                    </AnimatePresence>
-                    }
-                    <AnimatePresence mode='wait'>
-                        { mistakeMode && 
+                
+                        { mistakeSection &&
+                            <motion.div 
+                                key="mistake-test-section"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1}}
+                                exit={{ opacity: 0, y:-200 }}
+                                transition={{ duration: 0.4, ease: "easeInOut" }}
+                                >
                             <div className="max-w-full sm:max-w-[650px] flex flex-col justify-center">
                                 <p className='text-[var(--dark)] dark:text-[var(--light)] text-center text-3xl font-bold'>This is your mistake list</p>
-                                <p className='mt-2 text-[var(--dark)] dark:text-[var(--light)] text-xl font-medium'>You have {wrongWords.length} weak words:</p>
+                                <p className='mt-2 text-[var(--dark)] dark:text-[var(--light)] text-xl font-medium'>You have {`${wrongWords.length} weak ${wrongWords.length > 1 ? "words":"word"}`}</p>
                                 <div className="mt-4 max-h-[400px] overflow-y-auto text-[var(--dark)] dark:text-[var(--light)] w-full border border-gray-300 dark:border-gray-600">
                                     <div className="w-full overflow-x-auto">
                                         <table className="w-full min-w-[500px] border-collapse border border-gray-300 dark:border-gray-600">
@@ -306,12 +313,27 @@ export default function App() {
                                     </div>
                                 </div>
                                 <button 
-                                    onClick={() => setWorkMode("test")}
+                                    onClick={() => {
+                                        setTestMode("choice");
+                                        setMistakeSection(false);
+                                        setMistakeTest(true);
+                                    }}
+
                                     className='mt-5 buttonStyle text-xl font-medium'>
                                     Start test
                                 </button>
-                            </div>
-
+                                </div>
+                            </motion.div>
+                        
+                        }
+                        {
+                            mistakeTest && 
+                            <motion.div
+                                key="mistake-test"
+                                className='w-full'                            
+                            >
+                                <MemoTestSection  { ...settings } />
+                            </motion.div>
                         }
                     </AnimatePresence>
                 </main>

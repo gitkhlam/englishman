@@ -18,13 +18,14 @@ export default function SettingsWindow({
     googleLink,
     setGoogleLink,
     wrongWords,
-    mistakeMode,
-    setMistakeMode
+    setMistakeSection,
+    setMistakeTest
 }) {
     const handleBackgroundClick = (e) => {
         if (e.target === e.currentTarget) {
             setSettingsVisible(false);
-            setMistakeMode(false);
+            setMistakeSection(false);
+            setMistakeTest(false);
         }
     };
 
@@ -81,8 +82,9 @@ export default function SettingsWindow({
                         googleSpread={googleSpread}
                         setShowGoogleSettings={setShowGoogleSettings}
                         wrongWords={wrongWords}
-                        setMistakeMode={setMistakeMode}
+                        setMistakeSection={setMistakeSection}
                         setSettingsVisible={setSettingsVisible}
+                        setMistakeTest={setMistakeTest}
                     />
                 )}
                 <AnimatePresence mode="wait">

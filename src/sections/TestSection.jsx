@@ -23,7 +23,8 @@ export default function TestSection({
     trigger,
     setWrongWords,
     wrongWords,
-    mistakeMode
+    mistakeTest,
+    resetAll
 }) {
     const [input, setInput] = useState("");
     const [randomFourWords, setRandomFourWords] = useState([]); // array for four answer button
@@ -32,7 +33,7 @@ export default function TestSection({
     const [currentProgress, setCurrentProgress] = useState([]);
 
     const { workArray, themeArray, handlePartChange, handleThemeChange } = useWordFilter({
-        wordsData: mistakeMode ? wrongWords : wordsData,
+        wordsData: mistakeTest ? wrongWords : wordsData,
         selectedPart,
         selectedTheme,
         setSelectedPart,
@@ -122,7 +123,7 @@ export default function TestSection({
                         transition={{ duration: 0.5, ease: "easeInOut" }}
                     >
                         <span className={`${testMode ? "p-4" : ""} text-[var(--dark)] dark:text-[var(--light)] text-4xl font-semibold text-center`}>
-                            { mistakeMode ? "Mistake mode" : "Test Mode ✍️" }
+                            { mistakeTest ? "Mistake test mode" : "Test mode ✍️" }
                         </span>
                         { !testMode && (
                             <p className="text-[var(--dark)] dark:text-[var(--light)] text-2xl font-medium text-center">
@@ -171,7 +172,7 @@ export default function TestSection({
                             className="mt-3 sm:mt-5 w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7 transition-colors duration-700 overflow-hidden"
                         >
                             <div className="flex flex-col gap-3">
-                                {mistakeMode &&
+                                {mistakeTest &&
                                     <p>Mistake words test</p>
                                 }
                                 {/* { !mistakeMode &&  */}
@@ -258,6 +259,8 @@ export default function TestSection({
                         setVisibleNotification={setVisibleNotification}
                         setWrongWords={setWrongWords}
                         currentProgress={currentProgress}
+                        mistakeTest={mistakeTest}
+                        resetAll={resetAll}
                         isResult={currentNotificationMessage === "result"}>
                         { 
                             currentNotificationMessage === "result" 
@@ -269,6 +272,8 @@ export default function TestSection({
                                 exit={{ opacity: 0, y: 50 }}
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
                                 className='flex flex-col gap-4'>                                    
+                                
+                                { mistakeTest && <span className='text-4xl font-bold pb-2 border-b-2'>Work on mistakes</span>}
                                 <span className='font-bold text-4xl'>
                                     {(() => {
                                         const percentage = ((workArrayLength - currentProgress.length) * 100) / workArrayLength;
@@ -309,11 +314,11 @@ export default function TestSection({
 }
 
 
-function Notifications({ currentProgress, setWrongWords, isResult, setCurrentProgress, setSelectedPart, setSelectedTheme, setVisibleNotification, children}) {
+function Notifications({ currentProgress, setWrongWords, isResult, setCurrentProgress, setSelectedPart, setSelectedTheme, setVisibleNotification, mistakeTest, resetAll, children}) {
     
     const addWords = (newArray) => {
         setWrongWords(prevWords => {
-            const updatedWords = [
+            const updatedWords = mistakeTest ? newArray : [
                 ...prevWords,
                 ...newArray.filter(newWord =>
                     !prevWords.some(prevWord => prevWord.word === newWord.word)
@@ -324,6 +329,7 @@ function Notifications({ currentProgress, setWrongWords, isResult, setCurrentPro
 
             return updatedWords;
         });
+        resetAll();
     };
 
     
