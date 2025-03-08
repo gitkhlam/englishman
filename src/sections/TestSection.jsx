@@ -22,6 +22,7 @@ export default function TestSection({
     setSound,
     trigger,
     setWrongWords,
+    wrongWords,
     mistakeMode
 }) {
     const [input, setInput] = useState("");
@@ -31,7 +32,7 @@ export default function TestSection({
     const [currentProgress, setCurrentProgress] = useState([]);
 
     const { workArray, themeArray, handlePartChange, handleThemeChange } = useWordFilter({
-        wordsData,
+        wordsData: mistakeMode ? wrongWords : wordsData,
         selectedPart,
         selectedTheme,
         setSelectedPart,
@@ -170,24 +171,32 @@ export default function TestSection({
                             className="mt-3 sm:mt-5 w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7 transition-colors duration-700 overflow-hidden"
                         >
                             <div className="flex flex-col gap-3">
-                                {uniqueParts.length >= 1 && (
-                                    <ThemesDropdown
-                                        label="Choose part of speech:"
-                                        value={selectedPart}
-                                        options={uniqueParts}
-                                        onChange={handlePartChange}
-                                        className="h-12"
-                                    />                                    
-                                )}
-                                {themeArray.length >= 1 && (
-                                    <ThemesDropdown
-                                        label="Choose theme:"
-                                        value={selectedTheme}
-                                        options={themeArray}
-                                        onChange={handleThemeChange}
-                                        className="h-12"
-                                    />
-                                )}
+                                {mistakeMode &&
+                                    <p>Mistake words test</p>
+                                }
+                                {/* { !mistakeMode &&  */}
+                                    <>
+                                    {uniqueParts.length >= 1 && (
+                                        <ThemesDropdown
+                                            label="Choose part of speech:"
+                                            value={selectedPart}
+                                            options={uniqueParts}
+                                            onChange={handlePartChange}
+                                            className="h-12"
+                                        />
+                                    )}
+                                    {themeArray.length >= 1 && (
+                                        <ThemesDropdown
+                                            label="Choose theme:"
+                                            value={selectedTheme}
+                                            options={themeArray}
+                                            onChange={handleThemeChange}
+                                            className="h-12"
+                                        />
+                                    )}
+                                    </>
+                                {/* } */}
+                                
                             </div>
 
                             <div className="mt-3">

@@ -121,6 +121,7 @@ export default function App() {
         showApiExamples,
         trigger,
         setWrongWords,
+        wrongWords,
         mistakeMode
     }), [setWorkMode, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeMode]);
 
@@ -252,9 +253,10 @@ export default function App() {
                     }
                     <AnimatePresence mode='wait'>
                         { mistakeMode && 
-                            <div className="w-full">
-                                <p className='text-[var(--dark)] dark:text-[var(--light)] '>This is your mistake list</p>
-                                <div className="max-h-[400px] overflow-y-auto text-[var(--dark)] dark:text-[var(--light)] w-full border border-gray-300 dark:border-gray-600">
+                            <div className="max-w-full sm:max-w-[650px] flex flex-col justify-center">
+                                <p className='text-[var(--dark)] dark:text-[var(--light)] text-center text-3xl font-bold'>This is your mistake list</p>
+                                <p className='mt-2 text-[var(--dark)] dark:text-[var(--light)] text-xl font-medium'>You have {wrongWords.length} weak words:</p>
+                                <div className="mt-4 max-h-[400px] overflow-y-auto text-[var(--dark)] dark:text-[var(--light)] w-full border border-gray-300 dark:border-gray-600">
                                     <div className="w-full overflow-x-auto">
                                         <table className="w-full min-w-[500px] border-collapse border border-gray-300 dark:border-gray-600">
                                             <thead>
@@ -271,6 +273,9 @@ export default function App() {
                                                     <th className="border border-gray-300 dark:border-gray-600 px-2 py-1 text-left">
                                                         Example
                                                     </th>
+                                                    <th className="border border-gray-300 dark:border-gray-600 px-2 py-1 text-left">
+                                                        Part of speech
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -282,7 +287,7 @@ export default function App() {
                                                         <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
                                                             {ind + 1 + ")"}
                                                         </td>
-                                                        <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
+                                                        <td className="border border-gray-300 dark:border-gray-600 px-2 py-1 cursor-pointer hover:opacity-70">
                                                             {el.word}
                                                         </td>
                                                         <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
@@ -291,12 +296,20 @@ export default function App() {
                                                         <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
                                                             {el.example.split("+").join("; ")}
                                                         </td>
+                                                        <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
+                                                            {el.partOfSpeech}
+                                                        </td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
+                                <button 
+                                    onClick={() => setWorkMode("test")}
+                                    className='mt-5 buttonStyle text-xl font-medium'>
+                                    Start test
+                                </button>
                             </div>
 
                         }
