@@ -259,6 +259,7 @@ export default function App() {
                                 animate={{ opacity: 1}}
                                 exit={{ opacity: 0, y:-200 }}
                                 transition={{ duration: 0.4, ease: "easeInOut" }}
+                                className='w-full'
                                 >
                             <div className="max-w-full sm:max-w-[650px] flex flex-col justify-center">
                                 <p className='text-[var(--dark)] dark:text-[var(--light)] text-center text-3xl font-bold'>This is your mistake list</p>

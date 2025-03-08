@@ -173,7 +173,7 @@ export default function TestSection({
                         >
                             <div className="flex flex-col gap-3">
                                 {mistakeTest &&
-                                    <p>Mistake words test</p>
+                                    <p className='text-3xl font-bold border-b-2 w-fit'>Mistake words test</p>
                                 }
                                 {/* { !mistakeMode &&  */}
                                     <>
@@ -329,21 +329,20 @@ function Notifications({ currentProgress, setWrongWords, isResult, setCurrentPro
 
             return updatedWords;
         });
-        resetAll();
     };
 
     
     const handleClick = (e) => {
         if (e.target === e.currentTarget) {
             addWords(currentProgress);
-            setSelectedPart("all");
-            setSelectedTheme("all");
+            resetAll();
             setCurrentProgress([]);
             setVisibleNotification(false);    
         }
     };
 
     useEffect(() => {
+        
         document.body.style.overflow = 'hidden';
         return () => {
             document.body.style.overflow = '';
