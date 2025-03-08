@@ -133,9 +133,6 @@ export default function App() {
 
     return (
         <>
-            {(console.log('ew'))
-            }
-
             <AnimatePresence mode="wait">
                 {!isLoaded && (
                     <motion.div
@@ -255,9 +252,53 @@ export default function App() {
                     }
                     <AnimatePresence mode='wait'>
                         { mistakeMode && 
-                            <div className='bg-amber-800'>
-                                hwlfsd
-                            </div> 
+                            <div className="w-full">
+                                <p className='text-[var(--dark)] dark:text-[var(--light)] '>This is your mistake list</p>
+                                <div className="max-h-[400px] overflow-y-auto text-[var(--dark)] dark:text-[var(--light)] w-full border border-gray-300 dark:border-gray-600">
+                                    <div className="w-full overflow-x-auto">
+                                        <table className="w-full min-w-[500px] border-collapse border border-gray-300 dark:border-gray-600">
+                                            <thead>
+                                                <tr className="bg-gray-200 dark:bg-gray-700 text-sm sm:text-lg">
+                                                    <th className="border border-gray-300 dark:border-gray-600 px-2 py-1 text-left">
+                                                        №
+                                                    </th>
+                                                    <th className="border border-gray-300 dark:border-gray-600 px-2 py-1 text-left">
+                                                        Word
+                                                    </th>
+                                                    <th className="border border-gray-300 dark:border-gray-600 px-2 py-1 text-left">
+                                                        Translation
+                                                    </th>
+                                                    <th className="border border-gray-300 dark:border-gray-600 px-2 py-1 text-left">
+                                                        Example
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {wrongWords.map((el, ind) => (
+                                                    <tr
+                                                        key={ind}
+                                                        className="odd:bg-gray-100 even:bg-white dark:odd:bg-gray-800 dark:even:bg-gray-900 text-sm sm:text-lg"
+                                                    >
+                                                        <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
+                                                            {ind + 1 + ")"}
+                                                        </td>
+                                                        <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
+                                                            {el.word}
+                                                        </td>
+                                                        <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
+                                                            {el.translation}
+                                                        </td>
+                                                        <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
+                                                            {el.example.split("+").join("; ")}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
                         }
                     </AnimatePresence>
                 </main>

@@ -70,7 +70,7 @@ export default function SettingsWindow({
                 className="grow flex flex-col gap-5 justify-center items-center w-full container pb-5"
                 onClick={handleBackgroundClick}
             >
-                {!showGoogleSettings && !mistakeMode && (
+                {!showGoogleSettings && (
                     <SettingsMenu
                         showApiExamples={showApiExamples}
                         sound={sound}
@@ -82,6 +82,7 @@ export default function SettingsWindow({
                         setShowGoogleSettings={setShowGoogleSettings}
                         wrongWords={wrongWords}
                         setMistakeMode={setMistakeMode}
+                        setSettingsVisible={setSettingsVisible}
                     />
                 )}
                 <AnimatePresence mode="wait">
@@ -101,11 +102,7 @@ export default function SettingsWindow({
                         </motion.div>
                     )}
                 </AnimatePresence>
-                { mistakeMode && 
-                    <MistakeComponent 
-                        wrongWords={wrongWords}
-                    />
-                }
+                
             </div>
         </motion.div>
     );

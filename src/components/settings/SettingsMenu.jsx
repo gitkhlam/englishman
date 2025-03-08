@@ -1,5 +1,5 @@
 
-export default function SettingsMenu({ sound, setSound, showApiExamples, setShowGoogleSettings, setShowApiExamples, setGoogleSpread, googleLink, googleSpread, wrongWords, setMistakeMode }) {
+export default function SettingsMenu({ sound, setSound, showApiExamples, setShowGoogleSettings, setShowApiExamples, setGoogleSpread, googleLink, googleSpread, wrongWords, setMistakeMode, setSettingsVisible }) {
 
     const toggleSound = (e) => {
         e.stopPropagation();
@@ -61,6 +61,7 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
             { wrongWords.length > 0 && 
                 <Button onClick={(e) => {
                     e.stopPropagation();
+                    setSettingsVisible(false);
                     setMistakeMode(true);
                 }}>
                     Mistake list 🗿
