@@ -163,7 +163,7 @@ export default function App() {
                     transition={{ duration: 0.5, ease: "easeOut" }}
                         className="fixed inset-0 flex items-center justify-center bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] text-5xl font-bold z-99"
                 >
-                    Loading...⏳
+                        <Loader fullText={"Loading...⏳"} />
                 </motion.div>                
             }
             </AnimatePresence>
@@ -259,7 +259,7 @@ export default function App() {
                                 animate={{ opacity: 1}}
                                 exit={{ opacity: 0, y:-200 }}
                                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                                className='w-full'
+                                className='w-full flex justify-center'
                                 >
                             <div className="max-w-full sm:max-w-[650px] flex flex-col justify-center">
                                 <p className='text-[var(--dark)] dark:text-[var(--light)] text-center text-3xl font-bold'>This is your mistake list</p>
@@ -348,3 +348,32 @@ export default function App() {
 };
 
 
+function Loader({fullText}) {
+    const [text, setText] = useState("");
+    const fullT = fullText;
+    
+        useEffect(() => {
+            let index = 0;
+            const interval = setInterval(() => {
+                setText(fullT.substring(0, index));
+                index++;
+    
+                if (index > fullT.length) {
+                    index = 0;
+                }
+            }, 100);
+    
+            return () => clearInterval(interval);
+        }, []);  
+    
+        return (
+            <div className="min-w-[320px] fixed inset-0 z-999 bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] flex flex-col items-center justify-center p-10">
+                <div className="mb-4 text-3xl sm:text-4xl font-mono font-bold select-none">
+                    {text} <span className="animate-blink"> | </span>
+                </div>
+                <div className="w-[200px] h-[2px] bg-[var(--dark)] dark:bg-[var(--light)] rounded relative overflow-hidden">
+                    <div className="w-[40%] h-full bg-amber-50 dark:bg-gray-800 animate-loading-bar"></div>
+                </div>
+            </div>
+        );
+}
