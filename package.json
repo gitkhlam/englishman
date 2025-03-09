@@ -1,6 +1,6 @@
 {
 	"name": "englishman",
-	"homepage": "https://gitkhlam.github.io/Englishman",
+	"homepage": "https://gitkhlam.github.io/englishman",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
@@ -11,7 +11,7 @@
 		"postbuild": "cp dist/index.html dist/404.html",
 		"preview": "vite preview",
 		"predeploy": "rm -rf dist && vite build",
-		"deploy": "gh-pages -d dist"
+		"deploy": "vite build && cp dist/index.html dist/404.html && gh-pages -d dist"
 	},
 	"dependencies": {
 		"@heroicons/react": "^2.2.0",
