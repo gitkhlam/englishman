@@ -11,7 +11,7 @@ export function useWordFilter({
     trigger,
     setCurrentItem,
 }) {
-
+    
     // set of unique parts of speech, exclude empty string    
     useEffect(() => {
         setUniqueParts(

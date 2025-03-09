@@ -14,6 +14,9 @@ export default defineConfig({
   server: {
     host: true, // open server on localhost
     port: 5173, 
+    headers: {
+      "Content-Security-Policy": "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data:;"
+    }
   }
   
 })

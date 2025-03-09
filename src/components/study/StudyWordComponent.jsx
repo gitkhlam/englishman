@@ -43,10 +43,13 @@ export default function StudyWordComponent({
     }, [workArray, currentItem, showApiExamples]);
 
     
-    const localExamples = useMemo(
-        () => workArray[currentItem].example.split("+"),
-        [workArray, currentItem]
-    );
+    const localExamples = useMemo(() => {
+        if (!workArray || workArray.length === 0 || !workArray[currentItem]) {
+            return []; 
+        }
+        return workArray[currentItem].example.split("+");
+    }, [workArray, currentItem]);
+
     const apiExamples = useMemo(
         () => exampleSentences.slice(0, 3),
         [exampleSentences]
@@ -67,7 +70,7 @@ export default function StudyWordComponent({
         <div className="flex flex-col gap-3">    
             
                 <motion.p
-                    key={`${workArray[currentItem].word}-word`} 
+                    key={`${workArray[currentItem]}-word`} 
                     initial={{ opacity: 0, x: 20 }} 
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }} 
@@ -79,12 +82,12 @@ export default function StudyWordComponent({
                         className="cursor-pointer py-1 px-2 rounded-lg bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] text-2xl font-semibold hover:opacity-70"
                         onClick={() => speak(workArray[currentItem].word)}
                     >
-                        {workArray[currentItem].word}
+                        { workArray.length > 0 && workArray[currentItem].word}
                     </motion.span>
                 </motion.p>
 
                 <motion.p
-                    key={`${workArray[currentItem].translation}-translation`}
+                    key={`${workArray[currentItem]}-translation`}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
@@ -95,7 +98,7 @@ export default function StudyWordComponent({
                     <span 
                         transition={{ duration: 0.4, ease: "easeOut" }}
                         className="text-2xl font-semibold">
-                        {workArray[currentItem].translation}
+                        { workArray.length > 0 && workArray[currentItem].translation}
                     </span>
                 </motion.p>
 
@@ -110,14 +113,14 @@ export default function StudyWordComponent({
                 </motion.div>
             ) : (
                     <motion.div
-                        key={`${workArray[currentItem].word}-examples`} 
+                        key={`${workArray[currentItem]}-examples`} 
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 20 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
                     >
                         {renderExamples(
-                            !showApiExamples && workArray[currentItem].example.length >= 1,
+                            !showApiExamples && workArray.length > 0 && workArray[currentItem].example.length >= 1,
                             localExamples,
                             false
                         )}

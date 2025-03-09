@@ -11,6 +11,7 @@ import Preloader from './sections/Preloader';
 import { motion, AnimatePresence } from "framer-motion";
 
 const MemoTestSection = memo(TestSection);
+const MemoStudySection = memo(StudySection);
 
 // Главный компонент с маршрутами
 function App() {
@@ -217,15 +218,21 @@ function AppContent() {
                                     transition={{ duration: 0.5, ease: "easeInOut" }}
                                     className="w-full"
                                 >
-                                    <StudySection {...settings} />
+                                    <MemoStudySection {...settings} />
                                 </motion.div>
                             }
                         />
                         <Route
                             path="/englishman/mistakes"
-                            element={<MistakesSection wrongWords={wrongWords} setMistakeTest={setMistakeTest} setMistakeSection={setMistakeSection} setTestMode={setTestMode} setCurrentItem={setCurrentItem} />}
+                            element={
+                                <MistakesSection 
+                                    wrongWords={wrongWords} setMistakeTest={setMistakeTest} 
+                                    setMistakeSection={setMistakeSection} setTestMode={setTestMode} 
+                                    setCurrentItem={setCurrentItem}    
+                                />
+                            }
                         />
-                        <Route path="*" element={<div>404 - Page Not Found</div>} />
+                        <Route path="*" element={<div className='text-[var(--dark)] dark:text-[var(--light)]'>404 - Page Not Found</div>} />
                     </Routes>
                 </main>
 
@@ -277,6 +284,8 @@ function MistakesSection({ wrongWords, setMistakeTest, setMistakeSection, setTes
                 <p className="mt-2 text-[var(--dark)] dark:text-[var(--light)] text-xl font-medium">
                     You have {`${wrongWords.length} weak ${wrongWords.length > 1 ? "words" : "word"}`}
                 </p>
+                { wrongWords.length > 1 && 
+                <>
                 <div className="mt-4 max-h-[400px] overflow-y-auto text-[var(--dark)] dark:text-[var(--light)] w-full border border-gray-300 dark:border-gray-600">
                     <div className="w-full overflow-x-auto">
                         <table className="w-full min-w-[500px] border-collapse border border-gray-300 dark:border-gray-600">
@@ -315,6 +324,8 @@ function MistakesSection({ wrongWords, setMistakeTest, setMistakeSection, setTes
                 >
                     Start test
                 </button>
+                </>
+                }
             </div>
         </motion.div>
     );
