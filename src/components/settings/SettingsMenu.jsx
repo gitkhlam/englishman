@@ -1,5 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 
 export default function SettingsMenu({ sound, setSound, showApiExamples, setShowGoogleSettings, setShowApiExamples, setGoogleSpread, googleLink, googleSpread, wrongWords, setMistakeSection, setSettingsVisible, setMistakeTest }) {
+
+    const navigate = useNavigate();
 
     const toggleSound = (e) => {
         e.stopPropagation();
@@ -63,7 +66,8 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
                     e.stopPropagation();
                     setSettingsVisible(false);
                     setMistakeSection(true);
-                    setMistakeTest(false)
+                    setMistakeTest(false);
+                    navigate("/englishman/mistakes")
                 }}>
                     Mistake list 🗿
                 </Button>
