@@ -10,6 +10,14 @@ export default defineConfig({
   ],
 
   base: '/englishman/', // name of repository
+  
+  build: {
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: true
+      }
+    }
+  },
 
   server: {
     host: true, // open server on localhost
@@ -18,5 +26,6 @@ export default defineConfig({
       "Content-Security-Policy": "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: data:;"
     }
   }
+  
   
 })
