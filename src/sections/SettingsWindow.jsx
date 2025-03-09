@@ -24,8 +24,8 @@ export default function SettingsWindow({
     const handleBackgroundClick = (e) => {
         if (e.target === e.currentTarget) {
             setSettingsVisible(false);
-            setMistakeSection(false);
-            setMistakeTest(false);
+            // setMistakeSection(false);
+            // setMistakeTest(false);
         }
     };
 

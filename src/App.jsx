@@ -316,6 +316,7 @@ export default function App() {
                                 <button 
                                     onClick={() => {
                                         setTestMode("choice");
+                                        setCurrentItem(0);
                                         setMistakeSection(false);
                                         setMistakeTest(true);
                                     }}
