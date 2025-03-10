@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import "../../langConfig.js";
 import { t } from 'i18next';
+import { useNavigate } from 'react-router-dom';
 
 export default function StudySwitchButtons({ currentItem, workArray, speak, sound, setCurrentItem, setSound }) {
+
+    const navigate = useNavigate(); // Для программной навигации
 
     // function processes click on next/prev button in study mode
     const handleSwitchButton = (nav) => {
@@ -61,6 +64,7 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
                             className="buttonStyle"
                             onClick={() => {
                                 setCurrentItem(0);
+                                navigate("/englishman/test");
                             }}
                         >
                             {t("start_test")}

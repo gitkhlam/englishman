@@ -47,6 +47,8 @@ export default function TestSection({
     });
 
     const workArrayLength = workArray.length;
+    const { t } = useTranslation();
+
     
     // processes click on one of mode buttons
     const handleClickMode = useCallback((mode) => {
@@ -83,7 +85,7 @@ export default function TestSection({
                 return [...filtered, workArray[currentItem]];
             });
             
-            showResultWindow("wrong.mp3", 500, "Wrong! ❌");
+            showResultWindow("wrong.mp3", 500, `${t("wrong_answer")} ❌`);
         }
     };
 
@@ -107,14 +109,12 @@ export default function TestSection({
     };
 
     // function shows full-sized window with result of answer
-    const showResultWindow = (src = "correct.mp3", time = 500, message = "Correct ✅") => {
+    const showResultWindow = (src = "correct.mp3", time = 500, message = `${t("correct_answer")} ✅`) => {
         setCurrentNotificationMessage(message);
         setVisibleNotification(true);
         sound && playSound(import.meta.env.BASE_URL + src); // answer sound plays if sound enabled
         time !== 0 && setTimeout(() => setVisibleNotification(false), time);
     };
-
-    const { t } = useTranslation();
     
     return (
         <section className="w-full">
@@ -284,21 +284,23 @@ export default function TestSection({
                                     {(() => {
                                         const percentage = ((workArrayLength - currentProgress.length) * 100) / workArrayLength;
 
-                                        if (percentage === 100) return "Excellent! Congratulations! 🏆";
-                                        if (percentage >= 80) return "Well done! Keep going! 📑";
-                                            if (percentage >= 50) return "Not great ☹️, but you're getting there! Keep pushing!";
-                                        return "That's really bad! 🙅‍♂️ You need to push harder!";
+                                        if (percentage === 100) return t("result_1");
+                                        if (percentage >=90) return t("result_2");
+                                        if (percentage >= 80) return t("result_3"); ;
+                                        if (percentage >= 60) return t("result_4");
+                                        if (percentage >= 50) return t("result_5");
+                                        return t("result_6");
                                     })()}
                                 </span>
 
                                 <span className='text-3xl font-bold'>
-                                    Your score is {` `} 
+                                    {t("your_score")} {` `} 
                                     <span className='bg-[var(--light)] text-[var(--dark)] p-1 rounded-lg'>
                                             {`${Math.round((workArrayLength - currentProgress.length) * 100 / workArrayLength)}%.`}
                                     </span>
                                 </span> 
                                 <span className='text-2xl'>
-                                    {`You got ${workArrayLength - currentProgress.length} out of ${workArrayLength} words correct.`}
+                                            {`${t("you_got")} ${workArrayLength - currentProgress.length} ${t("out_of")} ${workArrayLength} ${t("words_correct")}.`}
                                 </span>
                             </motion.div>
                             : <motion.span 
@@ -321,6 +323,8 @@ export default function TestSection({
 
 
 function Notifications({ currentProgress, setWrongWords, isResult, setCurrentProgress, setSelectedPart, setSelectedTheme, setVisibleNotification, mistakeTest, resetAll, children}) {
+
+    const { t } = useTranslation();
     
     const addWords = (newArray) => {
         setWrongWords(prevWords => {
@@ -368,7 +372,7 @@ function Notifications({ currentProgress, setWrongWords, isResult, setCurrentPro
             <button 
                 onClick={handleClick}
                 className='mt-4 text-3xl font-medium bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] py-1 px-3 rounded-lg cursor-pointer hover:opacity-70'>
-                Close
+                {t("close")}
             </button>
         }
         </div>
