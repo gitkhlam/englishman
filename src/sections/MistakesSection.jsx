@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import "../langConfig.js";
 import { useTranslation } from "react-i18next";
+import { routeEnglishman } from '../App.jsx';
 
 export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode, setCurrentItem }) {
 
@@ -58,7 +59,7 @@ export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode
                                 setTestMode("choice");
                                 setCurrentItem(0);
                                 setMistakeTest(true);
-                                navigate("/englishman/test"); // Переход на тест
+                                navigate(`${routeEnglishman}/test`); // Переход на тест
                             }}
                             className="mt-5 buttonStyle text-xl font-medium"
                         >

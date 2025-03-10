@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import "../../langConfig.js";
-import MotionComponent from '../MotionComponent.jsx';
-import { AnimatePresence } from 'framer-motion';
+import { routeEnglishman } from '../../App.jsx';
 
 export default function SettingsMenu({ sound, setSound, showApiExamples, setShowApiExamples, setGoogleSpread, googleLink, googleSpread, wrongWords, setSettingsVisible, setMistakeTest }) {
 
@@ -79,7 +78,7 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
             <Button onClick={(e) => {
                 e.stopPropagation();
                 setSettingsVisible(false);
-                navigate("/englishman/custom")
+                navigate(`${routeEnglishman}/custom`)
             }}>
                 {googleLink ? t("edit_gs") : t("add_gs")}
             </Button>
@@ -97,7 +96,7 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
                     e.stopPropagation();
                     setSettingsVisible(false);
                     setMistakeTest(false);
-                    navigate("/englishman/mistakes")
+                    navigate(`${routeEnglishman}/mistakes`)
                 }}>
                     { t("mistakes_list") }
                 </Button>

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import "../../langConfig.js";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { routeEnglishman } from '../../App.jsx';
 
 export default function StudySwitchButtons({ currentItem, workArray, speak, sound, setCurrentItem, setSound }) {
 
@@ -66,7 +67,7 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
                             className="buttonStyle"
                             onClick={() => {
                                 setCurrentItem(0);
-                                navigate("/englishman/test");
+                                navigate(`${routeEnglishman}/test`);
                             }}
                         >
                             {t("start_test")}

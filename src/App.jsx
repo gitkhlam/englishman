@@ -19,6 +19,8 @@ import MotionComponent from './components/MotionComponent.jsx';
 const MemoTestSection = memo(TestSection);
 const MemoStudySection = memo(StudySection);
 
+export const routeEnglishman = "/englishman";
+
 // Главный компонент с маршрутами
 function App() {
     return (
@@ -109,7 +111,7 @@ function AppContent() {
         setCurrentItem(0);
         setSettingsVisible(false);
         setMistakeTest(false);
-        navigate("/englishman/"); // Возвращаемся на главную
+        navigate(`${routeEnglishman}/`); // Возвращаемся на главную
     }, []);
 
     const settings = useMemo(() => ({
@@ -166,11 +168,11 @@ function AppContent() {
                 
                     <main className="flex flex-col items-center justify-center grow container">
                         <Routes>
-                            <Route path="/englishman" element={<WelcomeScreen navigate={navigate} />} />
-                            <Route path="/englishman/test" element={<MemoTestSection {...settings} />} />
-                            <Route path="/englishman/study" element={<MemoStudySection {...settings} />} />
-                            <Route path="/englishman/mistakes" element={<MistakesSection wrongWords={wrongWords} setMistakeTest={setMistakeTest} setTestMode={setTestMode} setCurrentItem={setCurrentItem} />} />
-                            <Route path="/englishman/custom" element={<GoogleSettings googleLink={googleLink} setGoogleLink={setGoogleLink} setLoadingData={setLoadingData} />} />
+                            <Route path={routeEnglishman} element={<WelcomeScreen navigate={navigate} />} />
+                        <Route path={`${routeEnglishman}/test`} element={<MemoTestSection {...settings} />} />
+                        <Route path={`${routeEnglishman}/study`} element={<MemoStudySection {...settings} />} />
+                        <Route path={`${routeEnglishman}/mistakes`} element={<MistakesSection wrongWords={wrongWords} setMistakeTest={setMistakeTest} setTestMode={setTestMode} setCurrentItem={setCurrentItem} />} />
+                        <Route path={`${routeEnglishman}/custom`} element={<GoogleSettings googleLink={googleLink} setGoogleLink={setGoogleLink} setLoadingData={setLoadingData} />} />
 
                             <Route path="*" element={<div>404 - { t("404")}</div>} />
                         </Routes>
@@ -204,8 +206,8 @@ function WelcomeScreen ({ navigate }){
                 {t("hello_text")}
             </h1>
             <div className="mt-7 flex justify-center gap-5 flex-wrap">
-                <ModeButton onClick={() => navigate("/englishman/study")}>{ t("study_mode")}</ModeButton>
-                <ModeButton onClick={() => navigate("/englishman/test")}>{ t("test_mode")}</ModeButton>
+                <ModeButton onClick={() => navigate(`${routeEnglishman}/study`)}>{ t("study_mode")}</ModeButton>
+                <ModeButton onClick={() => navigate(`${routeEnglishman}/test`)}>{ t("test_mode")}</ModeButton>
             </div>
         </MotionComponent>
     );
