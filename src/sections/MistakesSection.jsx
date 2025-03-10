@@ -1,10 +1,14 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import "../langConfig.js";
-import { t } from 'i18next';
+import { useTranslation } from "react-i18next";
 
 export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode, setCurrentItem }) {
+
+    const { t } = useTranslation();
+    
     const navigate = useNavigate();
+
     return (
         <motion.div
             key="mistake-test-section"

@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion';
 import "../../langConfig.js";
-import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function StudySwitchButtons({ currentItem, workArray, speak, sound, setCurrentItem, setSound }) {
 
+    const { t } = useTranslation();
+    
     const navigate = useNavigate(); // Для программной навигации
 
     // function processes click on next/prev button in study mode

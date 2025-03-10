@@ -75,9 +75,9 @@ export default function TestSection({
             if (currentItem + 1 >= workArray.length) {
                 // setSelectedPart("all");
                 // setSelectedTheme("all");
-                showResultWindow("welldone.mp3", 0, "result");
+                showResultWindow({src:"welldone.mp3", time:0, message:"result"});
             } else {
-                showResultWindow(); // show full-screen size window with correct answer
+                showResultWindow({}); // show full-screen size window with correct answer
             }
         } else {
             setCurrentProgress(prev => {
@@ -85,7 +85,7 @@ export default function TestSection({
                 return [...filtered, workArray[currentItem]];
             });
             
-            showResultWindow("wrong.mp3", 500, `${t("wrong_answer")} ❌`);
+            showResultWindow({src:"wrong.mp3", message:`${t("wrong_answer")} ❌`});
         }
     };
 
@@ -109,7 +109,7 @@ export default function TestSection({
     };
 
     // function shows full-sized window with result of answer
-    const showResultWindow = (src = "correct.mp3", time = 500, message = `${t("correct_answer")} ✅`) => {
+    const showResultWindow = ({ src = "correct.mp3", time = 500, message = `${t("correct_answer")} ✅` }) => {
         setCurrentNotificationMessage(message);
         setVisibleNotification(true);
         sound && playSound(import.meta.env.BASE_URL + src); // answer sound plays if sound enabled

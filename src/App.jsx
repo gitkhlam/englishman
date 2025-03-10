@@ -8,12 +8,13 @@ import StudySection from './sections/StudySection';
 import SpreadsheetParser from './utilities/SpreadSheetParse';
 import SettingsWindow from './sections/SettingsWindow';
 import Preloader from './sections/Preloader';
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import Loader from './components/Loader';
 import MistakesSection from './sections/MistakesSection';
 import { useTranslation } from "react-i18next";
 import "./langConfig.js";
 import GoogleSettings from './components/settings/GoogleSettings.jsx';
+import MotionComponent from './components/MotionComponent.jsx';
 
 const MemoTestSection = memo(TestSection);
 const MemoStudySection = memo(StudySection);
@@ -29,6 +30,7 @@ function App() {
 
 // Основная логика приложения
 function AppContent() {
+
     const { t } = useTranslation();
 
     const navigate = useNavigate(); // Для программной навигации
@@ -136,26 +138,27 @@ function AppContent() {
         <>
             <AnimatePresence mode="wait">
                 {!isLoaded && (
-                    <motion.div
-                        key="preloader"
-                        className="fixed z-101 w-screen h-screen inset-0 dark:bg-[var(--dark)] bg-[var(--light)]"
-                        initial={{ opacity: 1 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0, y: "-100vh" }}
-                        transition={{ duration: 0.7, ease: "easeInOut" }}
-                    >
-                        <Preloader loadingData={loadingData} onComplete={handleComplete} />
-                    </motion.div>
+                <MotionComponent
+                    motionKey="preloader"
+                    opacity1={1}
+                    opacity2={1}
+                    opacity3={0}
+                    duration={0.7}
+                    y3={"-100vh"}
+                    animation="easeInOut"
+                    style="fixed z-101 w-screen h-screen inset-0 dark:bg-[var(--dark)] bg-[var(--light)]"
+                >
+                    <Preloader loadingData={loadingData} onComplete={handleComplete} />
+                </MotionComponent>
                 )}
             </AnimatePresence>
-
+            
             <AnimatePresence mode="wait">
-                {loadingData && <motion.div className="fixed inset-0 flex items-center justify-center z-99" exit={{ opacity: 0, y: "-100vh" }}><Loader fullText="Loading...⏳" /></motion.div>}
+                {loadingData && <MotionComponent motionKey="loader-data" style="fixed inset-0 flex items-center justify-center z-99" opacity3={0} y3={"100vh"} y1={0} y2={0}><Loader fullText="Loading...⏳" /></MotionComponent>}
             </AnimatePresence>
             <div className={`flex flex-col dark:text-[var(--light)] text-[var(--dark)] ${settingsVisible ? "h-[100dvh]" : "min-h-[100dvh]"}`}>
                 {!settingsVisible && <HeaderSection theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} logoClick={resetAll}>EnglishMan</HeaderSection> }
                 
-                <AnimatePresence mode="wait">
                     <main className="flex flex-col items-center justify-center grow container">
                         <Routes>
                             <Route path="/englishman" element={<WelcomeScreen navigate={navigate} />} />
@@ -167,7 +170,6 @@ function AppContent() {
                             <Route path="*" element={<div>404 - { t("404")}</div>} />
                         </Routes>
                     </main>
-                </AnimatePresence>
                 <footer className="p-5 text-center font-semibold">Kyiv {new Date().getFullYear()}</footer>
             </div>
             <AnimatePresence mode="wait">
@@ -180,17 +182,19 @@ function AppContent() {
 
 export default App;
 
+
 function WelcomeScreen ({ navigate }){
     const { t } = useTranslation();
-
     return (
-        <motion.div 
-            initial={{ opacity: 0, scale: 0.55 }} 
-            animate={{ opacity: 1, scale: 1 }} 
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.7, ease: "easeInOut" }}
-            className='max-w-[600px] '
-            >
+        <MotionComponent
+            motionKey="welcome-screen"
+            scale1={0.55}
+            scale2={1}
+            scale3={0.95}
+            duration={0.7}
+            animation="easeInOut"   
+            style='max-w-[600px]'
+        >
             <h1 className="text-2xl sm:text-3xl font-semibold text-center mb-5 transition-colors duration-700">
                 {t("hello_text")}
             </h1>
@@ -198,6 +202,6 @@ function WelcomeScreen ({ navigate }){
                 <ModeButton onClick={() => navigate("/englishman/study")}>{ t("study_mode")}</ModeButton>
                 <ModeButton onClick={() => navigate("/englishman/test")}>{ t("test_mode")}</ModeButton>
             </div>
-        </motion.div>
+        </MotionComponent>
     );
 }

@@ -3,9 +3,11 @@ import { ChevronDown } from "lucide-react";
 import { motion } from 'framer-motion';
 import SpreadsheetParser from '../../utilities/SpreadSheetParse';
 import "../../langConfig.js";
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export default function GoogleSettings({ googleLink, setGoogleLink, setLoadingData }) {
+
+    const { t } = useTranslation();
 
     const [inputLink, setInputLink] = useState(""); // state for input link
     const [openAcc, setOpenAcc] = useState(false);

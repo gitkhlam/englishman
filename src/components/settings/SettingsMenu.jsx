@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import "../../langConfig.js";
+import MotionComponent from '../MotionComponent.jsx';
+import { AnimatePresence } from 'framer-motion';
 
-export default function SettingsMenu({ sound, setSound, showApiExamples, setShowGoogleSettings, setShowApiExamples, setGoogleSpread, googleLink, googleSpread, wrongWords, setSettingsVisible, setMistakeTest }) {
+export default function SettingsMenu({ sound, setSound, showApiExamples, setShowApiExamples, setGoogleSpread, googleLink, googleSpread, wrongWords, setSettingsVisible, setMistakeTest }) {
 
     const navigate = useNavigate();
     
@@ -37,7 +39,6 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
             {children}
         </button>
     );
-
     function handleLanguageChange(event) {
         const newLang = event.target.value;
 
@@ -47,12 +48,14 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
     const languages = {
         en: t("english"),
         ru: t("russian"),
+        ua: t("ukrainian")
     };
 
     const selectStyle = " truncate cursor-pointer bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] p-1 rounded-lg outline-none hover:opacity-70 text-2xl font-medium";
 
     return (
         <>
+    
             <div className='flex justify-center w-full sm:w-fit bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] p-2 gap-2 rounded-lg'>
                 <p className='text-3xl sm:text-4xl font-bold'>{t("language_menu")}</p>
                 <select className={selectStyle} value={i18n.language} onChange={handleLanguageChange}>
@@ -67,6 +70,7 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
             </Button>
 
             <Button onClick={toggleApiExamples}>
+                
                 { showApiExamples
                     ? t("api_examples_enabled")
                     : t("api_examples_disabled") }
