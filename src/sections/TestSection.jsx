@@ -5,6 +5,9 @@ import ThemesDropdown from '../components/ThemesDropdown';
 import TestManualMode from '../components/test/TestManualMode';
 import TestChoiceMode from '../components/test/TestChoiceMode';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from "react-i18next";
+import "../langConfig.js";
+
 
 export default function TestSection({
     wordsData,
@@ -111,6 +114,8 @@ export default function TestSection({
         time !== 0 && setTimeout(() => setVisibleNotification(false), time);
     };
 
+    const { t } = useTranslation();
+    
     return (
         <section className="w-full">
             <div className={`max-w-170 mx-auto flex flex-col ${testMode ? "space-y-3" : "space-y-4"} justify-center items-center`}>
@@ -122,12 +127,13 @@ export default function TestSection({
                         exit={{ opacity: 0, x: 20, y: 10 }}
                         transition={{ duration: 0.5, ease: "easeInOut" }}
                     >
-                        <span className={`${testMode ? "p-4" : ""} text-[var(--dark)] dark:text-[var(--light)] text-4xl font-semibold text-center`}>
-                            { mistakeTest ? "Mistake test mode" : "Test mode ✍️" }
-                        </span>
+                        <p className={`${testMode ? "p-4" : ""} text-[var(--dark)] dark:text-[var(--light)] text-4xl font-semibold text-center`}>
+                            {mistakeTest ? t("mistake_test_mode") : t("test_mode2") }
+                            
+                        </p>
                         { !testMode && (
                             <p className="text-[var(--dark)] dark:text-[var(--light)] text-2xl font-medium text-center">
-                                Choose test mode:
+                                { t("choose_test_mode") }
                             </p>
                         ) }
                     </motion.div>
@@ -150,10 +156,10 @@ export default function TestSection({
                                 {testMode ? (
                                     <span className="sm:hidden">{mode === "manual" ? "⌨️" : "✅"}</span>
                                 ) : (
-                                    <span className="sm:hidden">{mode === "manual" ? "Manual ⌨️" : "Choice ✅"}</span>
+                                    <span className="sm:hidden">{mode === "manual" ? `${t("manual")} ⌨️` : `${t("choice")} ✅`}</span>
                                 )}
                                 <span className="hidden sm:inline">
-                                    {mode === "manual" ? "Manual Type ⌨️" : "Choice Mode ✅"}
+                                    {mode === "manual" ? `${t("manual_mode")} ⌨️` : `${t("choice_mode")} ✅`}
                                 </span>
                             </ModeButton>
                         ))}
@@ -173,13 +179,13 @@ export default function TestSection({
                         >
                             <div className="flex flex-col gap-3">
                                 {mistakeTest &&
-                                    <p className='text-3xl font-bold border-b-2 w-fit'>Mistake words test</p>
+                                    <p className='text-3xl font-bold border-b-2 w-fit'>{t("mistake_word_test")}</p>
                                 }
                                 {/* { !mistakeMode &&  */}
                                     <>
                                     {uniqueParts.length >= 1 && (
                                         <ThemesDropdown
-                                            label="Choose part of speech:"
+                                            label={t("choose_part_of_speech")}
                                             value={selectedPart}
                                             options={uniqueParts}
                                             onChange={handlePartChange}
@@ -188,7 +194,7 @@ export default function TestSection({
                                     )}
                                     {themeArray.length >= 1 && (
                                         <ThemesDropdown
-                                            label="Choose theme:"
+                                            label={t("choose_theme")}
                                             value={selectedTheme}
                                             options={themeArray}
                                             onChange={handleThemeChange}

@@ -1,8 +1,12 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
+import "../../langConfig.js";
 
-export default function SettingsMenu({ sound, setSound, showApiExamples, setShowGoogleSettings, setShowApiExamples, setGoogleSpread, googleLink, googleSpread, wrongWords, setMistakeSection, setSettingsVisible, setMistakeTest }) {
+export default function SettingsMenu({ sound, setSound, showApiExamples, setShowGoogleSettings, setShowApiExamples, setGoogleSpread, googleLink, googleSpread, wrongWords, setSettingsVisible, setMistakeTest }) {
 
     const navigate = useNavigate();
+    
+    const { t, i18n } = useTranslation();
 
     const toggleSound = (e) => {
         e.stopPropagation();
@@ -34,30 +38,53 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
         </button>
     );
 
+    function handleLanguageChange(event) {
+        const newLang = event.target.value;
+
+        i18n.changeLanguage(newLang);
+    }
+
+    const languages = {
+        en: t("english"),
+        ru: t("russian"),
+    };
+
+    const selectStyle = " truncate cursor-pointer bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] p-1 rounded-lg outline-none hover:opacity-70 text-2xl font-medium";
+
     return (
         <>
+            <div className='flex justify-center w-full sm:w-fit bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] p-2 gap-2 rounded-lg'>
+                <p className='text-3xl sm:text-4xl font-bold'>{t("language_menu")}</p>
+                <select className={selectStyle} value={i18n.language} onChange={handleLanguageChange}>
+                    {Object.entries(languages).map(([code, name]) => (
+                        <option key={code} value={code}>{name}</option>
+                    ))}
+                </select>
+            </div>
+
             <Button onClick={toggleSound}>
-                {sound ? 'Sound ENABLED 🔊' : 'Sound DISABLED 🔇'}
+                {sound ? t("sound_enabled") : t("sound_disabled")}
             </Button>
 
             <Button onClick={toggleApiExamples}>
-                {showApiExamples
-                    ? 'Examples from API ENABLED ✅'
-                    : 'Examples from API DISABLED ❌'}
+                { showApiExamples
+                    ? t("api_examples_enabled")
+                    : t("api_examples_disabled") }
             </Button>
 
             <Button onClick={(e) => {
                 e.stopPropagation();
-                setShowGoogleSettings(true);
+                setSettingsVisible(false);
+                navigate("/englishman/custom")
             }}>
-                {googleLink ? 'Edit Google Sheet📄' : 'Add Google Sheet📄'}
+                {googleLink ? t("edit_gs") : t("add_gs")}
             </Button>
 
             {googleLink && (
                 <Button onClick={toggleGoogleSpread}>
-                    {googleSpread
-                        ? 'Current data: Google Sheet📄'
-                        : 'Current data: Default🗂️'}
+                    { googleSpread
+                        ? t("current_data_gs")
+                        : t("current_data_default") }
                 </Button>
             )}
 
@@ -65,11 +92,10 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
                 <Button onClick={(e) => {
                     e.stopPropagation();
                     setSettingsVisible(false);
-                    setMistakeSection(true);
                     setMistakeTest(false);
                     navigate("/englishman/mistakes")
                 }}>
-                    Mistake list 🗿
+                    { t("mistakes_list") }
                 </Button>
             }
         </>

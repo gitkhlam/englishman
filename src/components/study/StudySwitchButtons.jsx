@@ -1,6 +1,8 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import "../../langConfig.js";
+import { t } from 'i18next';
 
-export default function StudySwitchButtons({ currentItem, workArray, speak, sound, setCurrentItem, setSound, setWorkMode }) {
+export default function StudySwitchButtons({ currentItem, workArray, speak, sound, setCurrentItem, setSound }) {
 
     // function processes click on next/prev button in study mode
     const handleSwitchButton = (nav) => {
@@ -24,7 +26,7 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
                     onClick={() => handleSwitchButton("prev")}
                 >
                     <span className='sm:hidden'>⬅️</span>
-                    <span className='hidden sm:block'>⬅️ prev</span>
+                    <span className='hidden sm:block'>⬅️ {t("prev")}</span>
                 </button>
                 <p>
                     {currentItem + 1}/{workArray.length}
@@ -41,7 +43,7 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
                     onClick={() => handleSwitchButton("next")}
                 >
                     <span className='sm:hidden'>➡️</span>
-                    <span className='hidden sm:block'>next ➡️</span>
+                    <span className='hidden sm:block'>{t("next")} ➡️</span>
                 </button>
             </div>
 
@@ -59,10 +61,9 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
                             className="buttonStyle"
                             onClick={() => {
                                 setCurrentItem(0);
-                                setWorkMode("test");
                             }}
                         >
-                            Start test
+                            {t("start_test")}
                         </button>
                     </motion.div>
                 )}

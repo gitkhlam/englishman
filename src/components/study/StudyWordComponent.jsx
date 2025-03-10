@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import ExamplesComponent from './ExamplesComponent';
-import { motion, AnimatePresence } from 'framer-motion';
-
+import { motion } from 'framer-motion';
+import { useTranslation } from "react-i18next";
+import "../../langConfig.js";
 
 export default function StudyWordComponent({
     speak,
@@ -13,6 +14,8 @@ export default function StudyWordComponent({
     
     const [exampleSentences, setExampleSentences] = useState([]); // state for examples
     const [loadingSentences, setLoadingSentences] = useState(false); // state for loading sentences
+
+    const { t } = useTranslation();
 
     // fetching examples 
     const fetchExampleSentences = async (word) => {
@@ -77,7 +80,7 @@ export default function StudyWordComponent({
                     transition={{ duration: 0.4, ease: "easeOut" }} 
                     className="break-words overflow-hidden"
                 >
-                    Word:{" "}
+                    {t("word")}:{" "}
                     <motion.span
                         className="cursor-pointer py-1 px-2 rounded-lg bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] text-2xl font-semibold hover:opacity-70"
                         onClick={() => speak(workArray[currentItem].word)}
@@ -94,7 +97,7 @@ export default function StudyWordComponent({
                     transition={{ duration: 0.4, ease: "easeOut" }}
                     className="break-words overflow-hidden" 
                 >
-                    Translation:{" "}
+                {t("translation")}:{" "}
                     <span 
                         transition={{ duration: 0.4, ease: "easeOut" }}
                         className="text-2xl font-semibold">
@@ -109,7 +112,7 @@ export default function StudyWordComponent({
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                 >
-                    Loading examples... ⏳
+                    {t("loading_examples")}
                 </motion.div>
             ) : (
                     <motion.div

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from "react-i18next";
+import "../../langConfig.js";
 
 export default function ExamplesComponent({ exampleArray, speak, isApi }) {
     const [accordionOpen, setAccordionOpen] = useState(false);
@@ -8,6 +10,8 @@ export default function ExamplesComponent({ exampleArray, speak, isApi }) {
         setAccordionOpen(false);
                 
     }, [exampleArray]);
+
+    const { t } = useTranslation();
     
     return (
         <div className="break-words">
@@ -16,8 +20,8 @@ export default function ExamplesComponent({ exampleArray, speak, isApi }) {
                 onClick={() => setAccordionOpen((prev) => !prev)}
             >
                 {exampleArray.length > 1
-                    ? `${isApi ? "API" : ""} Examples.. ${accordionOpen ? "👇" : "👈"}`
-                    : `${isApi ? "API" : ""} Example ${accordionOpen ? "👇" : "👈"}`}
+                    ? `${isApi ? "API" : ""} ${t("examples")} ${accordionOpen ? "👇" : "👈"}`
+                    : `${isApi ? "API" : ""} ${t("example")} ${accordionOpen ? "👇" : "👈"}`}
             </button>
             
             <AnimatePresence>

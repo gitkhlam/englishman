@@ -2,11 +2,12 @@ import { useWordFilter } from "../hooks/useWordFilter";
 import ThemesDropdown from '../components/ThemesDropdown';
 import StudyWordComponent from '../components/study/StudyWordComponent';
 import StudySwitchButtons from '../components/study/StudySwitchButtons';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useTranslation } from "react-i18next";
+import "../langConfig.js";
 
 export default function StudySection({
     wordsData,
-    setWorkMode,
     uniqueParts,
     selectedPart,
     selectedTheme,
@@ -31,6 +32,8 @@ export default function StudySection({
         setCurrentItem,
     });
 
+    const { t } = useTranslation();
+    
     // function speak of word
     const speak = (word) => {
 
@@ -54,22 +57,22 @@ export default function StudySection({
                 layout
                 className="max-w-170 mx-auto">
                 <p className='p-4 text-[var(--dark)] dark:text-[var(--light)] text-4xl font-semibold text-center'>
-                    Study mode 📚
+                    { t("study_mode") }
                 </p>
                 <div
                     className="flex flex-col gap-3 w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7"
                 >
-                    {uniqueParts.length > 1 && (
+                    {uniqueParts.length >= 1 && (
                         <div className='flex flex-col gap-3'>
                             <ThemesDropdown
-                                label="Choose part of speech:"
+                                label={ t("choose_part_of_speech") }
                                 value={selectedPart}
                                 options={uniqueParts}
                                 onChange={handlePartChange}
                             />
-                            {themeArray.length > 1 && (
+                            {themeArray.length >= 1 && (
                                 <ThemesDropdown
-                                    label="Choose theme:"
+                                    label={ t("choose_theme") }
                                     value={selectedTheme}
                                     options={themeArray}
                                     onChange={handleThemeChange}
@@ -91,7 +94,6 @@ export default function StudySection({
                         sound={sound}
                         setSound={setSound}
                         setCurrentItem={setCurrentItem}
-                        setWorkMode={setWorkMode}
                     />
                 </div>
             </motion.div>

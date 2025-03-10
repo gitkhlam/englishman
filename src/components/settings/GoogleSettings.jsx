@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { ChevronDown } from "lucide-react";
 import { motion } from 'framer-motion';
 import SpreadsheetParser from '../../utilities/SpreadSheetParse';
-export default function GoogleSettings({ googleLink, setGoogleLink, setLoading }) {
+import "../../langConfig.js";
+import { t } from 'i18next';
+
+export default function GoogleSettings({ googleLink, setGoogleLink, setLoadingData }) {
 
     const [inputLink, setInputLink] = useState(""); // state for input link
     const [openAcc, setOpenAcc] = useState(false);
@@ -22,15 +25,15 @@ export default function GoogleSettings({ googleLink, setGoogleLink, setLoading }
 
     async function loadData() {
         try {
-            setLoading(true);
+            setLoadingData(true);
             const data = await SpreadsheetParser(inputLink);
             console.log(data);
             
-            setLoading(false);
+            setLoadingData(false);
             return data !== null && data.length > 0;
         } catch (error) {
             console.log("Failed to load data. Please try again later.");
-            setLoading(false);
+            setLoadingData(false);
             return false;
         }
     }
@@ -38,14 +41,14 @@ export default function GoogleSettings({ googleLink, setGoogleLink, setLoading }
     return (
         <div className='rounded-lg dark:bg-[var(--light)] text-[var(--light)] border bg-[var(--dark)] dark:text-[var(--dark)] p-5 sm:max-w-3xl'>
             <span className='font-semibold text-2xl sm:text-3xl'>
-                Если вы хотите изучать свои слова, можно использовать Google Таблицы.
+                {t("google_settings_hello")}
             </span>
             <div className="my-3 border rounded-lg shadow-md overflow-hidden">
                 <button
                     className="w-full flex justify-between items-center p-2 cursor-pointer"
                     onClick={() => setOpenAcc(prev => !prev)}
                 >
-                    <span className="font-bold text-xl">Инструкция</span>
+                    <span className="font-bold text-xl">{t("instruction")}</span>
                     <ChevronDown
                         className={`duration-500 ease-in-out transform transition-transform ${openAcc ? "rotate-180" : "rotate-0"}`}
                     />
@@ -58,30 +61,30 @@ export default function GoogleSettings({ googleLink, setGoogleLink, setLoading }
                 >
                     <div className="p-4 border-t text-[var(--light)] dark:text-gray-700">
                         <ul className='text-xl'>
-                            <li>1. Создайте новый документ в Google Sheets.</li>
-                            <li>2. В первой строке укажите названия колонок: Word, Translation, Example, Part of speech, Theme (ВАЖНО! Названия должны совпадать).</li>
+                            <li>{t("instruction_list_1") }</li>
+                            <li>{t("instruction_list_2")}</li>
                             <li>
-                                3. Заполните таблицу своими данными:
+                                {t("instruction_list_3")}
                                 <ul className='list-disc pl-4'>
-                                    <li>Word и Translation — обязательные поля, они не могут быть пустыми.</li>
-                                    <li>Part of speech должно содержать одно из следующих значений: NOUN, PRONOUN, VERB, ADJECTIVE, ADVERB, PREPOSITION, CONJUNCTION, INTERJECTION.</li>
-                                    <li>Example — если у слова несколько примеров, разделяйте их знаком "+", например: go to bed + go on foot.</li>
+                                    <li>{t("instruction_list_3_1")}</li>
+                                    <li>{t("instruction_list_3_2")}</li>
+                                    <li>{t("instruction_list_3_3")}</li>
                                 </ul>
                             </li>
-                            <li>4. Опубликуйте таблицу в формате CSV: Файл → Опубликовать в интернете → CSV.</li>
-                            <li>5. Скопируйте полученную ссылку и вставьте её в соответствующее поле на сайте Englishman.</li>
+                            <li>{t("instruction_list_4")}</li>
+                            <li>{t("instruction_list_5")}</li>
                         </ul>
                     </div>
                 </motion.div>
             </div>
-            <span className='text-xl font-bold'>ВАЖНО! Если данные в Google Sheet обновились, нужно подождать несколько минут, чтобы подтягивало новые данные.</span>
+            <span className='text-xl font-bold'>{t("important_google")}</span>
             {googleLink !== null && (
                 <div className='mt-5 text-xl font-medium underline'>
-                    <a href={googleLink}>Current sheet</a>
+                    <a href={googleLink}>{t("cur_link")}</a>
                 </div>
             )}
             <div className='mt-3'>
-                <p className='text-xl font-bold'>Paste your link</p>
+                <p className='text-xl font-bold'>{t("paste_link")}</p>
                 <div className='mt-2 flex items-center gap-2'>
                     <input
                         type="text"
@@ -94,7 +97,7 @@ export default function GoogleSettings({ googleLink, setGoogleLink, setLoading }
                         className='select-none text-xl font-semibold border py-1 px-2 rounded-lg cursor-pointer bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] hover:opacity-50'
                         onClick={handleAddLinkButton}
                     >
-                        Add
+                        {t("add")}
                     </button>
                 </div>
             </div>

@@ -3,6 +3,8 @@ import HeaderSection from './HeaderSection';
 import SettingsMenu from '../components/settings/SettingsMenu';
 import GoogleSettings from '../components/settings/GoogleSettings';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from "react-i18next";
+import Loader from '../components/Loader';
 
 export default function SettingsWindow({
     theme,
@@ -18,14 +20,11 @@ export default function SettingsWindow({
     googleLink,
     setGoogleLink,
     wrongWords,
-    setMistakeSection,
     setMistakeTest
 }) {
     const handleBackgroundClick = (e) => {
         if (e.target === e.currentTarget) {
             setSettingsVisible(false);
-            // setMistakeSection(false);
-            // setMistakeTest(false);
         }
     };
 
@@ -36,8 +35,7 @@ export default function SettingsWindow({
         };
     }, []);
 
-    const [loading, setLoading] = useState(false);
-    const [showGoogleSettings, setShowGoogleSettings] = useState(false);
+    const { t } = useTranslation();
 
     return (
         <motion.div
@@ -47,11 +45,6 @@ export default function SettingsWindow({
             transition={{ duration: 0.5, ease: 'easeOut' }}
             className="fixed z-51 inset-0 flex flex-col min-w-[320px] backdrop-blur-xs overflow-auto"
         >
-            {loading && (
-                <div className="fixed inset-0 w-[100dvw] h-[100dvh] bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] flex items-center justify-center z-99 text-5xl font-bold">
-                    Loading...⏳
-                </div>
-            )}
             <HeaderSection
                 theme={theme}
                 setTheme={setTheme}
@@ -64,66 +57,27 @@ export default function SettingsWindow({
             >
                 <div className="flex flex-col items-center">
                     EnglishMan <br />
-                    <span className="text-xl">settings</span>
+                    <span className="text-xl">{ t('settings')}</span>
                 </div>
             </HeaderSection>
             <div
                 className="grow flex flex-col gap-5 justify-center items-center w-full container pb-5"
                 onClick={handleBackgroundClick}
             >
-                {!showGoogleSettings && (
-                    <SettingsMenu
-                        showApiExamples={showApiExamples}
-                        sound={sound}
-                        setSound={setSound}
-                        setShowApiExamples={setShowApiExamples}
-                        setGoogleSpread={setGoogleSpread}
-                        googleLink={googleLink}
-                        googleSpread={googleSpread}
-                        setShowGoogleSettings={setShowGoogleSettings}
-                        wrongWords={wrongWords}
-                        setMistakeSection={setMistakeSection}
-                        setSettingsVisible={setSettingsVisible}
-                        setMistakeTest={setMistakeTest}
-                    />
-                )}
-                <AnimatePresence mode="wait">
-                    {showGoogleSettings && (
-                        <motion.div
-                            key="google-settings"
-                            initial={{ opacity: 0, y: 200 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 200 }}
-                            transition={{ duration: 0.5, ease: 'easeOut' }}
-                        >
-                            <GoogleSettings
-                                googleLink={googleLink}
-                                setGoogleLink={setGoogleLink}
-                                setLoading={setLoading}
-                            />
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-                
+                <SettingsMenu
+                    showApiExamples={showApiExamples}
+                    sound={sound}
+                    setSound={setSound}
+                    setShowApiExamples={setShowApiExamples}
+                    setGoogleSpread={setGoogleSpread}
+                    googleLink={googleLink}
+                    googleSpread={googleSpread}
+                    wrongWords={wrongWords}
+                    setSettingsVisible={setSettingsVisible}
+                    setMistakeTest={setMistakeTest}
+                />
             </div>
         </motion.div>
     );
 }
 
-function MistakeComponent({ wrongWords }) {
-    
-    useEffect(() => {
-        document.body.style.userSelect = 'none';
-        return () => {
-            document.body.style.userSelect = '';
-        };
-    }, []);
-
-    return (
-        <div className=' select-auto'>
-            <ul>
-                { wrongWords.map((el, ind) => <li key={ind}>{el.word}</li>)}
-            </ul>
-        </div>
-    )
-}
