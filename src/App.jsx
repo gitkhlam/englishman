@@ -169,11 +169,10 @@ function AppContent() {
                     <main className="flex flex-col items-center justify-center grow container">
                         <Routes>
                             <Route path={routeEnglishman} element={<WelcomeScreen navigate={navigate} />} />
-                        <Route path={`${routeEnglishman}/test`} element={<MemoTestSection {...settings} />} />
-                        <Route path={`${routeEnglishman}/study`} element={<MemoStudySection {...settings} />} />
-                        <Route path={`${routeEnglishman}/mistakes`} element={<MistakesSection wrongWords={wrongWords} setMistakeTest={setMistakeTest} setTestMode={setTestMode} setCurrentItem={setCurrentItem} />} />
-                        <Route path={`${routeEnglishman}/custom`} element={<GoogleSettings googleLink={googleLink} setGoogleLink={setGoogleLink} setLoadingData={setLoadingData} />} />
-
+                            <Route path={`${routeEnglishman}/test`} element={<MemoTestSection {...settings} />} />
+                            <Route path={`${routeEnglishman}/study`} element={<MemoStudySection {...settings} />} />
+                            <Route path={`${routeEnglishman}/mistakes`} element={<MistakesSection wrongWords={wrongWords} setMistakeTest={setMistakeTest} setTestMode={setTestMode} setCurrentItem={setCurrentItem} />} />
+                            <Route path={`${routeEnglishman}/custom`} element={<GoogleSettings googleLink={googleLink} setGoogleLink={setGoogleLink} setLoadingData={setLoadingData} />} />
                             <Route path="*" element={<div>404 - { t("404")}</div>} />
                         </Routes>
                     </main>

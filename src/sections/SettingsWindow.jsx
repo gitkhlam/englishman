@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import HeaderSection from './HeaderSection';
 import SettingsMenu from '../components/settings/SettingsMenu';
-import GoogleSettings from '../components/settings/GoogleSettings';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useTranslation } from "react-i18next";
-import Loader from '../components/Loader';
 
 export default function SettingsWindow({
     theme,

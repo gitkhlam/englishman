@@ -5,6 +5,7 @@ import StudySwitchButtons from '../components/study/StudySwitchButtons';
 import { motion } from 'framer-motion';
 import { useTranslation } from "react-i18next";
 import "../langConfig.js";
+import MotionComponent from '../components/MotionComponent.jsx';
 
 export default function StudySection({
     wordsData,
