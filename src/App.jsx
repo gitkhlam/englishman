@@ -66,6 +66,9 @@ function AppContent() {
     const [googleLink, setGoogleLink] = useState(localStorage.getItem("googleLink"));
     const [isLoaded, setIsLoaded] = useState(false);
 
+    const [fastAnimation, setFastAnimation] = useState(false);
+
+
     useEffect(() => {
         async function loadData() {
             try {
@@ -129,8 +132,10 @@ function AppContent() {
         setWrongWords,
         wrongWords,
         mistakeTest,
-        resetAll
-    }), [wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeTest, resetAll]);
+        resetAll,
+        fastAnimation,
+        setFastAnimation
+    }), [fastAnimation, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeTest, resetAll]);
 
     const handleComplete = useCallback(() => setIsLoaded(true), []);
 

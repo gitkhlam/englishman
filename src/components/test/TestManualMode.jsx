@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import "../../langConfig.js";
 
-export default function TestManualMode({ input, setInput, processChoice, currentItem, workArray, setSound, sound }) {
+export default function TestManualMode({ fastAnimation,playSound, setFastAnimation, input, setInput, processChoice, currentItem, workArray, setSound, sound }) {
     const { t } = useTranslation();
-    
+
     return (
         <div>
             <input
@@ -18,7 +18,9 @@ export default function TestManualMode({ input, setInput, processChoice, current
                 <button className="buttonStyle" onClick={() => processChoice(input)}>
                     { t("check") }
                 </button>
-                <p>
+                <p 
+                    className={`cursor-pointer ${fastAnimation ? "underline" : ""}`}
+                    onClick={() => { setFastAnimation(prev => !prev); playSound(import.meta.env.BASE_URL + "click.mp3") }}>
                     {currentItem + 1}/{workArray.length}
                 </p>
                 <span

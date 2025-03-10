@@ -27,7 +27,9 @@ export default function TestSection({
     setWrongWords,
     wrongWords,
     mistakeTest,
-    resetAll
+    resetAll,
+    fastAnimation,
+    setFastAnimation,
 }) {
     const [input, setInput] = useState("");
     const [randomFourWords, setRandomFourWords] = useState([]); // array for four answer button
@@ -109,7 +111,7 @@ export default function TestSection({
     };
 
     // function shows full-sized window with result of answer
-    const showResultWindow = ({ src = "correct.mp3", time = 500, message = `${t("correct_answer")} ✅` }) => {
+    const showResultWindow = ({ src = "correct.mp3", time = fastAnimation ? 1 : 500, message = `${t("correct_answer")} ✅` }) => {
         setCurrentNotificationMessage(message);
         setVisibleNotification(true);
         sound && playSound(import.meta.env.BASE_URL + src); // answer sound plays if sound enabled
@@ -229,6 +231,9 @@ export default function TestSection({
                                             workArray={workArray}
                                             setSound={setSound}
                                             sound={sound}
+                                            setFastAnimation={setFastAnimation}
+                                            fastAnimation={fastAnimation}
+                                            playSound={playSound}
                                         />
                                     </motion.div>
                                 )}
@@ -239,7 +244,7 @@ export default function TestSection({
                                         initial={{ opacity: 0, y: -50 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: 0 }}
-                                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                                        transition={{ duration: fastAnimation ? 0 : 0.5, ease: "easeInOut" }}
                                     >
                                         <TestChoiceMode
                                             randomFourWords={randomFourWords}
@@ -248,6 +253,9 @@ export default function TestSection({
                                             sound={sound}
                                             setSound={setSound}
                                             workArray={workArray}
+                                            setFastAnimation={setFastAnimation}
+                                            fastAnimation={fastAnimation}
+                                            playSound={playSound}
                                         />
                                     </motion.div>
                                 )}
@@ -308,7 +316,7 @@ export default function TestSection({
                                 initial={{ opacity: 0.1 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                                transition={{ duration: fastAnimation ? 0 : 0.5, ease: "easeInOut" }}
                                 className='text-4xl font-medium'>
                                 { currentNotificationMessage }
                             </motion.span>
