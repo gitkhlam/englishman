@@ -56,13 +56,7 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
 
 
                 {currentItem === workArray.length - 1 && (
-                    <motion.div
-                        key="start test"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.7, ease: "easeOut" }}
-                        className="mt-4 flex justify-center">
+                    <div className="mt-4 flex justify-center">
                         <button
                             className="buttonStyle"
                             onClick={() => {
@@ -72,7 +66,7 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
                         >
                             {t("start_test")}
                         </button>
-                    </motion.div>
+                    </div>
                 )}
         </>
     )

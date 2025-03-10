@@ -50,7 +50,7 @@ function AppContent() {
             ? true
             : localStorage.getItem('soundStatus') === 'true'
     );
-    const [showApiExamples, setShowApiExamples] = useState(false);
+    const [showApiExamples, setShowApiExamples] = useState(true);
     const [googleSpread, setGoogleSpread] = useState(
         localStorage.getItem("googleLink") !== null &&
         (localStorage.getItem("googleSpread") === null ? true :
@@ -143,22 +143,22 @@ function AppContent() {
 
     return (
         <>
-            <AnimatePresence mode="wait">
+            {/* <AnimatePresence mode="wait">
                 {!isLoaded && (
-                <MotionComponent
-                    motionKey="preloader"
-                    opacity1={1}
-                    opacity2={1}
-                    opacity3={0}
-                    duration={0.7}
-                    y3={"-100vh"}
-                    animation="easeInOut"
-                    style="fixed z-101 w-screen h-screen inset-0 dark:bg-[var(--dark)] bg-[var(--light)]"
-                >
-                    <Preloader loadingData={loadingData} onComplete={handleComplete} />
-                </MotionComponent>
+                    <MotionComponent
+                        motionKey="preloader"
+                        opacity1={1}
+                        opacity2={1}
+                        opacity3={0}
+                        duration={0.7}
+                        y3={"-100vh"}
+                        animation="easeInOut"
+                        style="fixed z-101 w-screen h-screen inset-0 dark:bg-[var(--dark)] bg-[var(--light)]"
+                    >
+                        <Preloader loadingData={loadingData} onComplete={handleComplete} />
+                    </MotionComponent>
                 )}
-            </AnimatePresence>
+            </AnimatePresence> */}
             
             <AnimatePresence mode="wait">
                 {loadingData && <MotionComponent motionKey="loader-data" style="fixed inset-0 flex items-center justify-center z-99" opacity3={0} y3={"100vh"} y1={0} y2={0}><Loader fullText="Loading...⏳" /></MotionComponent>}
@@ -192,15 +192,7 @@ export default App;
 function WelcomeScreen ({ navigate }){
     const { t } = useTranslation();
     return (
-        <MotionComponent
-            motionKey="welcome-screen"
-            scale1={0.55}
-            scale2={1}
-            scale3={0.95}
-            duration={0.7}
-            animation="easeInOut"   
-            style='max-w-[600px]'
-        >
+        <div className='max-w-[600px]'>
             <h1 className="text-2xl sm:text-3xl font-semibold text-center mb-5 transition-colors duration-700">
                 {t("hello_text")}
             </h1>
@@ -208,6 +200,6 @@ function WelcomeScreen ({ navigate }){
                 <ModeButton onClick={() => navigate(`${routeEnglishman}/study`)}>{ t("study_mode")}</ModeButton>
                 <ModeButton onClick={() => navigate(`${routeEnglishman}/test`)}>{ t("test_mode")}</ModeButton>
             </div>
-        </MotionComponent>
+        </div>
     );
 }

@@ -5,7 +5,6 @@ import StudySwitchButtons from '../components/study/StudySwitchButtons';
 import { motion } from 'framer-motion';
 import { useTranslation } from "react-i18next";
 import "../langConfig.js";
-import MotionComponent from '../components/MotionComponent.jsx';
 
 export default function StudySection({
     wordsData,
@@ -54,8 +53,7 @@ export default function StudySection({
 
     return (
         <section className="w-full">
-            <motion.div
-                layout
+            <div
                 className="max-w-170 mx-auto">
                 <p className='p-4 text-[var(--dark)] dark:text-[var(--light)] text-4xl font-semibold text-center'>
                     { t("study_mode") }
@@ -97,7 +95,7 @@ export default function StudySection({
                         setCurrentItem={setCurrentItem}
                     />
                 </div>
-            </motion.div>
+            </div>
         </section>
     );
 }

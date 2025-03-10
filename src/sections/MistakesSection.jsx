@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import "../langConfig.js";
 import { useTranslation } from "react-i18next";
@@ -11,14 +11,7 @@ export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode
     const navigate = useNavigate();
 
     return (
-        <motion.div
-            key="mistake-test-section"
-            initial={{ opacity: 0, y: 200 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -200 }}
-            transition={{ duration: 0.9, ease: "easeInOut" }}
-            className="w-full flex justify-center"
-        >
+        <div className="w-full flex justify-center">
             <div className="max-w-full sm:max-w-[650px] flex flex-col justify-center">
                 <p className="text-[var(--dark)] dark:text-[var(--light)] text-center text-3xl font-bold">
                     {t("mistake_list_header")}
@@ -68,7 +61,7 @@ export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode
                     </>
                 }
             </div>
-        </motion.div>
+        </div>
     );
 }
 

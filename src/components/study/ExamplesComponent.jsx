@@ -16,15 +16,17 @@ export default function ExamplesComponent({ exampleArray, speak, isApi }) {
     return (
         <div className="break-words">
             <button
-                className="cursor-pointer bg-[var(--dark)] dark:bg-[var(--light)] text-[var(--light)] dark:text-[var(--dark)] font-medium p-2 rounded-lg hover:opacity-70"
+                className="flex items-center gap-2 cursor-pointer bg-[var(--dark)] dark:bg-[var(--light)] text-[var(--light)] dark:text-[var(--dark)] font-medium p-2 rounded-lg hover:opacity-70"
                 onClick={() => setAccordionOpen((prev) => !prev)}
             >
                 {exampleArray.length > 1
-                    ? `${isApi ? "API" : ""} ${t("examples")} ${accordionOpen ? "👇" : "👈"}`
-                    : `${isApi ? "API" : ""} ${t("example")} ${accordionOpen ? "👇" : "👈"}`}
+                    ? `${isApi ? "API" : ""} ${t("examples")}`
+                    : `${isApi ? "API" : ""} ${t("example")}`}
+                <p className={`w-fit duration-500 ease-in-out transform transition-transform ${accordionOpen ? "-rotate-90" : "rotate-0"}`}>
+                    👈
+                </p>
             </button>
             
-            <AnimatePresence>
                 <motion.ul
                     key="list-examples"
                     initial={false} // Чтобы не анимировать при первом рендере
@@ -61,7 +63,6 @@ export default function ExamplesComponent({ exampleArray, speak, isApi }) {
                         </li>
                     ))}
                 </motion.ul>
-            </AnimatePresence>
 
         </div>
     )
