@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
   ],
 
-  base: '/englishman/', // name of repository
+  base: `${routeEnglishman}/`, // name of repository
   
   build: {
     rollupOptions: {
