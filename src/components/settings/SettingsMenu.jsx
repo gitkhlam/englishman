@@ -55,7 +55,7 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
     return (
         <>
     
-            <div className='flex justify-center w-full sm:w-fit bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] p-2 gap-2 rounded-lg'>
+            <div className='flex items-center justify-center w-full sm:w-fit bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] p-2 gap-2 rounded-lg'>
                 <p className='text-3xl sm:text-4xl font-bold'>{t("language_menu")}</p>
                 <select className={selectStyle} value={i18n.language} onChange={handleLanguageChange}>
                     {Object.entries(languages).map(([code, name]) => (
