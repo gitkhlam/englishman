@@ -52,7 +52,12 @@ export default function StudySection({
 
 
     return (
-        <section className="w-full">
+        <motion.section 
+            initial= {{ opacity: 0, x: -400, scale: 0.55 }}
+            animate = {{ opacity: 1, x: 0, scale: 1 }}
+            exit = {{ opacity: 0, x: 400, scale: 0.80 }}
+            transition = {{ duration: 0.5, ease: "easeInOut" }}
+            className="w-full">
             <div
                 className="max-w-170 mx-auto">
                 <p className='p-4 text-[var(--dark)] dark:text-[var(--light)] text-4xl font-semibold text-center'>
@@ -79,7 +84,7 @@ export default function StudySection({
                             )}
                         </div>
                     )}
-
+                    
                     <StudyWordComponent
                         speak={speak}
                         showApiExamples={showApiExamples}
@@ -96,6 +101,6 @@ export default function StudySection({
                     />
                 </div>
             </div>
-        </section>
+        </motion.section>
     );
 }

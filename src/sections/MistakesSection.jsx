@@ -11,9 +11,14 @@ export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode
     const navigate = useNavigate();
 
     return (
-        <div className="w-full flex justify-center">
+        <motion.section 
+            initial={{ opacity: 0, scale: 0.3, y: 400 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.50, y: "-50vh" }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="w-full flex justify-center">
             <div className="max-w-full sm:max-w-[650px] flex flex-col justify-center">
-                <p className="text-[var(--dark)] dark:text-[var(--light)] text-center text-3xl font-bold">
+                <p className="text-[var(--dark)] dark:text-[var(--light)] text text-3xl font-bold">
                     {t("mistake_list_header")}
                 </p>
                 <p className="mt-2 text-[var(--dark)] dark:text-[var(--light)] text-xl font-medium">
@@ -61,7 +66,7 @@ export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode
                     </>
                 }
             </div>
-        </div>
+        </motion.section>
     );
 }
 

@@ -119,152 +119,110 @@ export default function TestSection({
     };
     
     return (
-        <section className="w-full">
-            <div className={`max-w-170 mx-auto flex flex-col ${testMode ? "space-y-3" : "space-y-4"} justify-center items-center`}>
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key="test-section-header" 
-                        initial={{ opacity: 0, x: 20, y: 10 }}
-                        animate={{ opacity: 1, x: 0, y: 0 }}
-                        exit={{ opacity: 0, x: 20, y: 10 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                    >
-                        <p className={`${testMode ? "p-4" : ""} text-[var(--dark)] dark:text-[var(--light)] text-4xl font-semibold text-center`}>
-                            {mistakeTest ? t("mistake_test_mode") : t("test_mode2") }
-                            
-                        </p>
-                        { !testMode && (
-                            <p className="text-[var(--dark)] dark:text-[var(--light)] text-2xl font-medium text-center">
-                                { t("choose_test_mode") }
-                            </p>
-                        ) }
-                    </motion.div>
-                </AnimatePresence>
-
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={`test-mode-${testMode ? "on" : "off"}`} 
-                        initial={{ opacity: 0, x: testMode ? 0 : 220, y: testMode ? 150 : 0 }}
-                        animate={{ opacity: 1, x: 0, y: 0 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="flex justify-center gap-5 flex-wrap sm:mt-2"
-                    >
-                        {["manual", "choice"].map((mode) => (
-                            <ModeButton
-                                key={mode} 
-                                onClick={() => handleClickMode(mode)}
-                                isActive={testMode === mode}
-                            >
-                                {testMode ? (
-                                    <span className="sm:hidden">{mode === "manual" ? "⌨️" : "✅"}</span>
-                                ) : (
-                                    <span className="sm:hidden">{mode === "manual" ? `${t("manual")} ⌨️` : `${t("choice")} ✅`}</span>
-                                )}
-                                <span className="hidden sm:inline">
-                                    {mode === "manual" ? `${t("manual_mode")} ⌨️` : `${t("choice_mode")} ✅`}
-                                </span>
-                            </ModeButton>
-                        ))}
-                    </motion.div>
-                </AnimatePresence>
-
-                <AnimatePresence mode="wait">
-                    { testMode && (
-                        <motion.div
-                            layout
-                            key="test-content" 
-                            initial={{ opacity: 0, x: 0, y: 0 }}
-                            animate={{ opacity: 1, x: 0, y: 0 }}
-                            exit={{ opacity: 0, x: 0, y: 0 }}
-                            transition={{ duration: 0.5, ease: "easeInOut" }}
-                            className="mt-3 sm:mt-5 w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7 transition-colors duration-700 overflow-hidden"
+        <motion.section 
+            initial={{ opacity: 0, scale: 0.3, x: 400 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale:0.50, x: "-50vw" }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="w-full">
+            <div
+            className={`max-w-170 mx-auto flex flex-col ${testMode ? "space-y-3" : "space-y-4"} justify-center items-center`}>    
+                <p className={`${testMode ? "p-4" : ""} text-[var(--dark)] dark:text-[var(--light)] text-4xl font-semibold text-center`}>
+                    {mistakeTest ? t("mistake_test_mode") : t("test_mode2") }
+                    
+                </p>
+                { !testMode && (
+                    <p className="text-[var(--dark)] dark:text-[var(--light)] text-2xl font-medium text-center">
+                        { t("choose_test_mode") }
+                    </p>
+                ) }
+                    
+                <div className="flex justify-center gap-5 flex-wrap sm:mt-2">
+                    {["manual", "choice"].map((mode) => (
+                        <ModeButton
+                            key={mode} 
+                            onClick={() => handleClickMode(mode)}
+                            isActive={testMode === mode}
                         >
-                            <div className="flex flex-col gap-3">
-                                {mistakeTest &&
-                                    <p className='text-3xl font-bold border-b-2 w-fit'>{t("mistake_word_test")}</p>
-                                }
-                                {/* { !mistakeMode &&  */}
-                                    <>
-                                    {uniqueParts.length >= 1 && (
-                                        <ThemesDropdown
-                                            label={t("choose_part_of_speech")}
-                                            value={selectedPart}
-                                            options={uniqueParts}
-                                            onChange={handlePartChange}
-                                            className="h-12"
-                                        />
-                                    )}
-                                    {themeArray.length >= 1 && (
-                                        <ThemesDropdown
-                                            label={t("choose_theme")}
-                                            value={selectedTheme}
-                                            options={themeArray}
-                                            onChange={handleThemeChange}
-                                            className="h-12"
-                                        />
-                                    )}
-                                    </>
-                                {/* } */}
-                                
-                            </div>
+                            {testMode ? (
+                                <span className="sm:hidden">{mode === "manual" ? "⌨️" : "✅"}</span>
+                            ) : (
+                                <span className="sm:hidden">{mode === "manual" ? `${t("manual")} ⌨️` : `${t("choice")} ✅`}</span>
+                            )}
+                            <span className="hidden sm:inline">
+                                {mode === "manual" ? `${t("manual_mode")} ⌨️` : `${t("choice_mode")} ✅`}
+                            </span>
+                        </ModeButton>
+                    ))}
 
-                            <div className="mt-3">
-                                <p className="w-full text-3xl font-semibold break-words">
-                                    {workArray[currentItem].translation}
-                                </p>
-                            </div>
-                            <AnimatePresence mode="wait">
-                                {testMode === "manual" && (
-                                    <motion.div
-                                        layout
-                                        key="test-manual" 
-                                        initial={{ opacity: 0, y: 50 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: 0 }}
-                                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                                    >
-                                        <TestManualMode
-                                            input={input}
-                                            setInput={setInput}
-                                            processChoice={processChoice}
-                                            currentItem={currentItem}
-                                            workArray={workArray}
-                                            setSound={setSound}
-                                            sound={sound}
-                                            setFastAnimation={setFastAnimation}
-                                            fastAnimation={fastAnimation}
-                                            playSound={playSound}
-                                        />
-                                    </motion.div>
+                { testMode && (
+                    <div className="mt-3 sm:mt-5 w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7 transition-colors duration-700 overflow-hidden"
+                    >
+                        <div className="flex flex-col gap-3">
+                            {mistakeTest &&
+                                <p className='text-3xl font-bold border-b-2 w-fit'>{t("mistake_word_test")}</p>
+                            }
+                            {/* { !mistakeMode &&  */}
+                                <>
+                                {uniqueParts.length >= 1 && (
+                                    <ThemesDropdown
+                                        label={t("choose_part_of_speech")}
+                                        value={selectedPart}
+                                        options={uniqueParts}
+                                        onChange={handlePartChange}
+                                        className="h-12"
+                                    />
                                 )}
-                                { testMode === "choice" && (
-                                    <motion.div
-                                        layout
-                                        key={`test-choice-${currentItem}`} 
-                                        initial={{ opacity: 0, y: -50 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: 0 }}
-                                        transition={{ duration: fastAnimation ? 0 : 0.5, ease: "easeInOut" }}
-                                    >
-                                        <TestChoiceMode
-                                            randomFourWords={randomFourWords}
-                                            processChoice={processChoice}
-                                            currentItem={currentItem}
-                                            sound={sound}
-                                            setSound={setSound}
-                                            workArray={workArray}
-                                            setFastAnimation={setFastAnimation}
-                                            fastAnimation={fastAnimation}
-                                            playSound={playSound}
-                                        />
-                                    </motion.div>
+                                {themeArray.length >= 1 && (
+                                    <ThemesDropdown
+                                        label={t("choose_theme")}
+                                        value={selectedTheme}
+                                        options={themeArray}
+                                        onChange={handleThemeChange}
+                                        className="h-12"
+                                    />
                                 )}
-                            </AnimatePresence>
-                        </motion.div>
+                                </>
+                            {/* } */}
+                            
+                        </div>
+
+                        <div className="mt-3">
+                            <p className="w-full text-3xl font-semibold break-words">
+                                {workArray[currentItem].translation}
+                            </p>
+                        </div>
+                            {testMode === "manual" && (
+                                <TestManualMode
+                                    input={input}
+                                    setInput={setInput}
+                                    processChoice={processChoice}
+                                    currentItem={currentItem}
+                                    workArray={workArray}
+                                    setSound={setSound}
+                                    sound={sound}
+                                    setFastAnimation={setFastAnimation}
+                                    fastAnimation={fastAnimation}
+                                    playSound={playSound}
+                                />
+                            )}
+                            { testMode === "choice" && (
+                                <TestChoiceMode
+                                    randomFourWords={randomFourWords}
+                                    processChoice={processChoice}
+                                    currentItem={currentItem}
+                                    sound={sound}
+                                    setSound={setSound}
+                                    workArray={workArray}
+                                    setFastAnimation={setFastAnimation}
+                                    fastAnimation={fastAnimation}
+                                    playSound={playSound}
+                                />
+                            )}
+                        </div>
                     )}
-                </AnimatePresence>
+                </div>
 
-            <AnimatePresence>   
                 {visibleNotification && (
                     <Notifications 
                         setSelectedPart={setSelectedPart}
@@ -279,13 +237,7 @@ export default function TestSection({
                         { 
                             currentNotificationMessage === "result" 
                             ?  
-                            <motion.div 
-                                key="result"
-                                initial={{ opacity: 0, y: -50 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 50 }}
-                                transition={{ duration: 0.5, ease: "easeInOut" }}
-                                className='flex flex-col gap-4'>                                    
+                            <div className='flex flex-col gap-4'>                                    
                                 
                                 { mistakeTest && <span className='text-4xl font-bold pb-2 border-b-2'>Work on mistakes</span>}
                                 <span className='font-bold text-4xl'>
@@ -310,22 +262,15 @@ export default function TestSection({
                                 <span className='text-2xl'>
                                             {`${t("you_got")} ${workArrayLength - currentProgress.length} ${t("out_of")} ${workArrayLength} ${t("words_correct")}.`}
                                 </span>
-                            </motion.div>
-                            : <motion.span 
-                                key="result-wrong-right"
-                                initial={{ opacity: 0.1 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: fastAnimation ? 0 : 0.5, ease: "easeInOut" }}
-                                className='text-4xl font-medium'>
+                            </div>
+                            : <span className='text-4xl font-medium'>
                                 { currentNotificationMessage }
-                            </motion.span>
+                            </span>
                         }
                     </Notifications>
                 )}
-                </AnimatePresence>
             </div>
-        </section>
+        </motion.section>
     );
 }
 

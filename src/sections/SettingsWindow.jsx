@@ -16,7 +16,6 @@ export default function SettingsWindow({
     googleSpread,
     setGoogleSpread,
     googleLink,
-    setGoogleLink,
     wrongWords,
     setMistakeTest
 }) {

@@ -10,10 +10,8 @@ export default function StudyWordComponent({
     workArray,
     currentItem,
 }) {
-
-    
-    const [exampleSentences, setExampleSentences] = useState([]); // state for examples
-    const [loadingSentences, setLoadingSentences] = useState(false); // state for loading sentences
+    const [exampleSentences, setExampleSentences] = useState([]);
+    const [loadingSentences, setLoadingSentences] = useState(false);
 
     const { t } = useTranslation();
 
@@ -34,24 +32,21 @@ export default function StudyWordComponent({
             setExampleSentences([]);
         } finally {
             setTimeout(() => {
-                setLoadingSentences(false);    
+                setLoadingSentences(false);
             }, 1000);
-            
         }
     };
 
-    // fetch when currentItem or workArray have changed
     useEffect(() => {
         if (workArray[currentItem]?.word) {
             setExampleSentences([]);
-            showApiExamples && fetchExampleSentences(workArray[currentItem].word); // if enabled - fetch
+            showApiExamples && fetchExampleSentences(workArray[currentItem].word);
         }
     }, [workArray, currentItem, showApiExamples]);
 
-    
     const localExamples = useMemo(() => {
         if (!workArray || workArray.length === 0 || !workArray[currentItem]) {
-            return []; 
+            return [];
         }
         return workArray[currentItem].example.split("+");
     }, [workArray, currentItem]);
@@ -71,81 +66,71 @@ export default function StudyWordComponent({
         )
     );
 
-
     return (
-        <motion.div 
-            layout
-            className="flex flex-col gap-3">   
-            
-            <AnimatePresence mode='wait'>
-                <motion.div
-                    key={`${currentItem}-word-loading`}
-                    initial={{ opacity: 0.5, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.45, ease: "easeOut" }}
-                >
-                    <p className="break-words overflow-hidden">
-                        {t("word")}:{" "}
-                        <span
-                            className="cursor-pointer py-1 px-2 rounded-lg bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] text-2xl font-semibold hover:opacity-70"
-                            onClick={() => speak(workArray[currentItem].word)}
+        <motion.div
+            className="flex flex-col gap-3"
+            initial={{ opacity: 0, height: "auto" }}
+            animate={{ opacity: 1, height: "auto", transition: { duration: 0.3 } }}
+            exit={{ opacity: 0, height: 0, transition: { duration: 0.2 } }}
+        >
+            <div>
+                <p className="break-words overflow-hidden">
+                    {t("word")}:{" "}
+                    <button
+                        className="cursor-pointer px-2 rounded-lg bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] text-2xl font-semibold hover:opacity-70"
+                        onClick={() => speak(workArray[currentItem].word)}
+                    >
+                        {workArray.length > 0 && workArray[currentItem].word}
+                    </button>
+                </p>
+            </div>
+
+            <div>
+                <p className="break-words overflow-hidden">
+                    {t("translation")}:{" "}
+                    <span className="text-2xl font-semibold">
+                        {workArray.length > 0 && workArray[currentItem].translation}
+                    </span>
+                </p>
+            </div>
+
+            {/* Анимация контейнера с примерами */}
+            <motion.div
+                layout
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1, transition: { duration: 0.4, ease: "easeInOut" } }}
+                exit={{ height: 0, opacity: 0, transition: { duration: 0.3 } }}
+                className="overflow-hidden"
+            >
+                <AnimatePresence mode="wait">
+                    {loadingSentences ? (
+                        <motion.div
+                            key="loading"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto", transition: { duration: 0.3 } }}
+                            exit={{ opacity: 0, height: 0, transition: { duration: 0.2 } }}
                         >
-                            {workArray.length > 0 && workArray[currentItem].word}
-                        </span>
-                    </p>
-                </motion.div>
-
-                <motion.div
-                    key={`${currentItem}-translation-loading`}
-                    initial={{ opacity: 0.5, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.45, ease: "easeOut" }}
-                >
-                    <p className="break-words overflow-hidden">
-                        {t("translation")}:{" "}
-                        <span
-                            transition={{ duration: 0.4, ease: "easeOut" }}
-                            className="text-2xl font-semibold">
-                            {workArray.length > 0 && workArray[currentItem].translation}
-                        </span>
-                    </p>
-
-                </motion.div>
-            </AnimatePresence>
-
-            <AnimatePresence mode='wait'>
-            {loadingSentences ? (
-                    <motion.div
-                        layout
-                        key={`${currentItem}-examples-loading`} 
-                        initial={{ opacity: 0.5, height:0}}
-                        animate={{ opacity: 1, height:"auto" }}
-                        exit={{ opacity: 0, height:0 }}
-                        transition={{ duration: 0.35, ease: "easeOut" }}
-                    >
-                        {t("loading_examples")}
-                    </motion.div>
-            ) : (
-                    <motion.div
-                        layout
-                        key={`${currentItem}-examples`} 
-                        initial={{ opacity: 0, x: 20, height:0 }}
-                        animate={{ opacity: 1, x: 0, height:"auto" }}
-                        exit={{ opacity: 0, x: 20, height:0 }}
-                        transition={{ duration: 0.4, ease: "easeIn" }}
-                    >
-                        {renderExamples(
-                            !showApiExamples && workArray.length > 0 && workArray[currentItem].example.length >= 1,
-                            localExamples,
-                            false
-                        )}
-                        {renderExamples(exampleSentences.length > 0, apiExamples, true)}
-                    </motion.div>
-            )}
-            </AnimatePresence>
-
+                            {t("loading_examples")}
+                        </motion.div>
+                    ) : (
+                        (exampleSentences.length > 0 || (!showApiExamples && localExamples.length > 0)) && (
+                            <motion.div
+                                key="examples"
+                                initial={{ opacity: 0, height: 0, x: 20 }}
+                                animate={{ opacity: 1, height: "auto", x: 0, transition: { duration: 0.4, ease: "easeInOut" } }}
+                                exit={{ opacity: 0, height: 0, x: 20, transition: { duration: 0.3 } }}
+                            >
+                                {renderExamples(
+                                    !showApiExamples && workArray.length > 0 && workArray[currentItem].example.length >= 1,
+                                    localExamples,
+                                    false
+                                )}
+                                {renderExamples(exampleSentences.length > 0, apiExamples, true)}
+                            </motion.div>
+                        )
+                    )}
+                </AnimatePresence>
+            </motion.div>
         </motion.div>
-    )
+    );
 }

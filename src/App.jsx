@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo, useMemo } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom"; // Добавляем роутинг
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom"; // Добавляем роутинг
 import HeaderSection from "./sections/HeaderSection";
 import TestSection from './sections/TestSection';
 import ModeButton from './components/WorkModeButton';
@@ -8,7 +8,7 @@ import StudySection from './sections/StudySection';
 import SpreadsheetParser from './utilities/SpreadSheetParse';
 import SettingsWindow from './sections/SettingsWindow';
 import Preloader from './sections/Preloader';
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Loader from './components/Loader';
 import MistakesSection from './sections/MistakesSection';
 import { useTranslation } from "react-i18next";
@@ -34,6 +34,8 @@ function App() {
 function AppContent() {
 
     const { t } = useTranslation();
+    
+    const location = useLocation(); 
 
     const navigate = useNavigate(); // Для программной навигации
 
@@ -103,12 +105,15 @@ function AppContent() {
     }, [googleSpread]);
 
     const resetAll = useCallback(() => {
-        setTrigger(prev => !prev);
-        setTestMode(null);
-        setSelectedPart("all");
-        setSelectedTheme("all");
-        setUniqueParts([]);
-        setCurrentItem(0);
+        setTimeout(() => {
+            setTestMode(null);
+            setTrigger(prev => !prev);
+            setSelectedPart("all");
+            setSelectedTheme("all");
+            setUniqueParts([]);
+            setCurrentItem(0);
+
+        }, 100); // delay to prevent animation of disappearing element
         setSettingsVisible(false);
         setMistakeTest(false);
         navigate(`${routeEnglishman}/`); // Возвращаемся на главную
@@ -164,17 +169,28 @@ function AppContent() {
                 {loadingData && <MotionComponent motionKey="loader-data" style="fixed inset-0 flex items-center justify-center z-99" opacity3={0} y3={"100vh"} y1={0} y2={0}><Loader fullText="Loading...⏳" /></MotionComponent>}
             </AnimatePresence>
             <div className={`flex flex-col dark:text-[var(--light)] text-[var(--dark)] ${settingsVisible ? "h-[100dvh]" : "min-h-[100dvh]"}`}>
-                {!settingsVisible && <HeaderSection theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} logoClick={resetAll}>EnglishMan</HeaderSection> }
+                <HeaderSection 
+                    theme={theme} setTheme={setTheme} 
+                    settingsVisible={settingsVisible}
+                    setSettingsVisible={setSettingsVisible} 
+                    logoClick={resetAll}
+                >
+                    EnglishMan
+                </HeaderSection>
                 
                     <main className="flex flex-col items-center justify-center grow container">
-                        <Routes>
+                    
+                    <AnimatePresence mode="wait">
+                        <Routes location={location} key={location.pathname}>
                             <Route path={routeEnglishman} element={<WelcomeScreen navigate={navigate} />} />
                             <Route path={`${routeEnglishman}/test`} element={<MemoTestSection {...settings} />} />
                             <Route path={`${routeEnglishman}/study`} element={<MemoStudySection {...settings} />} />
                             <Route path={`${routeEnglishman}/mistakes`} element={<MistakesSection wrongWords={wrongWords} setMistakeTest={setMistakeTest} setTestMode={setTestMode} setCurrentItem={setCurrentItem} />} />
                             <Route path={`${routeEnglishman}/custom`} element={<GoogleSettings googleLink={googleLink} setGoogleLink={setGoogleLink} setLoadingData={setLoadingData} />} />
-                            <Route path="*" element={<div>404 - { t("404")}</div>} />
+                            <Route path="*" element={<div>404 - {t("404")}</div>} />
                         </Routes>
+                    </AnimatePresence>
+
                     </main>
                 <footer className="p-5 text-center font-semibold">Kyiv {new Date().getFullYear()}</footer>
             </div>
@@ -192,7 +208,13 @@ export default App;
 function WelcomeScreen ({ navigate }){
     const { t } = useTranslation();
     return (
-        <div className='max-w-[600px]'>
+        <motion.section
+            initial={{ opacity: 0, scale: 0.55 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className='max-w-[600px]'
+        >
             <h1 className="text-2xl sm:text-3xl font-semibold text-center mb-5 transition-colors duration-700">
                 {t("hello_text")}
             </h1>
@@ -200,6 +222,6 @@ function WelcomeScreen ({ navigate }){
                 <ModeButton onClick={() => navigate(`${routeEnglishman}/study`)}>{ t("study_mode")}</ModeButton>
                 <ModeButton onClick={() => navigate(`${routeEnglishman}/test`)}>{ t("test_mode")}</ModeButton>
             </div>
-        </div>
+        </motion.section>
     );
 }
