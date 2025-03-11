@@ -14,7 +14,7 @@ export default async function ReadFileCsv() {
     const partIndex = headers.indexOf("part of speech");
     const themeIndex = headers.indexOf("theme");
 
-    if ([wordIndex, translationIndex, exampleIndex, partIndex, themeIndex].includes(-1)) alert('No columns');
+    if ([wordIndex, translationIndex, exampleIndex, partIndex, themeIndex].includes(-1)) alert(t("no_columns"));
 
     wordsData = rows.slice(1)
         .map((row) => ({

@@ -89,6 +89,13 @@ i18n
                     words_correct: "words correct",
                     wrong_answer: "Wrong",
                     correct_answer: "Correct",
+                    empty_google_sheet: "Your Google Sheet is empty!",
+                    gsh_some_problem: "There is a problem with your Google Sheet. Please check it!",
+                    something_wrong: "Something went wrong. Check your Google Sheet and the link.",
+                    no_columns: "Your table has no columns."
+        }
+
+
                 },
             },
             ru: {
@@ -167,6 +174,13 @@ i18n
                     words_correct: "слов",
                     wrong_answer: "Неверно",
                     correct_answer: "Верно",
+                    
+                    empty_google_sheet: "Ваш Google Sheet пуст!",
+                    gsh_some_problem: "Возникла проблема с вашим Google Sheet. Пожалуйста, проверьте его!",
+                    something_wrong: "Что-то пошло не так. Проверьте ваш Google Sheet и ссылку.",
+                    no_columns: "В вашей таблице нет столбцов."
+        
+
                 },
             },
             ua: {
@@ -245,7 +259,10 @@ i18n
                     words_correct: "слів",
                     wrong_answer: "Неправильно",
                     correct_answer: "Правильно",
-                },
+                    empty_google_sheet: "Твій Google Sheet порожній!",
+                    gsh_some_problem: "З Google Sheet якась проблема, перевір!",
+                    something_wrong: "Щось пішло не так. Перевір Google Sheet і посилання.",
+                    no_columns: "У таблиці немає стовпців."           
             },
 
         },

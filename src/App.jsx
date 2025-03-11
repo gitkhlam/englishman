@@ -87,13 +87,13 @@ function AppContent() {
                 if (data.length > 0) {
                     setWordsData(data);
                 } else {
-                    alert("Your google sheet is empty!");
+                    alert(t("empty_google_sheet"));
                     setWordsData(await ReadFileCsv());
                     setGoogleSpread(false);
                     localStorage.setItem("googleSpread", false);
                 }
             } catch (error) {
-                alert("Your google sheet has some problems! Check it!");
+                alert(t("gsh_some_problem"));
                 setWordsData(await ReadFileCsv());
                 setGoogleSpread(false);
                 localStorage.setItem("googleSpread", false);

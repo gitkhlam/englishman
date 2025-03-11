@@ -20,7 +20,7 @@ export default function GoogleSettings({ googleLink, setGoogleLink, setLoadingDa
             if (rightData) {
                 setGoogleLink(inputLink);
                 localStorage.setItem("googleLink", inputLink);
-            } else alert("Something went wrong. Try to check your Google sheet and link.")
+            } else alert(t("something_wrong"))
         }
         setInputLink("");
     }
