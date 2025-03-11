@@ -16,6 +16,7 @@ import "./langConfig.js";
 import GoogleSettings from './components/settings/GoogleSettings.jsx';
 import MotionComponent from './components/MotionComponent.jsx';
 
+
 const MemoTestSection = memo(TestSection);
 const MemoStudySection = memo(StudySection);
 
@@ -30,14 +31,13 @@ function App() {
     );
 }
 
-// Основная логика приложения
 function AppContent() {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation(); // for language
     
-    const location = useLocation(); 
+    const location = useLocation(); // for route animation
 
-    const navigate = useNavigate(); // Для программной навигации
+    const navigate = useNavigate(); // for route navigation
 
     const [testMode, setTestMode] = useState(null);
     const [selectedPart, setSelectedPart] = useState("all");
@@ -102,7 +102,7 @@ function AppContent() {
             }
         }
         loadData();
-    }, [googleSpread]);
+    }, [googleSpread, googleLink]);
 
     const resetAll = useCallback(() => {
         setTimeout(() => {
@@ -114,9 +114,10 @@ function AppContent() {
             setCurrentItem(0);
 
         }, 100); // delay to prevent animation of disappearing element
+        
         setSettingsVisible(false);
         setMistakeTest(false);
-        navigate(`${routeEnglishman}/`); // Возвращаемся на главную
+        navigate(`${routeEnglishman}/`);
     }, []);
 
     const settings = useMemo(() => ({
@@ -148,7 +149,7 @@ function AppContent() {
 
     return (
         <>
-            {/* <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait">
                 {!isLoaded && (
                     <MotionComponent
                         motionKey="preloader"
@@ -163,7 +164,7 @@ function AppContent() {
                         <Preloader loadingData={loadingData} onComplete={handleComplete} />
                     </MotionComponent>
                 )}
-            </AnimatePresence> */}
+            </AnimatePresence>
             
             <AnimatePresence mode="wait">
                 {loadingData && <MotionComponent motionKey="loader-data" style="fixed inset-0 flex items-center justify-center z-99" opacity3={0} y3={"100vh"} y1={0} y2={0}><Loader fullText="Loading...⏳" /></MotionComponent>}
@@ -207,6 +208,7 @@ export default App;
 
 function WelcomeScreen ({ navigate }){
     const { t } = useTranslation();
+
     return (
         <motion.section
             initial={{ opacity: 0, scale: 0.55 }}
@@ -219,8 +221,8 @@ function WelcomeScreen ({ navigate }){
                 {t("hello_text")}
             </h1>
             <div className="mt-7 flex justify-center gap-5 flex-wrap">
-                <ModeButton onClick={() => navigate(`${routeEnglishman}/study`)}>{ t("study_mode")}</ModeButton>
-                <ModeButton onClick={() => navigate(`${routeEnglishman}/test`)}>{ t("test_mode")}</ModeButton>
+                <ModeButton onClick={() => navigate(`${routeEnglishman}/study`)}>{t("study_mode")}</ModeButton>
+                <ModeButton onClick={() => navigate(`${routeEnglishman}/test`)}>{t("test_mode")}</ModeButton>
             </div>
         </motion.section>
     );
