@@ -6,11 +6,11 @@ import HttpApi from "i18next-http-backend";
 
 i18n
     .use(HttpApi)
-    .use(LanguageDetector) 
+    .use(LanguageDetector)
     .use(initReactI18next)
     .init({
         fallbackLng: "en",
-        debug: true, 
+        debug: true,
         interpolation: { escapeValue: false },
         resources: {
             en: {
@@ -89,13 +89,10 @@ i18n
                     words_correct: "words correct",
                     wrong_answer: "Wrong",
                     correct_answer: "Correct",
-                    empty_google_sheet: "Your Google Sheet is empty!",
-                    gsh_some_problem: "There is a problem with your Google Sheet. Please check it!",
-                    something_wrong: "Something went wrong. Check your Google Sheet and the link.",
-                    no_columns: "Your table has no columns."
-        }
-
-
+                    empty_google_sheet: "Ваш Google Sheet пуст!",
+                    gsh_some_problem: "Возникла проблема с вашим Google Sheet. Пожалуйста, проверьте его!",
+                    something_wrong: "Что-то пошло не так. Проверьте ваш Google Sheet и ссылку.",
+                    no_columns: "В вашей таблице нет столбцов."
                 },
             },
             ru: {
@@ -147,7 +144,7 @@ i18n
                     weak: "проблемных",
                     words: "слов(-а)",
                     part_of_speech: "Часть речи",
-                    google_settings_hello: 'Если вы хотите изучать свои слова, можно использовать Google Таблицы.', 
+                    google_settings_hello: 'Если вы хотите изучать свои слова, можно использовать Google Таблицы.',
                     instruction: 'Инструкция',
                     important_google: "ВАЖНО! Если данные в Google Sheet обновились, нужно подождать несколько минут, чтобы подтягивало новые данные.",
                     cur_link: "Текущая ссылка",
@@ -174,13 +171,10 @@ i18n
                     words_correct: "слов",
                     wrong_answer: "Неверно",
                     correct_answer: "Верно",
-                    
                     empty_google_sheet: "Ваш Google Sheet пуст!",
                     gsh_some_problem: "Возникла проблема с вашим Google Sheet. Пожалуйста, проверьте его!",
                     something_wrong: "Что-то пошло не так. Проверьте ваш Google Sheet и ссылку.",
                     no_columns: "В вашей таблице нет столбцов."
-        
-
                 },
             },
             ua: {
@@ -262,7 +256,8 @@ i18n
                     empty_google_sheet: "Твій Google Sheet порожній!",
                     gsh_some_problem: "З Google Sheet якась проблема, перевір!",
                     something_wrong: "Щось пішло не так. Перевір Google Sheet і посилання.",
-                    no_columns: "У таблиці немає стовпців."           
+                    no_columns: "У таблиці немає стовпців."          
+                },
             },
 
         },
