@@ -3,6 +3,7 @@ import { initReactI18next } from "react-i18next";
 
 import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
+import { m } from 'framer-motion';
 
 i18n
     .use(HttpApi)
@@ -96,6 +97,15 @@ i18n
                     work_on_mistakes: "Work on your mistakes",
                     show_image: "Show image",
                     hide_image: "Hide image",
+                    noun: "noun",
+                    pronoun: "pronoun",
+                    verb: "verb",
+                    adjective: "adjective",
+                    adverb: "adverb",
+                    preposition: "preposition",
+                    conjunction: "conjunction",
+                    interjection: "interjection",
+                    all: "all",
                 },
             },
             ru: {
@@ -181,7 +191,15 @@ i18n
                     work_on_mistakes: "Робота над ошибками.",
                     show_image: "Показать изображение",
                     hide_image: "Скрыть изображение",
-
+                    noun: "существительное",
+                    pronoun: "местоимение",
+                    verb: "глагол",
+                    adjective: "прилагательное",
+                    adverb: "наречие",
+                    preposition: "предлог",
+                    conjunction: "союз",
+                    interjection: "междометие",
+                    all: "все",
                 },
             },
             ua: {
@@ -267,7 +285,15 @@ i18n
                     work_on_mistakes: "Робота над помилками.",
                     show_image: "Показати зображення",
                     hide_image: "Приховати зображення",
-
+                    noun: "іменник",
+                    pronoun: "займенник",
+                    verb: "дієслово",
+                    adjective: "прикметник",
+                    adverb: "прислівник",
+                    preposition: "прийменник",
+                    conjunction: "сполучник",
+                    interjection: "вигук",
+                    all: "всі",
                 },
             },
 

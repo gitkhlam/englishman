@@ -133,7 +133,7 @@ export default function StudySection({
                             currentItem={currentItem}
                         />
 
-                    <AnimatePresence mode="wait">
+                    {/* <AnimatePresence mode="wait">
                         { showPictures && <motion.div 
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
@@ -142,7 +142,7 @@ export default function StudySection({
                         className="h-40 sm:w-auto shrink flex items-center justify-center">
                             {imageUrl && <img src={imageUrl} alt="Search result" className="h-full rounded-lg shadow-lg" />}
                         </motion.div>}
-                    </AnimatePresence>
+                    </AnimatePresence> */}
                 </div>
                     <StudySwitchButtons
                         currentItem={currentItem}

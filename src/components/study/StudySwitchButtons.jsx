@@ -67,8 +67,6 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
                     exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.5, ease: "easeInOut" }}
                 >
-                        <div className='mt-4 '>
-
                     <button
                         className="buttonStyle"
                         onClick={() => {
@@ -78,7 +76,6 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
                     >
                         {t("start_test")}
                     </button>
-                        </div>
 
                 </motion.div>
 
