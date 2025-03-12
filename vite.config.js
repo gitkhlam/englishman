@@ -15,7 +15,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        inlineDynamicImports: true
+        inlineDynamicImports: true,
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'framer-motion': ['framer-motion'],
+          'i18n': ['i18next', 'react-i18next'],
+        }
       }
     }
   },

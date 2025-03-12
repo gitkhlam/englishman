@@ -46,38 +46,38 @@ export default function StudySection({
         window.speechSynthesis.speak(utterance);
     };
 
-    const PIXABAY_API_KEY = "49300347-bb4d366c7fd6741a3e9a7532c";
-    const [query, setQuery] = useState("");
-    const [imageUrl, setImageUrl] = useState(null);
-    const [showPictures, setShowPictures] = useState(false);
+    // const PIXABAY_API_KEY = "49300347-bb4d366c7fd6741a3e9a7532c";
+    // const [query, setQuery] = useState("");
+    // const [imageUrl, setImageUrl] = useState(null);
+    // const [showPictures, setShowPictures] = useState(false);
 
 
-    useEffect(() => {
-        workArray.length && setQuery(workArray[currentItem].word);
-        fetchImage();
-    }, [currentItem, workArray, query])
+    // useEffect(() => {
+    //     workArray.length && setQuery(workArray[currentItem].word);
+    //     fetchImage();
+    // }, [currentItem, workArray, query])
 
-    async function fetchImage() {
-        console.log(query);
-        if (!query) return;
-        const url = `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodeURIComponent(query)}&image_type=photo&page=1`;
+    // async function fetchImage() {
+    //     console.log(query);
+    //     if (!query) return;
+    //     const url = `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodeURIComponent(query)}&image_type=photo&page=1`;
 
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
+    //     try {
+    //         const response = await fetch(url);
+    //         const data = await response.json();
 
-            if (data.hits.length > 0) {
-                setImageUrl(data.hits[0].webformatURL);
-            } else {
-                console.log("no images!!");
-                //alert("No images found");
-            }
-        } catch (error) {
-            console.error("Error fetching image:", error);
-        }
-    }
+    //         if (data.hits.length > 0) {
+    //             setImageUrl(data.hits[0].webformatURL);
+    //         } else {
+    //             console.log("no images!!");
+    //             //alert("No images found");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching image:", error);
+    //     }
+    // }
     
-    const [checked, setChecked] = useState(false);
+    // const [checked, setChecked] = useState(false);
 
 
     return (
