@@ -114,7 +114,7 @@ export default function StudySection({
                         </div>
                     )}
                     
-                    <label className="flex items-center space-x-2 cursor-pointer w-fit">
+                    {/* <label className="flex items-center space-x-2 cursor-pointer w-fit">
                         <input
                             type="checkbox"
                             checked={showPictures}
@@ -122,7 +122,8 @@ export default function StudySection({
                             className="w-5 h-5 rounded focus:ring focus:ring-blue-300"
                         />
                         <span>{!showPictures ? t("show_image") : t("hide_image")}</span>
-                    </label>
+                    </label> */}
+                    
                     <div className='flex gap-5 flex-col justify-center sm:flex-row sm:justify-between'>
                     
                         <StudyWordComponent
