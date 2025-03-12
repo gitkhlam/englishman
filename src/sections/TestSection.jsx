@@ -75,6 +75,11 @@ export default function TestSection({
         if (word.trim().toLowerCase() === workArray[currentItem].word.toLowerCase()) {
             setCurrentItem((cur) => (cur + 1 >= workArray.length ? 0 : cur + 1));
             setInput("");
+
+            const storedWords = JSON.parse(localStorage.getItem("wrongWords")) || [];
+            const updatedWords = storedWords.filter(wordObj => wordObj.word !== workArray[currentItem].word);
+            localStorage.setItem("wrongWords", JSON.stringify(updatedWords));
+            
             // if user have done all words of selected theme
             if (currentItem + 1 >= workArray.length) {
                 // setSelectedPart("all");
@@ -263,7 +268,7 @@ export default function TestSection({
                             ?
                             <div className='flex flex-col gap-4'>
 
-                                {mistakeTest && <span className='text-4xl font-bold pb-2 border-b-2'>Work on mistakes</span>}
+                                {mistakeTest && <span className='text-4xl font-bold pb-2 border-b-2'>{t("work_on_mistakes")}</span>}
                                 <span className='font-bold text-4xl'>
                                     {(() => {
                                         const percentage = ((workArrayLength - currentProgress.length) * 100) / workArrayLength;
@@ -304,8 +309,30 @@ function Notifications({ currentProgress, setWrongWords, isResult, setCurrentPro
     const { t } = useTranslation();
     
     const addWords = (newArray) => {
+        console.log(newArray);
+//[{"word":"move","translation":"двигать(ся)","example":"He moved toward us","partOfSpeech":"verb","theme":""},{"word":"run","translation":"бежать","example":"I love my mother","partOfSpeech":"","theme":""},{"word":"people","translation":"люди","example":"I love my mother","partOfSpeech":"","theme":""},{"word":"mother","translation":"мама","example":"I love my mother+and I love my father+ I should make them happy and proud","partOfSpeech":"","theme":""}]        
+        
+        if (mistakeTest) {
+            setWrongWords(() => {
+                const storedWords = JSON.parse(localStorage.getItem("wrongWords") || "[]");
+
+                // Фильтруем newArray, оставляя только те слова, которых нет в storedWords
+                const filteredNewWords = newArray.filter(newWord =>
+                    !storedWords.some(storedWord => storedWord.word === newWord.word)
+                );
+
+                // Объединяем старые и новые слова
+                const updatedWords = [...storedWords, ...filteredNewWords];
+
+                // Обновляем localStorage
+                localStorage.setItem("wrongWords", JSON.stringify(updatedWords));
+
+                return updatedWords;
+            });
+            return;
+        }
         setWrongWords(prevWords => {
-            const updatedWords = mistakeTest ? newArray : [
+            const updatedWords = [
                 ...prevWords,
                 ...newArray.filter(newWord =>
                     !prevWords.some(prevWord => prevWord.word === newWord.word)

@@ -25,7 +25,10 @@ export default function TestManualMode({ fastAnimation,playSound, setFastAnimati
                 </p>
                 <span
                     className='cursor-pointer hover:opacity-70'
-                    onClick={() => setSound(prev => !prev)}
+                    onClick={() => setSound(prev => {
+                        localStorage.setItem('soundStatus', !prev);
+                        return !prev;
+                    })}
                 >
                     {sound ? "🔊" : "🔇"}
                 </span>

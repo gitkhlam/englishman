@@ -36,7 +36,7 @@ export default function StudySection({
     
     // function speak of word
     const speak = (word) => {
-
+        
         window.speechSynthesis.cancel(); // if prev speech doesn't stop
 
         if (!word) return;
@@ -64,7 +64,7 @@ export default function StudySection({
                     { t("study_mode") }
                 </p>
                 <div
-                    className="flex flex-col gap-3 w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7"
+                    className="flex flex-col gap-3 w-full dark:text-[var(--light)] text-[var(--dark)] text-2xl rounded-lg bg-blue-200 dark:bg-gray-800 p-7 shadow-2xl"
                 >
                     {uniqueParts.length >= 1 && (
                         <div className='flex flex-col gap-3'>

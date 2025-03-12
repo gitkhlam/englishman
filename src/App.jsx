@@ -52,7 +52,7 @@ function AppContent() {
             ? true
             : localStorage.getItem('soundStatus') === 'true'
     );
-    const [showApiExamples, setShowApiExamples] = useState(true);
+    const [showApiExamples, setShowApiExamples] = useState(false);
     const [googleSpread, setGoogleSpread] = useState(
         localStorage.getItem("googleLink") !== null &&
         (localStorage.getItem("googleSpread") === null ? true :
@@ -142,14 +142,16 @@ function AppContent() {
         mistakeTest,
         resetAll,
         fastAnimation,
-        setFastAnimation
-    }), [fastAnimation, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeTest, resetAll]);
+        setFastAnimation,
+        setMistakeTest,
+        setCurrentItem,
+    }), [fastAnimation, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeTest, resetAll, wrongWords]);
 
     const handleComplete = useCallback(() => setIsLoaded(true), []);
 
     return (
         <>
-            <AnimatePresence mode="wait">
+            {/* <AnimatePresence mode="wait">
                 {!isLoaded && (
                     <MotionComponent
                         motionKey="preloader"
@@ -164,7 +166,7 @@ function AppContent() {
                         <Preloader loadingData={loadingData} onComplete={handleComplete} />
                     </MotionComponent>
                 )}
-            </AnimatePresence>
+            </AnimatePresence> */}
             
             <AnimatePresence mode="wait">
                 {loadingData && <MotionComponent motionKey="loader-data" style="fixed inset-0 flex items-center justify-center z-99" opacity3={0} y3={"100vh"} y1={0} y2={0}><Loader fullText="Loading...⏳" /></MotionComponent>}
@@ -186,7 +188,7 @@ function AppContent() {
                             <Route path={routeEnglishman} element={<WelcomeScreen navigate={navigate} />} />
                             <Route path={`${routeEnglishman}/test`} element={<MemoTestSection {...settings} />} />
                             <Route path={`${routeEnglishman}/study`} element={<MemoStudySection {...settings} />} />
-                            <Route path={`${routeEnglishman}/mistakes`} element={<MistakesSection wrongWords={wrongWords} setMistakeTest={setMistakeTest} setTestMode={setTestMode} setCurrentItem={setCurrentItem} />} />
+                            <Route path={`${routeEnglishman}/mistakes`} element={<MistakesSection {...settings}/>} />
                             <Route path={`${routeEnglishman}/custom`} element={<GoogleSettings googleLink={googleLink} setGoogleLink={setGoogleLink} setLoadingData={setLoadingData} />} />
                             <Route path="*" element={<div>404 - {t("404")}</div>} />
                         </Routes>

@@ -32,7 +32,7 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
 
     const Button = ({ onClick, children, className = '' }) => (
         <button
-            className={`buttonStyle !break-normal w-full sm:w-fit text-3xl sm:text-4xl font-bold ${className}`}
+            className={`buttonStyle !break-normal w-full sm:w-fit text-2xl sm:text-4xl font-bold ${className}`}
             onClick={onClick}
         >
             {children}
@@ -56,7 +56,7 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
         <>
     
             <div className='flex items-center justify-center w-full sm:w-fit bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] p-2 gap-2 rounded-lg'>
-                <p className='text-3xl sm:text-4xl font-bold'>{t("language_menu")}</p>
+                <p className='text-2xl sm:text-4xl font-bold'>{t("language_menu")}</p>
                 <select className={selectStyle} value={i18n.language} onChange={handleLanguageChange}>
                     {Object.entries(languages).map(([code, name]) => (
                         <option key={code} value={code}>{name}</option>

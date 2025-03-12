@@ -68,7 +68,7 @@ export default function StudyWordComponent({
 
     return (
         <motion.div
-            className="flex flex-col gap-3"
+            className="flex flex-col gap-2"
             initial={{ opacity: 0, height: "auto" }}
             animate={{ opacity: 1, height: "auto", transition: { duration: 0.3 } }}
             exit={{ opacity: 0, height: 0, transition: { duration: 0.2 } }}
@@ -94,13 +94,22 @@ export default function StudyWordComponent({
                 </p>
             </div>
 
+            <div>
+                <p className="break-words overflow-hidden">
+                    {t("part_of_speech")}:{" "}
+                    <span className="text-2xl font-semibold">
+                        {workArray.length > 0 && workArray[currentItem].partOfSpeech}
+                    </span>
+                </p>
+            </div>
+
             {/* Анимация контейнера с примерами */}
             <motion.div
                 layout
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1, transition: { duration: 0.4, ease: "easeInOut" } }}
                 exit={{ height: 0, opacity: 0, transition: { duration: 0.3 } }}
-                className="overflow-hidden"
+                className="overflow-hidden mt-2"
             >
                 <AnimatePresence mode="wait">
                     {loadingSentences ? (

@@ -54,7 +54,7 @@ export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode
                         </div>
                         <button
                             onClick={() => {
-                                setTestMode("choice");
+                                //setTestMode("choice");
                                 setCurrentItem(0);
                                 setMistakeTest(true);
                                 navigate(`${routeEnglishman}/test`); // Переход на тест
