@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import "../../langConfig.js";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -57,20 +57,33 @@ export default function StudySwitchButtons({ currentItem, workArray, speak, soun
             </div>
 
 
-
+                <AnimatePresence mode='wait'>
                 {currentItem === workArray.length - 1 && (
-                    <div className="mt-4 flex justify-center">
-                        <button
-                            className="buttonStyle"
-                            onClick={() => {
-                                setCurrentItem(0);
-                                navigate(`${routeEnglishman}/test`);
-                            }}
-                        >
-                            {t("start_test")}
-                        </button>
-                    </div>
+
+                <motion.div
+                    className="flex justify-center"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                >
+                        <div className='mt-4 '>
+
+                    <button
+                        className="buttonStyle"
+                        onClick={() => {
+                            setCurrentItem(0);
+                            navigate(`${routeEnglishman}/test`);
+                        }}
+                    >
+                        {t("start_test")}
+                    </button>
+                        </div>
+
+                </motion.div>
+
                 )}
+            </AnimatePresence>
         </>
     )
 }

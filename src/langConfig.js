@@ -94,6 +94,8 @@ i18n
                     something_wrong: "Something went wrong. Check your Google Sheet and the link.",
                     no_columns: "There are no columns in your table.",
                     work_on_mistakes: "Work on your mistakes",
+                    show_image: "Show image",
+                    hide_image: "Hide image",
                 },
             },
             ru: {
@@ -177,6 +179,8 @@ i18n
                     something_wrong: "Что-то пошло не так. Проверьте ваш Google Sheet и ссылку.",
                     no_columns: "В вашей таблице нет столбцов.",
                     work_on_mistakes: "Робота над ошибками.",
+                    show_image: "Показать изображение",
+                    hide_image: "Скрыть изображение",
 
                 },
             },
@@ -261,6 +265,9 @@ i18n
                     something_wrong: "Щось пішло не так. Перевірте Google Sheet і посилання.",
                     no_columns: "У таблиці немає стовпців.",
                     work_on_mistakes: "Робота над помилками.",
+                    show_image: "Показати зображення",
+                    hide_image: "Приховати зображення",
+
                 },
             },
 

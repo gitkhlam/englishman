@@ -20,6 +20,7 @@ import MotionComponent from './components/MotionComponent.jsx';
 const MemoTestSection = memo(TestSection);
 const MemoStudySection = memo(StudySection);
 
+
 export const routeEnglishman = "/englishman";
 
 // Главный компонент с маршрутами
@@ -144,8 +145,10 @@ function AppContent() {
         fastAnimation,
         setFastAnimation,
         setMistakeTest,
-        setCurrentItem,
-    }), [fastAnimation, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeTest, resetAll, wrongWords]);
+        googleLink, 
+        setGoogleLink,
+        setLoadingData,
+    }), [googleLink, fastAnimation, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeTest, resetAll, wrongWords]);
 
     const handleComplete = useCallback(() => setIsLoaded(true), []);
 
@@ -189,7 +192,7 @@ function AppContent() {
                             <Route path={`${routeEnglishman}/test`} element={<MemoTestSection {...settings} />} />
                             <Route path={`${routeEnglishman}/study`} element={<MemoStudySection {...settings} />} />
                             <Route path={`${routeEnglishman}/mistakes`} element={<MistakesSection {...settings}/>} />
-                            <Route path={`${routeEnglishman}/custom`} element={<GoogleSettings googleLink={googleLink} setGoogleLink={setGoogleLink} setLoadingData={setLoadingData} />} />
+                            <Route path={`${routeEnglishman}/custom`} element={<GoogleSettings {...settings} />} />
                             <Route path="*" element={<div>404 - {t("404")}</div>} />
                         </Routes>
                     </AnimatePresence>
