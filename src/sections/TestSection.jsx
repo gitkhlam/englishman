@@ -66,6 +66,7 @@ export default function TestSection({
     // refreshes RandomFourWords if currentItem or workArray have changed
     useEffect(() => {
         getRandomWords();
+        workArray.length === 1 && setTestMode("manual")
     }, [currentItem, workArray]);
 
     // function processes click on answer-button and/or manual input
@@ -252,6 +253,7 @@ export default function TestSection({
             </div>
         </motion.div>
 
+            <AnimatePresence mode='wait'>
             {visibleNotification && (
                 <Notifications
                     setSelectedPart={setSelectedPart}
@@ -298,6 +300,8 @@ export default function TestSection({
                     }
                 </Notifications>
             )}
+            </AnimatePresence>
+
     </motion.section>
 
     );
@@ -309,40 +313,26 @@ function Notifications({ currentProgress, setWrongWords, isResult, setCurrentPro
     const { t } = useTranslation();
     
     const addWords = (newArray) => {
-        console.log(newArray);
 //[{"word":"move","translation":"двигать(ся)","example":"He moved toward us","partOfSpeech":"verb","theme":""},{"word":"run","translation":"бежать","example":"I love my mother","partOfSpeech":"","theme":""},{"word":"people","translation":"люди","example":"I love my mother","partOfSpeech":"","theme":""},{"word":"mother","translation":"мама","example":"I love my mother+and I love my father+ I should make them happy and proud","partOfSpeech":"","theme":""}]        
         
-        if (mistakeTest) {
-            setWrongWords(() => {
-                const storedWords = JSON.parse(localStorage.getItem("wrongWords") || "[]");
-
-                // Фильтруем newArray, оставляя только те слова, которых нет в storedWords
-                const filteredNewWords = newArray.filter(newWord =>
-                    !storedWords.some(storedWord => storedWord.word === newWord.word)
-                );
-
-                // Объединяем старые и новые слова
-                const updatedWords = [...storedWords, ...filteredNewWords];
-
-                // Обновляем localStorage
-                localStorage.setItem("wrongWords", JSON.stringify(updatedWords));
-
-                return updatedWords;
-            });
-            return;
-        }
         setWrongWords(prevWords => {
-            const updatedWords = [
-                ...prevWords,
-                ...newArray.filter(newWord =>
-                    !prevWords.some(prevWord => prevWord.word === newWord.word)
-                )
-            ];
+            const storedWords = JSON.parse(localStorage.getItem("wrongWords") || "[]");
+            const baseWords = mistakeTest ? storedWords : prevWords;
 
+            // Фильтруем newArray, исключая уже сохранённые слова
+            const filteredNewWords = newArray.filter(newWord =>
+                !baseWords.some(word => word.word === newWord.word)
+            );
+
+            const updatedWords = [...baseWords, ...filteredNewWords];
+
+            // Обновляем localStorage
             localStorage.setItem("wrongWords", JSON.stringify(updatedWords));
 
             return updatedWords;
         });
+
+        
     };
 
     
@@ -364,8 +354,12 @@ function Notifications({ currentProgress, setWrongWords, isResult, setCurrentPro
     }, []);
 
     return(
-        <div
-            className={`z-50 px-2 flex items-center justify-center fixed inset-0 min-h-screen w-full text-[var(--dark)] dark:text-[var(--light)] overflow-hidden ${isResult ? "backdrop-blur-xl":"bg-[var(--light)] dark:bg-[var(--dark)]"}`}
+        <motion.div
+            initial={{ scale: 0.55 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 1.45, opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className={`z-50 px-2 flex items-center justify-center fixed inset-0 min-h-screen w-full text-[var(--dark)] dark:text-[var(--light)] overflow-hidden ${isResult ? "backdrop-blur-xl" : "bg-[var(--light)] dark:bg-[var(--dark)]"}`}
         >
         
         <div
@@ -380,7 +374,7 @@ function Notifications({ currentProgress, setWrongWords, isResult, setCurrentPro
             </button>
         }
         </div>
-    </div>
+    </motion.div>
     )
 }
 

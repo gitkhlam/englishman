@@ -52,7 +52,7 @@ export default function GoogleSettings({ googleLink, setGoogleLink, setLoadingDa
             </span>
             <div className="my-3 border rounded-lg shadow-md overflow-hidden">
                 <button
-                    className="w-full flex justify-between items-center p-2 cursor-pointer"
+                    className="w-full flex justify-between items-center p-2 cursor-pointer hover:opacity-50 transition-opacity duration-900"
                     onClick={() => setOpenAcc(prev => !prev)}
                 >
                     <span className="font-bold text-xl">{t("instruction")}</span>

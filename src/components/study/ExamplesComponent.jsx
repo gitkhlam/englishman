@@ -2,13 +2,50 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from "react-i18next";
 import "../../langConfig.js";
+import axios from 'axios';
+import { LanguageIcon } from "@heroicons/react/24/solid";
+
 
 export default function ExamplesComponent({ exampleArray, speak, isApi }) {
     const [accordionOpen, setAccordionOpen] = useState(false);
+    const [translatedText, setTranslatedText] = useState({});
     
+
+
+    const handleTranslate = async (example, index) => {
+        console.log(translatedText[index]);
+        if (translatedText[index] !== undefined && Object.keys(translatedText).length > 0){
+            setTranslatedText((prev) => ({
+                ...prev,
+                [index]: false,
+            }));
+            return;
+        } 
+
+        try {
+            const response = await axios.get('https://api.mymemory.translated.net/get', {
+                params: {
+                    q: example,
+                    langpair: 'en|ru',
+                },
+            });
+            const translated = response.data.responseData.translatedText;
+            setTranslatedText((prev) => ({
+                ...prev,
+                [index]: translated,
+            }));
+        } catch (error) {
+            console.error('Ошибка перевода:', error.message);
+            setTranslatedText((prev) => ({
+                ...prev,
+                [index]: 'Ошибка перевода',
+            }));
+        }
+    };
+
     useEffect(() => {
         setAccordionOpen(false);
-                
+        setTranslatedText({})
     }, [exampleArray]);
 
     const { t } = useTranslation();
@@ -56,10 +93,17 @@ export default function ExamplesComponent({ exampleArray, speak, isApi }) {
                     {exampleArray.map((example, index) => (
                         <li
                             key={index}
-                            className="cursor-pointer text-2xl font-semibold hover:opacity-70"
-                            onClick={() => speak(example)}
                         >
-                            {`${exampleArray.length > 1 ? index + 1 + ". " : ""}${example}`}
+                            <span
+                                onClick={() => speak(example)}
+                                className="cursor-pointer text-2xl font-semibold hover:opacity-70"
+                            >
+                                {`${exampleArray.length > 1 ? index + 1 + '. ' : ''}${translatedText[index] || example}`}
+                            </span>
+                            <LanguageIcon
+                                onClick={() => handleTranslate(example, index)}
+                                className="w-5 h-5 cursor-pointer hover:opacity-40 inline-block align-middle ml-2"
+                            />
                         </li>
                     ))}
                 </motion.ul>
@@ -67,3 +111,7 @@ export default function ExamplesComponent({ exampleArray, speak, isApi }) {
         </div>
     )
 }
+
+
+
+

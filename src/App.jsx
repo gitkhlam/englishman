@@ -232,3 +232,4 @@ function WelcomeScreen ({ navigate }){
         </motion.section>
     );
 }
+
