@@ -50,13 +50,13 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
         ua: t("ukrainian")
     };
 
-    const selectStyle = " truncate cursor-pointer bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] p-1 rounded-lg outline-none hover:opacity-70 text-2xl font-medium";
+    const selectStyle = " truncate cursor-pointer bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] p-1 rounded-lg outline-none hover:opacity-70 text-2xl font-medium select-none";
 
     return (
         <>
     
             <div className='flex items-center justify-center w-full sm:w-fit bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] p-2 gap-2 rounded-lg'>
-                <p className='text-2xl sm:text-4xl font-bold'>{t("language_menu")}</p>
+                <p className='text-2xl sm:text-4xl font-bold select-none'>{t("language_menu")}</p>
                 <select className={selectStyle} value={i18n.language} onChange={handleLanguageChange}>
                     {Object.entries(languages).map(([code, name]) => (
                         <option key={code} value={code}>{name}</option>
