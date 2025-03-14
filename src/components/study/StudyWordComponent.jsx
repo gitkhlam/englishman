@@ -13,8 +13,8 @@ export default function StudyWordComponent({
     const [exampleSentences, setExampleSentences] = useState([]);
     const [loadingSentences, setLoadingSentences] = useState(false);
 
-    const { t } = useTranslation();
-
+    const { t, i18n } = useTranslation();
+    
     // fetching examples 
     const fetchExampleSentences = async (word) => {
         try {
@@ -56,6 +56,19 @@ export default function StudyWordComponent({
         [exampleSentences]
     );
 
+    const getTranslation = () => {
+        const translations = workArray[currentItem].translation.split("--")
+            .map(part => part.split(":").map(s => s.trim())) // Разбиваем и удаляем пробелы
+            .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}); // Создаём объект {ru: "...", ua: "..."}
+
+        if (i18n.language === "en") {
+            return translations["ua"] || translations["ru"] || workArray[currentItem].translation;
+        }
+
+        // Если язык не "en", пробуем найти его, иначе берём "ru" или fallback
+        return translations[i18n.language] || translations["ua"] || translations["ru"] || workArray[currentItem].translation;
+    }
+
     const renderExamples = (condition, array, isApi) => (
         condition && (
             <ExamplesComponent
@@ -80,7 +93,7 @@ export default function StudyWordComponent({
                         className="cursor-pointer px-2 rounded-lg bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-[var(--dark)] text-2xl font-semibold hover:opacity-70"
                         onClick={() => speak(workArray[currentItem].word)}
                     >
-                        {workArray.length > 0 && workArray[currentItem].word}
+                        { workArray.length > 0 && workArray[currentItem].word }
                     </button>
                 </p>
             </div>
@@ -89,7 +102,7 @@ export default function StudyWordComponent({
                 <p className="break-words overflow-hidden">
                     {t("translation")}:{" "}
                     <span className="text-2xl font-semibold">
-                        {workArray.length > 0 && workArray[currentItem].translation}
+                        {workArray.length > 0 && getTranslation() }
                     </span>
                 </p>
             </div>
@@ -98,7 +111,7 @@ export default function StudyWordComponent({
                 <p className="break-words overflow-hidden">
                     {t("part_of_speech")}:{" "}
                     <span className="text-2xl font-semibold">
-                        {workArray.length > 0 && t(workArray[currentItem].partOfSpeech)}
+                        { workArray.length > 0 && t(workArray[currentItem].partOfSpeech) }
                     </span>
                 </p>
             </div>

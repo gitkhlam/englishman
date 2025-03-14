@@ -17,7 +17,7 @@ export default function ExamplesComponent({ exampleArray, speak, isApi }) {
         if (translatedText[index] !== undefined && Object.keys(translatedText).length > 0){
             setTranslatedText((prev) => ({
                 ...prev,
-                [index]: false,
+                [index]: undefined,
             }));
             return;
         } 
