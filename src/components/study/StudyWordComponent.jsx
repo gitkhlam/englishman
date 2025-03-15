@@ -3,9 +3,11 @@ import ExamplesComponent from './ExamplesComponent';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from "react-i18next";
 import "../../langConfig.js";
+import { getTranslation } from '../../langConfig.js';
+import { speak } from '../../Sound.js';
+
 
 export default function StudyWordComponent({
-    speak,
     showApiExamples,
     workArray,
     currentItem,
@@ -13,7 +15,7 @@ export default function StudyWordComponent({
     const [exampleSentences, setExampleSentences] = useState([]);
     const [loadingSentences, setLoadingSentences] = useState(false);
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     
     // fetching examples 
     const fetchExampleSentences = async (word) => {
@@ -43,6 +45,7 @@ export default function StudyWordComponent({
             showApiExamples && fetchExampleSentences(workArray[currentItem].word);
         }
     }, [workArray, currentItem, showApiExamples]);
+    
 
     const localExamples = useMemo(() => {
         if (!workArray || workArray.length === 0 || !workArray[currentItem]) {
@@ -52,28 +55,15 @@ export default function StudyWordComponent({
     }, [workArray, currentItem]);
 
     const apiExamples = useMemo(
-        () => exampleSentences.slice(0, 3),
+        () => exampleSentences.slice(0, 3), // get first 3 examples
         [exampleSentences]
     );
 
-    const getTranslation = () => {
-        const translations = workArray[currentItem].translation.split("--")
-            .map(part => part.split(":").map(s => s.trim())) // Разбиваем и удаляем пробелы
-            .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}); // Создаём объект {ru: "...", ua: "..."}
-
-        if (i18n.language === "en") {
-            return translations["ua"] || translations["ru"] || workArray[currentItem].translation;
-        }
-
-        // Если язык не "en", пробуем найти его, иначе берём "ru" или fallback
-        return translations[i18n.language] || translations["ua"] || translations["ru"] || workArray[currentItem].translation;
-    }
 
     const renderExamples = (condition, array, isApi) => (
         condition && (
             <ExamplesComponent
                 exampleArray={array}
-                speak={speak}
                 isApi={isApi}
             />
         )
@@ -102,7 +92,7 @@ export default function StudyWordComponent({
                 <p className="break-words overflow-hidden">
                     {t("translation")}:{" "}
                     <span className="text-2xl font-semibold">
-                        {workArray.length > 0 && getTranslation() }
+                        {workArray.length > 0 && getTranslation(workArray, currentItem) }
                     </span>
                 </p>
             </div>

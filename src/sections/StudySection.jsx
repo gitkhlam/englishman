@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import "../langConfig.js";
 import { useState, useCallback, useEffect } from 'react';
 import ModeButton from '../components/WorkModeButton.jsx';
+import { Flashcard } from '../components/study/FlashCard.jsx';
 
 export default function StudySection({
     wordsData,
@@ -36,17 +37,6 @@ export default function StudySection({
 
     const { t } = useTranslation();
     
-    // function speak of word
-    const speak = (word) => {
-        window.speechSynthesis.cancel(); // if prev speech doesn't stop
-        if (!word) return;
-        const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-US';
-        utterance.voice = window.speechSynthesis.getVoices().find(voice => (voice.name === "Samantha" || voice.name.includes("Google")) && voice.lang === "en-US");
-        // speak
-        window.speechSynthesis.speak(utterance);
-    };
-
     // const PIXABAY_API_KEY = "49300347-bb4d366c7fd6741a3e9a7532c";
     // const [query, setQuery] = useState("");
     // const [imageUrl, setImageUrl] = useState(null);
@@ -153,7 +143,6 @@ export default function StudySection({
                     <div className='flex gap-5 flex-col justify-center sm:flex-row sm:justify-between'>
                     
                         <StudyWordComponent
-                            speak={speak}
                             showApiExamples={showApiExamples}
                             workArray={workArray}
                             currentItem={currentItem}
@@ -178,15 +167,14 @@ export default function StudySection({
                     <Flashcard
                         workArray={workArray}
                         currentItem={currentItem}
-                        speak={speak}
                         sound={sound}
+                        showApiExamples={showApiExamples}
                     />
                 }
                     </AnimatePresence>
                     <StudySwitchButtons
                         currentItem={currentItem}
                         workArray={workArray}
-                        speak={speak}
                         sound={sound}
                         setSound={setSound}
                         setCurrentItem={setCurrentItem}
@@ -198,62 +186,4 @@ export default function StudySection({
 }
 
 
-const Flashcard = ({ sound, workArray, currentItem, speak }) => {
-    const [flipped, setFlipped] = useState(false);
-    const [currentWord, setCurrentWord] = useState(workArray[currentItem].word);
-    const [currentTranslation, setCurrentTranslation] = useState(workArray[currentItem].translation);
-    const [currentExample, setCurrentExample] = useState(workArray[currentItem].example);
 
-    const handleClick = () => {
-        setFlipped(!flipped);
-        sound && speak(workArray[currentItem].word);
-    }
-
-    useEffect(() => {
-        setTimeout(() => {
-            setCurrentTranslation(workArray[currentItem].translation);
-            setCurrentExample(workArray[currentItem].example);
-        }, 300);
-        setCurrentWord(workArray[currentItem].word);
-        setFlipped(prev => prev === true && false);
-    },[currentItem, workArray])
-
-    return (
-        <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto", transition: { duration: 0.5 } }}
-            exit={{ opacity: 0, height: 0, transition: { duration: 0.5 } }}
-        className="flex justify-center items-center">
-            <AnimatePresence mode='wait'>
-            <motion.div
-                initial={{ opacity: 0}}
-                animate={{ opacity: 1}}
-                exit={{ opacity: 0 }}
-                className="w-80 h-48 perspective-1000 cursor-pointer"
-                onClick={handleClick}
-            >
-                <motion.div
-                    className="relative w-full h-full"
-                    animate={{ rotateY: flipped ? 180 : 0 }}
-                    transition={{ duration: 0.6 }}
-                    style={{ transformStyle: "preserve-3d" }}
-                >
-                    <div className="hover:opacity-70 transition-all duration-500 absolute w-full h-full flex items-center justify-center bg-[var(--light)] dark:bg-gray-900 dark:text-[var(--light)] text-3xl font-bold rounded-2xl shadow-2xl backface-hidden ">
-                        {currentWord}
-                    </div>
-                        <div className="absolute w-full h-full flex flex-col items-center justify-center bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-gray-800 p-4 rounded-2xl shadow-lg backface-hidden rotate-y-180">
-                        <p className="text-3xl font-semibold break-all">{currentTranslation}</p>
-                        {workArray.length > 0 &&
-                            currentExample.split("+").map(el =>
-                                <p key={el} className="text-center text-sm italic">
-                                    {el}
-                                </p>
-                            )}
-                    </div>
-                </motion.div>
-            </motion.div>
-            </AnimatePresence>
-        </motion.div>
-        
-    );
-};

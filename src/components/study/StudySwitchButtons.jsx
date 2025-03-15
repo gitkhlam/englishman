@@ -3,8 +3,9 @@ import "../../langConfig.js";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { routeEnglishman } from '../../App.jsx';
+import { speak } from '../../Sound.js';
 
-export default function StudySwitchButtons({ currentItem, workArray, speak, sound, setCurrentItem, setSound }) {
+export default function StudySwitchButtons({ currentItem, workArray, sound, setCurrentItem, setSound }) {
 
     const { t } = useTranslation();
     

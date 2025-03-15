@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import "../../langConfig.js";
 import axios from 'axios';
 import { LanguageIcon } from "@heroicons/react/24/solid";
+import { speak } from '../../Sound.js';
 
-
-export default function ExamplesComponent({ exampleArray, speak, isApi }) {
+export default function ExamplesComponent({ exampleArray, isApi }) {
     const [accordionOpen, setAccordionOpen] = useState(false);
     const [translatedText, setTranslatedText] = useState({});
     
@@ -99,11 +99,12 @@ export default function ExamplesComponent({ exampleArray, speak, isApi }) {
                                 className="cursor-pointer text-2xl font-semibold hover:opacity-70"
                             >
                                 {`${exampleArray.length > 1 ? index + 1 + '. ' : ''}${translatedText[index] || example}`}
+                                <LanguageIcon
+                                    onClick={() => handleTranslate(example, index)}
+                                    className="w-5 h-5 cursor-pointer hover:opacity-40 inline-block align-middle ml-2"
+                                />
                             </span>
-                            <LanguageIcon
-                                onClick={() => handleTranslate(example, index)}
-                                className="w-5 h-5 cursor-pointer hover:opacity-40 inline-block align-middle ml-2"
-                            />
+
                         </li>
                     ))}
                 </motion.ul>

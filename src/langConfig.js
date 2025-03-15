@@ -3,7 +3,6 @@ import { initReactI18next } from "react-i18next";
 
 import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
-import { m } from 'framer-motion';
 
 i18n
     .use(HttpApi)
@@ -301,3 +300,16 @@ i18n
     });
 
 export default i18n;
+
+export const getTranslation = (workArray, currentItem) => {
+    const translations = workArray[currentItem].translation.split("--")
+        .map(part => part.split(":").map(s => s.trim())) // Разбиваем и удаляем пробелы
+        .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}); // Создаём объект {ru: "...", ua: "..."}
+
+    if (i18n.language === "en") {
+        return translations["ua"] || translations["ru"] || workArray[currentItem].translation;
+    }
+
+    // Если язык не "en", пробуем найти его, иначе берём "ru" или fallback
+    return translations[i18n.language] || translations["ua"] || translations["ru"] || workArray[currentItem].translation;
+}

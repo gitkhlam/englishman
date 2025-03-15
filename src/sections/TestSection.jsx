@@ -7,7 +7,7 @@ import TestChoiceMode from '../components/test/TestChoiceMode';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from "react-i18next";
 import "../langConfig.js";
-import { AcademicCapIcon } from "@heroicons/react/24/solid";
+import { getTranslation } from '../langConfig.js';
 
 
 
@@ -119,9 +119,10 @@ export default function TestSection({
     };
 
     // function shows full-sized window with result of answer
-    const showResultWindow = ({ src = "correct.mp3", time = fastAnimation ? 1 : 500, message = `${t("correct_answer")} ✅` }) => {
+    const showResultWindow = ({ src = "correct.mp3", time = 500, message = `${t("correct_answer")} ✅` }) => {
         setCurrentNotificationMessage(message);
-        setVisibleNotification(true);
+        !fastAnimation && setVisibleNotification(true);
+        message === "result" && setVisibleNotification(true);
         sound && playSound(import.meta.env.BASE_URL + src); // answer sound plays if sound enabled
         time !== 0 && setTimeout(() => setVisibleNotification(false), time);
     };
@@ -213,7 +214,7 @@ export default function TestSection({
                                 )}
                                     <div className="mt-3">
                                         <p className="w-full text-3xl font-semibold break-words">
-                                            {workArray[currentItem].translation}
+                                            {workArray.length > 0 && getTranslation(workArray, currentItem) }
                                         </p>
                                     </div>
 
