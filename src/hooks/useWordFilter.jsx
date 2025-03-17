@@ -15,9 +15,10 @@ export function useWordFilter({
     // set of unique parts of speech, exclude empty string    
     useEffect(() => {
         setUniqueParts(
-            [...new Set(wordsData.map((word) => word.partOfSpeech))].filter(
-            (word) => word.trim() !== "")
-        )
+            [...new Set(
+                wordsData.flatMap((word) => word.partOfSpeech.split('/').map(p => p.trim()))
+            )].filter(word => word !== "")
+        );
     }, [wordsData, setUniqueParts]);
 
     // sets array of selected parts of speech
@@ -25,8 +26,11 @@ export function useWordFilter({
         if (!wordsData.length) return [];
         return selectedPart === "all"
             ? wordsData
-            : wordsData.filter((word) => word.partOfSpeech === selectedPart);
+            : wordsData.filter((word) =>
+                word.partOfSpeech.split('/').map(p => p.trim()).includes(selectedPart)
+            );
     }, [selectedPart, wordsData]);
+
 
     // sets final work array of selected theme
     const workArray = useMemo(() => {

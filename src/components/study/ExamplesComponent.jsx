@@ -100,7 +100,7 @@ export default function ExamplesComponent({ exampleArray, isApi }) {
                             >
                                 {`${exampleArray.length > 1 ? index + 1 + '. ' : ''}${translatedText[index] || example}`}
                                 <LanguageIcon
-                                    onClick={() => handleTranslate(example, index)}
+                                    onClick={(e) => { e.stopPropagation(); handleTranslate(example, index)}}
                                     className="w-5 h-5 cursor-pointer hover:opacity-40 inline-block align-middle ml-2"
                                 />
                             </span>

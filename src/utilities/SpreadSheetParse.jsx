@@ -17,7 +17,7 @@ const SpreadsheetParser = async (url) => {
                             word: (normalizedRow.word).trim() || '', 
                             translation: (normalizedRow.translation).trim() || '',
                             example: (normalizedRow.example).trim() || '',
-                            partOfSpeech: (normalizedRow["part of speech"]).trim() || '', 
+                            partOfSpeech: (normalizedRow["part of speech"]).trim().toLowerCase() || '', 
                             theme: (normalizedRow.theme).trim() || '',
                         };
                     });

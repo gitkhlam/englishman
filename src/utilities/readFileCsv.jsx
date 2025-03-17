@@ -22,7 +22,7 @@ export default async function ReadFileCsv() {
             translation: row[translationIndex]?.trim(),
             example: row[exampleIndex]?.trim(),
             theme: row[themeIndex]?.trim(),
-            partOfSpeech: row[partIndex]?.trim(),
+            partOfSpeech: row[partIndex]?.trim().toLowerCase(),
         }))
         .filter((word) => word.translation && word.word); 
 
