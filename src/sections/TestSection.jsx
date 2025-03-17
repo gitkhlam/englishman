@@ -201,6 +201,7 @@ export default function TestSection({
                                         options={uniqueParts}
                                         onChange={handlePartChange}
                                         className="h-12"
+                                        isTheme={false}
                                     />
                                 )}
                                 {themeArray.length >= 1 && (
@@ -210,6 +211,7 @@ export default function TestSection({
                                         options={themeArray}
                                         onChange={handleThemeChange}
                                         className="h-12"
+                                        isTheme={true}
                                     />
                                 )}
                                     <div className="mt-3">

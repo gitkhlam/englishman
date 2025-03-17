@@ -21,7 +21,7 @@ const MemoTestSection = memo(TestSection);
 const MemoStudySection = memo(StudySection);
 
 
-export const routeEnglishman = "/englishman";
+export const routeEnglishman = "";
 
 // Главный компонент с маршрутами
 function App() {

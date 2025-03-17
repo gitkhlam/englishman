@@ -117,6 +117,7 @@ export default function StudySection({
                                 value={selectedPart}
                                 options={uniqueParts}
                                 onChange={handlePartChange}
+                                isTheme={false}
                             />
                             {themeArray.length >= 1 && (
                                 <ThemesDropdown
@@ -124,6 +125,7 @@ export default function StudySection({
                                     value={selectedTheme}
                                     options={themeArray}
                                     onChange={handleThemeChange}
+                                    isTheme={true}
                                 />
                             )}
                         </div>
