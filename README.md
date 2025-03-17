@@ -30,3 +30,16 @@ A web application for learning English words through interactive study modes and
     npm install
     npm run dev
 ```
+
+## Publishing
+
+1. Publish to github pages: 
+```sh
+    npm run build
+    npm run deploy
+```
+
+2. Publish to netlify:
+- Edit path in App.jsx: `export const routeEnglishman = "";`.
+- `npm run build`.
+- Compress files in `/dist` directory and load on netlify.
