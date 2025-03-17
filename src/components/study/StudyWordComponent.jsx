@@ -101,7 +101,12 @@ export default function StudyWordComponent({
                 <p className="break-words overflow-hidden">
                     {t("part_of_speech")}:{" "}
                     <span className="text-2xl font-semibold">
-                        { workArray.length > 0 && t(workArray[currentItem].partOfSpeech) }
+                        {workArray.length > 0 &&
+                            t(workArray[currentItem].partOfSpeech)
+                                .split("/")
+                                .map((item) => t(item))
+                                .join("/")
+                        }                    
                     </span>
                 </p>
             </div>

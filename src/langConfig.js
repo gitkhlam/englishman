@@ -105,6 +105,7 @@ i18n
                     conjunction: "conjunction",
                     interjection: "interjection",
                     phrase: "phrase",
+                    count_of_words: "Count of words: ",
                     all: "all",
                 },
             },
@@ -200,6 +201,7 @@ i18n
                     conjunction: "союз",
                     interjection: "междометие",
                     phrase: "фраза",
+                    count_of_words: "Количество слов: ",
                     all: "все",
                 },
             },
@@ -294,6 +296,7 @@ i18n
                     preposition: "прийменник",
                     conjunction: "сполучник",
                     interjection: "вигук",
+                    count_of_words: "Кількість слів: ",
                     phrase: "фраза",
                     
                     all: "всі",
@@ -306,12 +309,14 @@ i18n
 export default i18n;
 
 export const getTranslation = (workArray, currentItem, workColumn = "translation") => {
+    
     let workVar;
     if (currentItem === -1) {
         workVar = workArray
     } else {
         workVar = workArray[currentItem][workColumn];
     }
+    
     const workCol = workVar.split("--")
         .map(part => part.split(":").map(s => s.trim())) // Разбиваем и удаляем пробелы
         .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}); // Создаём объект {ru: "...", ua: "..."}

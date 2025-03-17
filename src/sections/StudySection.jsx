@@ -8,6 +8,10 @@ import "../langConfig.js";
 import { useState, useCallback, useEffect } from 'react';
 import ModeButton from '../components/WorkModeButton.jsx';
 import { Flashcard } from '../components/study/FlashCard.jsx';
+import { getTranslation } from '../langConfig.js';
+import { PlayIcon } from "@heroicons/react/24/solid";
+import { speak } from '../Sound.js';
+
 
 export default function StudySection({
     wordsData,
@@ -90,7 +94,7 @@ export default function StudySection({
                     { t("study_mode") }
                 </p>
                 <div className='flex justify-center gap-5'>
-                    {["card", "def"].map((mode) => (
+                    {["card", "def", "list"].map((mode) => (
                         <ModeButton
                             key={mode}
                             onClick={() => handleClickMode(mode)}
@@ -101,7 +105,7 @@ export default function StudySection({
                                 animate={{ scale: 1.1, opacity: 1 }}
                                 transition={{ duration: 10.3, ease: "easeInOut" }}
                             >
-                                {mode === "def" ? "📑" : "🃏" }
+                                {mode === "def" ? "📑" : mode === "card" ? "🃏" : "📋" }
                             </motion.span>
     
                         </ModeButton>
@@ -173,14 +177,21 @@ export default function StudySection({
                         showApiExamples={showApiExamples}
                     />
                 }
-                    </AnimatePresence>
-                    <StudySwitchButtons
-                        currentItem={currentItem}
-                        workArray={workArray}
-                        sound={sound}
-                        setSound={setSound}
-                        setCurrentItem={setCurrentItem}
-                    />
+                </AnimatePresence>
+                
+                {studyMode !== "list" && <StudySwitchButtons
+                    currentItem={currentItem}
+                    workArray={workArray}
+                    sound={sound}
+                    setSound={setSound}
+                    setCurrentItem={setCurrentItem}
+                />}
+                
+                {studyMode === "list" && <ListMode 
+                    workArray={workArray}
+                    speak={speak}
+                />}
+
                 </div>
             </div>
         </motion.section>
@@ -189,3 +200,85 @@ export default function StudySection({
 
 
 
+
+
+function ListMode({ workArray }) {
+    const [openAcc, setOpenAcc] = useState(false);
+    const [openItems, setOpenItems] = useState({});
+
+    const toggleAccordion = (index) => {
+        setOpenItems((prev) => ({
+            ...prev,
+            [index]: !prev[index],
+        }));
+    };
+
+    return (
+        <motion.div
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="w-full bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--dark)] dark:text-[var(--light)] my-3 border rounded-lg shadow-md overflow-hidden"
+        >
+            <button
+                className="w-full sticky top-0 flex justify-between items-center p-2 cursor-pointer hover:opacity-50 transition-opacity duration-300 border bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--dark)] dark:text-[var(--light)]"
+                onClick={() => setOpenAcc(prev => !prev)}
+            >
+                <span className="font-bold text-xl">Count: {workArray.length}</span>
+            </button>
+
+            <AnimatePresence mode="wait">
+                {openAcc && (
+                    <motion.div
+                        initial={{ maxHeight: 0, opacity: 0 }}
+                        animate={{ maxHeight: 300, opacity: 1 }}
+                        exit={{ maxHeight: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-y-auto"
+                    >
+                        <div className="p-4 dark:text-[var(--light)] text-[var(--dark)]">
+                            <ul className="text-xl">
+                                {workArray.map((el, index) => (
+                                    <li key={index} className="flex justify-between py-1 items-center">
+                                        <div
+                                            onClick={() => toggleAccordion(index)}
+                                            className="flex flex-col max-w-[80%] cursor-pointer"
+                                        >
+                                            <span className="text-2xl font-bold">{el.word}</span>
+                                            <span className="text-gray-500 max-w-[70%]">
+                                                {getTranslation(el.translation, -1, "translation")}
+                                            </span>
+
+                                            {/* Анимация аккордеона без лагов */}
+                                            <AnimatePresence>
+                                                {openItems[index] && (
+                                                    <motion.div
+                                                        layout
+                                                        initial={{ maxHeight: 0, opacity: 0 }}
+                                                        animate={{ maxHeight: 200, opacity: 1 }}
+                                                        exit={{ maxHeight: 0, opacity: 0 }}
+                                                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                        className="overflow-hidden"
+                                                    >
+                                                        <div className="border-t py-2 text-gray-700 dark:text-gray-300">
+                                                            {el.example.split("+").map((sentence, i) => (
+                                                                <p key={i}>{sentence}</p>
+                                                            ))}
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+
+                                        <PlayIcon
+                                            onClick={() => speak(el.word)}
+                                            className="shrink-0 cursor-pointer hover:opacity-50 w-5 h-5 sm:w-8 sm:h-8 dark:text-[var(--light)] text-[var(--dark)]"
+                                        />
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+}

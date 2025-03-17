@@ -154,7 +154,7 @@ function AppContent() {
 
     return (
         <>
-            <AnimatePresence mode="wait">
+            {/* <AnimatePresence mode="wait">
                 {!isLoaded && (
                     <MotionComponent
                         motionKey="preloader"
@@ -169,7 +169,7 @@ function AppContent() {
                         <Preloader loadingData={loadingData} onComplete={handleComplete} />
                     </MotionComponent>
                 )}
-            </AnimatePresence>
+            </AnimatePresence> */}
             
             <AnimatePresence mode="wait">
                 {loadingData && <MotionComponent motionKey="loader-data" style="fixed inset-0 flex items-center justify-center z-99" opacity3={0} y3={"100vh"} y1={0} y2={0}><Loader fullText="Loading...⏳" /></MotionComponent>}

@@ -46,7 +46,7 @@ export default function GoogleSettings({ googleLink, setGoogleLink, setLoadingDa
             animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
             exit={{ opacity: 0, x: "-100vw", y: "-100vh", scale: 0.95 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-        className='rounded-lg dark:bg-[var(--light)] text-[var(--light)] border bg-[var(--dark)] dark:text-[var(--dark)] p-5 w-full sm:max-w-3xl'>
+            className='rounded-lg dark:bg-[var(--light)] text-[var(--light)] border bg-[var(--dark)] dark:text-[var(--dark)] p-5 w-full sm:max-w-3xl'>
             <span className='font-semibold text-2xl sm:text-3xl'>
                 {t("google_settings_hello")}
             </span>

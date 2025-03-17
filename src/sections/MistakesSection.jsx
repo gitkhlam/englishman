@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../langConfig.js";
 import { useTranslation } from "react-i18next";
 import { routeEnglishman } from '../App.jsx';
+import { getTranslation } from '../langConfig.js';
 
 export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode, setCurrentItem }) {
 
@@ -43,9 +44,16 @@ export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode
                                             <tr key={ind} className="odd:bg-gray-100 even:bg-white dark:odd:bg-gray-800 dark:even:bg-gray-900 text-sm sm:text-lg">
                                                 <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">{ind + 1 + ")"}</td>
                                                 <td className="border border-gray-300 dark:border-gray-600 px-2 py-1 cursor-pointer hover:opacity-70">{el.word}</td>
-                                                <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">{el.translation}</td>
+                                                <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">{getTranslation(el.translation, -1, "translation")}</td>
                                                 <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">{el.example.split("+").join("; ")}</td>
-                                                <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">{el.partOfSpeech}</td>
+                                                <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
+                                                    {
+                                                        t(el.partOfSpeech)
+                                                            .split("/")
+                                                            .map((item) => t(item))
+                                                            .join("/")
+                                                    }   
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
