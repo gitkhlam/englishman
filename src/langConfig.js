@@ -305,15 +305,21 @@ i18n
 
 export default i18n;
 
-export const getTranslation = (workArray, currentItem) => {
-    const translations = workArray[currentItem].translation.split("--")
+export const getTranslation = (workArray, currentItem, workColumn = "translation") => {
+    let workVar;
+    if (currentItem === -1) {
+        workVar = workArray
+    } else {
+        workVar = workArray[currentItem][workColumn];
+    }
+    const workCol = workVar.split("--")
         .map(part => part.split(":").map(s => s.trim())) // Разбиваем и удаляем пробелы
         .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}); // Создаём объект {ru: "...", ua: "..."}
 
     if (i18n.language === "en") {
-        return translations["ua"] || translations["ru"] || workArray[currentItem].translation;
+        return workCol["ua"] || workCol["ru"] || workVar;
     }
 
     // Если язык не "en", пробуем найти его, иначе берём "ru" или fallback
-    return translations[i18n.language] || translations["ua"] || translations["ru"] || workArray[currentItem].translation;
+    return workCol[i18n.language] || workCol["ua"] || workCol["ru"] || workVar;
 }
