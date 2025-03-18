@@ -13,7 +13,6 @@ export default function ExamplesComponent({ exampleArray, isApi }) {
 
 
     const handleTranslate = async (example, index) => {
-        console.log(translatedText[index]);
         if (translatedText[index] !== undefined && Object.keys(translatedText).length > 0){
             setTranslatedText((prev) => ({
                 ...prev,

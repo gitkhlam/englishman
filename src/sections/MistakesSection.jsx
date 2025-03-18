@@ -45,7 +45,7 @@ export default function MistakeSection({ wrongWords, setMistakeTest, setTestMode
                                                 <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">{ind + 1 + ")"}</td>
                                                 <td className="border border-gray-300 dark:border-gray-600 px-2 py-1 cursor-pointer hover:opacity-70">{el.word}</td>
                                                 <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">{getTranslation(el.translation, -1, "translation")}</td>
-                                                <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">{el.example.split("+").join("; ")}</td>
+                                                <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">{el.example.split("+").join(" ")}</td>
                                                 <td className="border border-gray-300 dark:border-gray-600 px-2 py-1">
                                                     {
                                                         t(el.partOfSpeech)

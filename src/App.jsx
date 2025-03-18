@@ -53,7 +53,7 @@ function AppContent() {
             ? true
             : localStorage.getItem('soundStatus') === 'true'
     );
-    const [showApiExamples, setShowApiExamples] = useState(false);
+    const [showApiExamples, setShowApiExamples] = useState(true);
     const [googleSpread, setGoogleSpread] = useState(
         localStorage.getItem("googleLink") !== null &&
         (localStorage.getItem("googleSpread") === null ? true :
@@ -148,7 +148,7 @@ function AppContent() {
         googleLink, 
         setGoogleLink,
         setLoadingData,
-    }), [googleLink, fastAnimation, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeTest, resetAll, wrongWords]);
+    }), [showApiExamples, googleLink, fastAnimation, wordsData, testMode, uniqueParts, selectedPart, selectedTheme, currentItem, sound, trigger, mistakeTest, resetAll, wrongWords]);
 
     const handleComplete = useCallback(() => setIsLoaded(true), []);
 

@@ -5,12 +5,15 @@ import StudySwitchButtons from '../components/study/StudySwitchButtons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from "react-i18next";
 import "../langConfig.js";
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import ModeButton from '../components/WorkModeButton.jsx';
 import { Flashcard } from '../components/study/FlashCard.jsx';
 import { getTranslation } from '../langConfig.js';
 import { PlayIcon } from "@heroicons/react/24/solid";
 import { speak } from '../Sound.js';
+import { LanguageIcon } from "@heroicons/react/24/solid";
+import axios from 'axios';
+
 
 
 export default function StudySection({
@@ -81,6 +84,7 @@ export default function StudySection({
             setStudyMode(mode);
         }, [setStudyMode]);
 
+        
     return (
         <motion.section 
             initial= {{ opacity: 0, x: -400, scale: 0.55 }}
@@ -190,6 +194,7 @@ export default function StudySection({
                 {studyMode === "list" && <ListMode 
                     workArray={workArray}
                     speak={speak}
+                    showApiExamples={showApiExamples}
                 />}
 
                 </div>
@@ -202,16 +207,108 @@ export default function StudySection({
 
 
 
-function ListMode({ workArray }) {
+function ListMode({ workArray, showApiExamples }) {
     const [openAcc, setOpenAcc] = useState(false);
     const [openItems, setOpenItems] = useState({});
+    const [translatedText, setTranslatedText] = useState({}); // Теперь { wordIndex: { sentenceIndex: "перевод" } }
+    const [exampleSentences, setExampleSentences] = useState({});
+    const [loadingSentences, setLoadingSentences] = useState(false);
 
-    const toggleAccordion = (index) => {
-        setOpenItems((prev) => ({
-            ...prev,
-            [index]: !prev[index],
-        }));
+    useEffect(() => {
+        setOpenAcc(false);
+        setOpenItems({});
+        setTranslatedText({});
+        setExampleSentences({});
+        setLoadingSentences(false);
+    }, [showApiExamples])
+
+    const { t } = useTranslation();
+
+    const toggleAccordion = (word, index) => {
+        if (showApiExamples && !exampleSentences[index]) {
+            fetchExampleSentences(word, index);
+        }
+        setOpenItems((prev) => {
+            const newOpenItems = {};
+            Object.keys(prev).forEach((key) => {
+                newOpenItems[key] = false;
+            });
+            newOpenItems[index] = !prev[index];
+            return newOpenItems;
+        });
     };
+
+    const handleTranslate = async (example, wordIndex, sentenceIndex) => {
+        // Проверяем, есть ли уже перевод для этого предложения
+        if (translatedText[wordIndex]?.[sentenceIndex] !== undefined) {
+            setTranslatedText((prev) => ({
+                ...prev,
+                [wordIndex]: {
+                    ...prev[wordIndex],
+                    [sentenceIndex]: undefined, // Сбрасываем перевод
+                },
+            }));
+            return;
+        }
+
+        try {
+            const response = await axios.get('https://api.mymemory.translated.net/get', {
+                params: {
+                    q: example,
+                    langpair: 'en|ru',
+                },
+            });
+            const translated = response.data.responseData.translatedText;
+            setTranslatedText((prev) => ({
+                ...prev,
+                [wordIndex]: {
+                    ...prev[wordIndex],
+                    [sentenceIndex]: translated, // Сохраняем перевод для конкретного предложения
+                },
+            }));
+        } catch (error) {
+            console.error('Ошибка перевода:', error.message);
+            setTranslatedText((prev) => ({
+                ...prev,
+                [wordIndex]: {
+                    ...prev[wordIndex],
+                    [sentenceIndex]: 'Ошибка перевода',
+                },
+            }));
+        }
+    };
+
+    const fetchExampleSentences = async (word, index) => {
+        try {
+            setLoadingSentences(true);
+            const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+            if (!response.ok) throw new Error("Failed to fetch examples");
+            const data = await response.json();
+            const examples =
+                data[0]?.meanings[0]?.definitions
+                    .filter((def) => def.example)
+                    .map((def) => def.example) || [];
+            setExampleSentences((prev) => ({
+                ...prev,
+                [index]: examples,
+            }));
+        } catch (err) {
+            console.error(err);
+            setExampleSentences((prev) => ({
+                ...prev,
+                [index]: [],
+            }));
+        } finally {
+            setTimeout(() => {
+                setLoadingSentences(false);
+            }, 1000);
+        }
+    };
+
+    const apiExamples = useMemo(
+        () => (index) => exampleSentences[index]?.slice(0, 3) || [],
+        [exampleSentences]
+    );
 
     return (
         <motion.div
@@ -220,9 +317,11 @@ function ListMode({ workArray }) {
         >
             <button
                 className="w-full sticky top-0 flex justify-between items-center p-2 cursor-pointer hover:opacity-50 transition-opacity duration-300 border bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--dark)] dark:text-[var(--light)]"
-                onClick={() => setOpenAcc(prev => !prev)}
+                onClick={() => setOpenAcc((prev) => !prev)}
             >
-                <span className="font-bold text-xl">Count: {workArray.length}</span>
+                <span className="font-bold text-xl">
+                    {t("count_of_words")}{workArray.length}
+                </span>
             </button>
 
             <AnimatePresence mode="wait">
@@ -239,15 +338,14 @@ function ListMode({ workArray }) {
                                 {workArray.map((el, index) => (
                                     <li key={index} className="flex justify-between py-1 items-center">
                                         <div
-                                            onClick={() => toggleAccordion(index)}
-                                            className="flex flex-col max-w-[80%] cursor-pointer"
+                                            onClick={() => toggleAccordion(el.word, index)}
+                                            className="flex flex-col max-w-[90%] cursor-pointer"
                                         >
                                             <span className="text-2xl font-bold">{el.word}</span>
-                                            <span className="text-gray-500 max-w-[70%]">
+                                            <span className="text-[var(--dark)] dark:text-[var(--light)] max-w-[90%]">
                                                 {getTranslation(el.translation, -1, "translation")}
                                             </span>
 
-                                            {/* Анимация аккордеона без лагов */}
                                             <AnimatePresence>
                                                 {openItems[index] && (
                                                     <motion.div
@@ -259,9 +357,51 @@ function ListMode({ workArray }) {
                                                         className="overflow-hidden"
                                                     >
                                                         <div className="border-t py-2 text-gray-700 dark:text-gray-300">
-                                                            {el.example.split("+").map((sentence, i) => (
-                                                                <p key={i}>{sentence}</p>
-                                                            ))}
+                                                            {!showApiExamples &&
+                                                                el.example.split("+").map((sentence, i) => (
+                                                                    <p
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            speak(sentence);
+                                                                        }}
+                                                                        key={`${i}ab`}
+                                                                    >
+                                                                        {translatedText[index]?.[i] || sentence}
+                                                                        <LanguageIcon
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                handleTranslate(sentence, index, i);
+                                                                            }}
+                                                                            className="w-5 h-5 cursor-pointer hover:opacity-40 inline-block align-middle ml-2"
+                                                                        />
+                                                                    </p>
+                                                                ))}
+                                                            {showApiExamples && (
+                                                                loadingSentences ? (
+                                                                    <>LOADING</>
+                                                                ) : (
+                                                                    apiExamples(index).length > 0 &&
+                                                                    apiExamples(index).map((elm, ind) => (
+                                                                        <p
+                                                                            key={`${ind}ba`}
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                speak(elm);
+                                                                            }}
+                                                                            className="text-center text-sm italic cursor-pointer font-semibold hover:opacity-70"
+                                                                        >
+                                                                            {translatedText[index]?.[ind] || elm}
+                                                                            <LanguageIcon
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                    handleTranslate(elm, index, ind);
+                                                                                }}
+                                                                                className="w-5 h-5 cursor-pointer hover:opacity-40 inline-block align-middle ml-2"
+                                                                            />
+                                                                        </p>
+                                                                    ))
+                                                                )
+                                                            )}
                                                         </div>
                                                     </motion.div>
                                                 )}
