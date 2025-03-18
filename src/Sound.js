@@ -8,3 +8,10 @@ export const speak = (word) => {
         // speak
         window.speechSynthesis.speak(utterance);
     };
+
+
+export const playSound = (src) => {
+    const audio = new Audio(src);
+    audio.currentTime = 0;
+    audio.play();
+};

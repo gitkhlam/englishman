@@ -17,7 +17,8 @@ export default function SettingsWindow({
     setGoogleSpread,
     googleLink,
     wrongWords,
-    setMistakeTest
+    setMistakeTest,
+    showApiMenu
 }) {
     const handleBackgroundClick = (e) => {
         if (e.target === e.currentTarget) {
@@ -72,6 +73,7 @@ export default function SettingsWindow({
                     wrongWords={wrongWords}
                     setSettingsVisible={setSettingsVisible}
                     setMistakeTest={setMistakeTest}
+                    showApiMenu={showApiMenu}
                 />
             </div>
         </motion.div>

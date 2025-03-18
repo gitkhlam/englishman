@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import "../../langConfig.js";
 import { routeEnglishman } from '../../App.jsx';
 
-export default function SettingsMenu({ sound, setSound, showApiExamples, setShowApiExamples, setGoogleSpread, googleLink, googleSpread, wrongWords, setSettingsVisible, setMistakeTest }) {
+export default function SettingsMenu({ showApiMenu, sound, setSound, showApiExamples, setShowApiExamples, setGoogleSpread, googleLink, googleSpread, wrongWords, setSettingsVisible, setMistakeTest }) {
 
     const navigate = useNavigate();
     
@@ -67,14 +67,15 @@ export default function SettingsMenu({ sound, setSound, showApiExamples, setShow
             <Button onClick={toggleSound}>
                 {sound ? t("sound_enabled") : t("sound_disabled")}
             </Button>
-
+            
+            {showApiMenu && 
             <Button onClick={toggleApiExamples}>
                 
                 { showApiExamples
                     ? t("api_examples_enabled")
                     : t("api_examples_disabled") }
             </Button>
-
+            }
             <Button onClick={(e) => {
                 e.stopPropagation();
                 setSettingsVisible(false);

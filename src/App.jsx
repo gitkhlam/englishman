@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import "./langConfig.js";
 import GoogleSettings from './components/settings/GoogleSettings.jsx';
 import MotionComponent from './components/MotionComponent.jsx';
+import { playSound } from './Sound.js';
 
 
 const MemoTestSection = memo(TestSection);
@@ -53,7 +54,8 @@ function AppContent() {
             ? true
             : localStorage.getItem('soundStatus') === 'true'
     );
-    const [showApiExamples, setShowApiExamples] = useState(true);
+    const [showApiExamples, setShowApiExamples] = useState(false);
+    const [showApiMenu, setShowApiMenu] = useState(false);
     const [googleSpread, setGoogleSpread] = useState(
         localStorage.getItem("googleLink") !== null &&
         (localStorage.getItem("googleSpread") === null ? true :
@@ -181,7 +183,7 @@ function AppContent() {
                     setSettingsVisible={setSettingsVisible} 
                     logoClick={resetAll}
                 >
-                    EnglishMan
+                    EnglishMa<span onClick={(e) => { e.stopPropagation(); playSound("click.mp3"); setShowApiMenu(prev => !prev)}}>n</span>
                 </HeaderSection>
                 
                     <main className="flex flex-col items-center justify-center grow container">
@@ -201,7 +203,7 @@ function AppContent() {
                 <footer className="p-5 text-center font-semibold"><span>Kyiv {new Date().getFullYear()}</span></footer>
             </div>
             <AnimatePresence mode="wait">
-                {settingsVisible && <SettingsWindow sound={sound} setSound={setSound} theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} resetAll={resetAll} googleSpread={googleSpread} setGoogleSpread={setGoogleSpread} googleLink={googleLink} setGoogleLink={setGoogleLink} wrongWords={wrongWords} setMistakeTest={setMistakeTest} setShowApiExamples={setShowApiExamples} showApiExamples={showApiExamples} />}
+                {settingsVisible && <SettingsWindow showApiMenu={showApiMenu} sound={sound} setSound={setSound} theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} resetAll={resetAll} googleSpread={googleSpread} setGoogleSpread={setGoogleSpread} googleLink={googleLink} setGoogleLink={setGoogleLink} wrongWords={wrongWords} setMistakeTest={setMistakeTest} setShowApiExamples={setShowApiExamples} showApiExamples={showApiExamples} />}
             </AnimatePresence>
         </>
     );
