@@ -18,6 +18,10 @@ A web application for learning English words through interactive study modes and
   - Words are loaded from a CSV file in the project root.
   - Additional words can be added via Google Sheets.
 
+- **Additional features**:
+  - Clicking on the last "n" in the Logo enables API examples mode for selection.
+  - Clicking on the word count in test mode toggles the animation (show or hide).
+
 ## Installation
 
 1. Clone the repository:
