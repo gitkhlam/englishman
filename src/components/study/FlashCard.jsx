@@ -3,6 +3,7 @@ import { getTranslation } from '../../langConfig';
 import { motion, AnimatePresence } from 'framer-motion';
 import { speak } from '../../Sound';
 import { LanguageIcon } from "@heroicons/react/24/solid";
+import i18n from '../../langConfig';
 import axios from 'axios';
 
 export const Flashcard = ({ sound, workArray, currentItem, showApiExamples }) => {
@@ -25,7 +26,7 @@ export const Flashcard = ({ sound, workArray, currentItem, showApiExamples }) =>
             const response = await axios.get('https://api.mymemory.translated.net/get', {
                 params: {
                     q: example,
-                    langpair: 'en|ru',
+                    langpair: `en|${i18n.language === 'ru' ? 'ru' : 'uk'}`,
                 },
             });
             const translated = response.data.responseData.translatedText;

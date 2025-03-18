@@ -13,6 +13,7 @@ import { PlayIcon } from "@heroicons/react/24/solid";
 import { speak } from '../Sound.js';
 import { LanguageIcon } from "@heroicons/react/24/solid";
 import axios from 'axios';
+import i18n from '../langConfig.js';
 
 
 
@@ -255,7 +256,7 @@ function ListMode({ workArray, showApiExamples }) {
             const response = await axios.get('https://api.mymemory.translated.net/get', {
                 params: {
                     q: example,
-                    langpair: 'en|ru',
+                    langpair: `en|${i18n.language === 'ru' ? 'ru' : 'uk'}`,
                 },
             });
             const translated = response.data.responseData.translatedText;
@@ -341,8 +342,8 @@ function ListMode({ workArray, showApiExamples }) {
                                             onClick={() => toggleAccordion(el.word, index)}
                                             className="flex flex-col max-w-[90%] cursor-pointer"
                                         >
-                                            <span className="text-2xl font-bold">{el.word}</span>
-                                            <span className="text-[var(--dark)] dark:text-[var(--light)] max-w-[90%]">
+                                            <span className="hover:opacity-60 text-2xl font-bold">{el.word}</span>
+                                            <span className="hover:opacity-60 text-[var(--dark)] dark:text-[var(--light)] max-w-[90%]">
                                                 {getTranslation(el.translation, -1, "translation")}
                                             </span>
 
@@ -356,9 +357,9 @@ function ListMode({ workArray, showApiExamples }) {
                                                         transition={{ duration: 0.3, ease: "easeInOut" }}
                                                         className="overflow-hidden"
                                                     >
-                                                        <div className="border-t py-2 text-gray-700 dark:text-gray-300">
+                                                        <div className="hover:opacity-60 border-t py-2 text-gray-700 dark:text-gray-300">
                                                             {!showApiExamples &&
-                                                                el.example.split("+").map((sentence, i) => (
+                                                                el.example.length > 0 && el.example.split("+").map((sentence, i) => (
                                                                     <p
                                                                         onClick={(e) => {
                                                                             e.stopPropagation();

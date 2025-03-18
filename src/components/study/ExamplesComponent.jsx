@@ -5,6 +5,7 @@ import "../../langConfig.js";
 import axios from 'axios';
 import { LanguageIcon } from "@heroicons/react/24/solid";
 import { speak } from '../../Sound.js';
+import i18n from '../../langConfig.js';
 
 export default function ExamplesComponent({ exampleArray, isApi }) {
     const [accordionOpen, setAccordionOpen] = useState(false);
@@ -13,6 +14,8 @@ export default function ExamplesComponent({ exampleArray, isApi }) {
 
 
     const handleTranslate = async (example, index) => {
+        console.log(i18n.language);
+        
         if (translatedText[index] !== undefined && Object.keys(translatedText).length > 0){
             setTranslatedText((prev) => ({
                 ...prev,
@@ -23,9 +26,10 @@ export default function ExamplesComponent({ exampleArray, isApi }) {
 
         try {
             const response = await axios.get('https://api.mymemory.translated.net/get', {
+                
                 params: {
                     q: example,
-                    langpair: 'en|ru',
+                    langpair: `en|${i18n.language === 'ru' ? 'ru' : 'uk'}`,
                 },
             });
             const translated = response.data.responseData.translatedText;

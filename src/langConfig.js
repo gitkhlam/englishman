@@ -72,6 +72,7 @@ i18n
                     instruction_list_2: "2. In the first row, specify the column names as follows: Word, Translation, Example, Part of speech, Theme. IMPORTANT‼️ Names must match.",
                     instruction_list_3: "3. Fill in the table with your data:",
                     instruction_list_3_1: "Word and Translation — required fields, they cannot be empty.",
+                    instruction_list_3_11: 'In Translation, if you need two translations, write them in the format: "ru: завтрак -- ua: сніданок". The same applies to Theme.',
                     instruction_list_3_2: "Part of speech must contain one of the following values: NOUN, PRONOUN, VERB, ADJECTIVE, ADVERB, PREPOSITION, CONJUNCTION, INTERJECTION.",
                     instruction_list_3_3: "Example — if the word has several examples, separate them with a '+', for example: go to bed + go on foot.",
                     instruction_list_4: "4. Publish the table in CSV format: File → Publish to the web → CSV.",
@@ -107,6 +108,9 @@ i18n
                     phrase: "phrase",
                     count_of_words: "Count of words: ",
                     all: "all",
+                    example_google_img: "Your google sheet should look like that:",
+                    show_image_google_sh: "Show image",
+                    hide_image_google_sh: "Hide image",
                 },
             },
             ru: {
@@ -168,6 +172,7 @@ i18n
                     instruction_list_2: "2. В первой строке укажите названия колонок: Word, Translation, Example, Part of speech, Theme. ВАЖНО‼️ Названия должны совпадать.",
                     instruction_list_3: "3. Заполните таблицу своими данными:",
                     instruction_list_3_1: "Word и Translation — обязательные поля, они не могут быть пустыми.",
+                    instruction_list_3_11: 'В Translation, если вам нужно два перевода, записывайте их в формате: "ru: завтрак -- ua: сніданок". То же самое касается Theme.',
                     instruction_list_3_2: "Part of speech должно содержать одно из следующих значений: NOUN, PRONOUN, VERB, ADJECTIVE, ADVERB, PREPOSITION, CONJUNCTION, INTERJECTION.",
                     instruction_list_3_3: "Example — если у слова несколько примеров, разделяйте их знаком '+', например: go to bed + go on foot.",
                     instruction_list_4: "4. Опубликуйте таблицу в формате CSV: Файл → Опубликовать в интернете → CSV.",
@@ -203,6 +208,9 @@ i18n
                     phrase: "фраза",
                     count_of_words: "Количество слов: ",
                     all: "все",
+                    example_google_img: "Ваша Google-таблица должна выглядеть так:",
+                    show_image_google_sh: "Показать изображение",
+                    hide_image_google_sh: "Скрыть изображение"
                 },
             },
             ua: {
@@ -264,6 +272,7 @@ i18n
                     instruction_list_2: "2. У першому рядку вкажіть назви колонок: Word, Translation, Example, Part of speech, Theme. ВАЖЛИВО‼️ Назви мають збігатися.",
                     instruction_list_3: "3. Заповніть таблицю своїми даними:",
                     instruction_list_3_1: "Word і Translation — обов'язкові поля, вони не можуть бути порожніми.",
+                    instruction_list_3_11: 'В Translation, якщо вам потрібно два переклади записуйте у форматі: "ru: завтрак -- ua: сніданок". Те ж саме стосується Theme.',
                     instruction_list_3_2: "Part of speech має містити одне з таких значень: NOUN, PRONOUN, VERB, ADJECTIVE, ADVERB, PREPOSITION, CONJUNCTION, INTERJECTION.",
                     instruction_list_3_3: "Example — якщо у слова кілька прикладів, розділяйте їх знаком '+', наприклад: go to bed + go on foot.",
                     instruction_list_4: "4. Опублікуйте таблицю у форматі CSV: Файл → Опублікувати в Інтернеті → CSV.",
@@ -298,8 +307,10 @@ i18n
                     interjection: "вигук",
                     count_of_words: "Кількість слів: ",
                     phrase: "фраза",
-                    
                     all: "всі",
+                    example_google_img: "Ваша Google-таблиця повинна виглядати так:",
+                    show_image_google_sh: "Показати зображення",
+                    hide_image_google_sh: "Приховати зображення",
                 },
             },
 

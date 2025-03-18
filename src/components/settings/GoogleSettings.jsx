@@ -11,6 +11,8 @@ export default function GoogleSettings({ googleLink, setGoogleLink, setLoadingDa
 
     const [inputLink, setInputLink] = useState(""); // state for input link
     const [openAcc, setOpenAcc] = useState(false);
+    const [openAcc12, setOpenAcc12] = useState(false);
+
 
     const handleAddLinkButton = async () => {
 
@@ -74,12 +76,27 @@ export default function GoogleSettings({ googleLink, setGoogleLink, setLoadingDa
                                 {t("instruction_list_3")}
                                 <ul className='list-disc pl-4'>
                                     <li>{t("instruction_list_3_1")}</li>
+                                    <li>{t("instruction_list_3_11")}</li>
+
                                     <li>{t("instruction_list_3_2")}</li>
                                     <li>{t("instruction_list_3_3")}</li>
                                 </ul>
                             </li>
                             <li>{t("instruction_list_4")}</li>
                             <li>{t("instruction_list_5")}</li>
+                            <li className='mt-4'>
+                                <button onClick={() => setOpenAcc12(prev => !prev)} 
+                                    className='select-none text-xl font-semibold border py-1 px-2 rounded-lg cursor-pointer bg-[var(--light)] text-[var(--dark)] dark:bg-[var(--dark)] dark:text-[var(--light)] hover:opacity-50'>{openAcc12 ? t("hide_image_google_sh") : t("show_image_google_sh")}</button>
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: openAcc12 ? 'auto' : 0, opacity: openAcc12 ? 1 : 0 }}
+                                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                                    className="overflow-hidden py-2"
+                                >
+                                    <span>{t("example_google_img")}</span>
+                                    <img className='select-none' src="gsh.png" alt="googlesheet" />
+                                </motion.div>
+                            </li>
                         </ul>
                     </div>
                 </motion.div>
