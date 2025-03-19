@@ -411,7 +411,7 @@ function ListMode({ workArray, showApiExamples }) {
                                                     <motion.div
                                                         layout
                                                         initial={{ maxHeight: 0, opacity: 0 }}
-                                                        animate={{ maxHeight: 200, opacity: 1 }}
+                                                        animate={{ maxHeight: 700, opacity: 1 }}
                                                         exit={{ maxHeight: 0, opacity: 0 }}
                                                         transition={{ duration: 0.3, ease: "easeInOut" }}
                                                         className="overflow-hidden"
