@@ -311,19 +311,62 @@ function ListMode({ workArray, showApiExamples }) {
         [exampleSentences]
     );
 
+    const [search, setSearch] = useState("");
+
+    const handleSearchChange = useCallback((e) => {
+        setSearch(e.target.value);
+    }, []);
+
+
+    const filteredArray = useMemo(() => {
+        if (!search) return workArray; 
+
+        return workArray.filter((el) =>
+            el.word.toLowerCase().includes(search.toLowerCase()) ||
+            el.translation.toLowerCase().includes(search.toLowerCase()) ||
+            el.example.toLowerCase().includes(search.toLowerCase()) ||
+            el.theme.toLowerCase().includes(search.toLowerCase())
+        );
+    }, [search, workArray]);
+
+    // Подсветка совпадений
+    const highlightMatch = (text, query) => {
+        if (!query) return text;
+        const regex = new RegExp(`(${query})`, "gi");
+        return text.split(regex).map((part, i) =>
+            part.toLowerCase() === query.toLowerCase() ? (
+                <span key={i} className="bg-yellow-300 dark:bg-yellow-600 px-1 rounded">
+                    {part}
+                </span>
+            ) : (
+                part
+            )
+        );
+    };
+
     return (
         <motion.div
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="w-full bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--dark)] dark:text-[var(--light)] my-3 border rounded-lg shadow-md overflow-hidden"
         >
             <button
-                className="w-full sticky top-0 flex justify-between items-center p-2 cursor-pointer hover:opacity-50 transition-opacity duration-300 border bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--dark)] dark:text-[var(--light)]"
+                className="w-full flex justify-between items-center p-2 cursor-pointer hover:opacity-50 transition-opacity duration-300 border bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--dark)] dark:text-[var(--light)]"
                 onClick={() => setOpenAcc((prev) => !prev)}
             >
-                <span className="font-bold text-xl">
-                    {t("count_of_words")}{workArray.length}
-                </span>
+                <span className="font-bold text-xl">{t("count_of_words")}{workArray.length}</span>
             </button>
+
+            {openAcc && (
+                <div className="p-2">
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={search}
+                        onChange={handleSearchChange}
+                        className="text-xl w-full p-2 border rounded-lg text-black dark:text-white dark:bg-gray-800"
+                    />
+                </div>
+            )}
 
             <AnimatePresence mode="wait">
                 {openAcc && (
@@ -336,15 +379,17 @@ function ListMode({ workArray, showApiExamples }) {
                     >
                         <div className="p-4 dark:text-[var(--light)] text-[var(--dark)]">
                             <ul className="text-xl">
-                                {workArray.map((el, index) => (
+                                {filteredArray.map((el, index) => (
                                     <li key={index} className="flex justify-between py-1 items-center">
                                         <div
                                             onClick={() => toggleAccordion(el.word, index)}
                                             className="flex flex-col max-w-[90%] cursor-pointer"
                                         >
-                                            <span className="hover:opacity-60 text-2xl font-bold">{el.word}</span>
+                                            <span className="hover:opacity-60 text-2xl font-bold">
+                                                {highlightMatch(el.word, search)}
+                                            </span>
                                             <span className="hover:opacity-60 text-[var(--dark)] dark:text-[var(--light)] max-w-[90%]">
-                                                {getTranslation(el.translation, -1, "translation")}
+                                                {highlightMatch(getTranslation(el.translation, -1, "translation"), search)}
                                             </span>
 
                                             <AnimatePresence>
@@ -357,10 +402,10 @@ function ListMode({ workArray, showApiExamples }) {
                                                         transition={{ duration: 0.3, ease: "easeInOut" }}
                                                         className="overflow-hidden"
                                                     >
-                                                        <div className="hover:opacity-60 border-t py-2 text-gray-700 dark:text-gray-300">
+                                                        <div className="border-t py-2 text-gray-700 dark:text-gray-300">
                                                             {!showApiExamples &&
                                                                 el.example.length > 0 && el.example.split("+").map((sentence, i) => (
-                                                                    <p
+                                                                    <p className='hover:opacity-60'
                                                                         onClick={(e) => {
                                                                             e.stopPropagation();
                                                                             speak(sentence);
