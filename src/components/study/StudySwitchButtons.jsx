@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { routeEnglishman } from '../../App.jsx';
 import { speak } from '../../Sound.js';
 
-export default function StudySwitchButtons({ currentItem, workArray, sound, setCurrentItem, setSound }) {
+export default function StudySwitchButtons({ currentItem, workArray, sound, setCurrentItem, setSound, isTrans, studyMode }) {
 
     const { t } = useTranslation();
     
@@ -19,7 +19,7 @@ export default function StudySwitchButtons({ currentItem, workArray, sound, setC
         } else {
             current = currentItem - 1 <= 0 ? 0 : currentItem - 1
         }
-        sound && speak(workArray[current].word); // if sound enable speak
+        (studyMode === "card" && !isTrans) || (sound && speak(workArray[current].word)); // if sound enable speak
         setCurrentItem(current);
     };
 

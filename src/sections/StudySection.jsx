@@ -10,8 +10,8 @@ import ModeButton from '../components/WorkModeButton.jsx';
 import { Flashcard } from '../components/study/FlashCard.jsx';
 import { getTranslation } from '../langConfig.js';
 import { PlayIcon } from "@heroicons/react/24/solid";
-import { speak } from '../Sound.js';
-import { LanguageIcon } from "@heroicons/react/24/solid";
+import { speak, playSound } from '../Sound.js';
+import { LanguageIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 import axios from 'axios';
 import i18n from '../langConfig.js';
 
@@ -86,6 +86,9 @@ export default function StudySection({
         }, [setStudyMode]);
 
         
+    const [isTrans, setIsTrans] = useState(true);
+
+
     return (
         <motion.section 
             initial= {{ opacity: 0, x: -400, scale: 0.55 }}
@@ -175,12 +178,21 @@ export default function StudySection({
 
                 <AnimatePresence>
                 { studyMode === "card" && 
-                    <Flashcard
-                        workArray={workArray}
-                        currentItem={currentItem}
-                        sound={sound}
-                        showApiExamples={showApiExamples}
-                    />
+                <>
+                    <ArrowPathIcon 
+                        onClick={() => {
+                            playSound("click.mp3");
+                            setIsTrans(prev => !prev);
+                        }}
+                        className='w-5 h-5 fon-bold cursor-pointer hover:opacity-50'/>
+                            <Flashcard
+                                workArray={workArray}
+                                currentItem={currentItem}
+                                sound={sound}
+                                showApiExamples={showApiExamples}
+                                isTrans={isTrans}
+                            />
+                </>
                 }
                 </AnimatePresence>
                 
@@ -190,6 +202,8 @@ export default function StudySection({
                     sound={sound}
                     setSound={setSound}
                     setCurrentItem={setCurrentItem}
+                    isTrans={isTrans}
+                    studyMode={studyMode}
                 />}
                 
                 {studyMode === "list" && <ListMode 
@@ -335,7 +349,7 @@ function ListMode({ workArray, showApiExamples }) {
         const regex = new RegExp(`(${query})`, "gi");
         return text.split(regex).map((part, i) =>
             part.toLowerCase() === query.toLowerCase() ? (
-                <span key={i} className="bg-yellow-300 dark:bg-yellow-600 px-1 rounded">
+                <span key={i} className="bg-blue-200 dark:bg-blue-900 px-[1px] rounded">
                     {part}
                 </span>
             ) : (
@@ -350,7 +364,7 @@ function ListMode({ workArray, showApiExamples }) {
             className="w-full bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--dark)] dark:text-[var(--light)] my-3 border rounded-lg shadow-md overflow-hidden"
         >
             <button
-                className="w-full flex justify-between items-center p-2 cursor-pointer hover:opacity-50 transition-opacity duration-300 border bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--dark)] dark:text-[var(--light)]"
+                className={`${openAcc ? "border-b": ""} w-full flex justify-between items-center p-2 cursor-pointer hover:opacity-50 transition-opacity duration-300 bg-[var(--light)] dark:bg-[var(--dark)] text-[var(--dark)] dark:text-[var(--light)]`}
                 onClick={() => setOpenAcc((prev) => !prev)}
             >
                 <span className="font-bold text-xl">{t("count_of_words")}{workArray.length}</span>
@@ -363,7 +377,7 @@ function ListMode({ workArray, showApiExamples }) {
                         placeholder="Search..."
                         value={search}
                         onChange={handleSearchChange}
-                        className="text-xl w-full p-2 border rounded-lg text-black dark:text-white dark:bg-gray-800"
+                        className="text-xl w-full px-2 py-1 border rounded-lg text-black dark:text-white dark:bg-gray-800"
                     />
                 </div>
             )}

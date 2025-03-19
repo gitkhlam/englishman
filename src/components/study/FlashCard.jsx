@@ -6,10 +6,10 @@ import { LanguageIcon } from "@heroicons/react/24/solid";
 import i18n from '../../langConfig';
 import axios from 'axios';
 
-export const Flashcard = ({ sound, workArray, currentItem, showApiExamples }) => {
+export const Flashcard = ({ sound, workArray, currentItem, showApiExamples, isTrans }) => {
     const [flipped, setFlipped] = useState(false);
     const [currentWord, setCurrentWord] = useState(workArray[currentItem].word);
-    const [currentTranslation, setCurrentTranslation] = useState(workArray[currentItem].translation);
+    const [currentTranslation, setCurrentTranslation] = useState(getTranslation(workArray, currentItem));
     const [currentExample, setCurrentExample] = useState(workArray[currentItem].example);
     const [translatedText, setTranslatedText] = useState({});
 
@@ -117,14 +117,14 @@ export const Flashcard = ({ sound, workArray, currentItem, showApiExamples }) =>
                         style={{ transformStyle: "preserve-3d" }}
                     >
                         <div className="hover:opacity-70 transition-all duration-500 absolute w-full h-full flex items-center justify-center bg-[var(--light)] dark:bg-gray-900 dark:text-[var(--light)] text-3xl font-bold rounded-2xl shadow-2xl backface-hidden p-4">
-                            {currentWord}
+                            {isTrans ? currentWord : currentTranslation}
                         </div>
-                        <div class="absolute w-full h-full flex flex-col items-center 
+                        <div className="absolute w-full h-full flex flex-col items-center 
                             bg-[var(--dark)] text-[var(--light)] dark:bg-[var(--light)] dark:text-gray-800 
                             p-4 rounded-2xl shadow-lg backface-hidden rotate-y-180 
                             overflow-y-auto max-h-full min-h-0">
-                            <div class="flex flex-col items-center justify-center flex-grow p-4">
-                                <p className="text-3xl font-semibold break-all mb-3">{currentTranslation}</p>
+                            <div className="flex flex-col items-center justify-center flex-grow p-4">
+                                <p className="text-3xl font-semibold break-all mb-3">{isTrans ? currentTranslation : currentWord}</p>
                                 {workArray.length > 0 && workArray[currentItem].example.length >= 1 && !showApiExamples && 
                                     currentExample.split("+").map((el, index) =>
                                         <span key={el} 
