@@ -59,7 +59,12 @@ export const Flashcard = ({ sound, workArray, currentItem, showApiExamples, isTr
             setTranslatedText({});
 
         }, 300);
-        setCurrentWord(workArray[currentItem].word);
+        !isTrans && flipped && setCurrentTranslation(workArray.length > 0 && getTranslation(workArray, currentItem));
+
+        setTimeout(() => {
+            setCurrentWord(workArray[currentItem].word);
+        }, 200);
+
         setFlipped(prev => prev === true && false);
         
     }, [currentItem, workArray, showApiExamples]);
