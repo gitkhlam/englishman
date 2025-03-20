@@ -200,7 +200,7 @@ function AppContent() {
                     </AnimatePresence>
 
                     </main>
-                <footer className="p-5 text-center font-semibold"><span>Kyiv {new Date().getFullYear()}</span></footer>
+                <footer className="relative p-5 text-center font-semibold"><span>Kyiv {new Date().getFullYear()}</span></footer>
             </div>
             <AnimatePresence mode="wait">
                 {settingsVisible && <SettingsWindow showApiMenu={showApiMenu} sound={sound} setSound={setSound} theme={theme} setTheme={setTheme} setSettingsVisible={setSettingsVisible} resetAll={resetAll} googleSpread={googleSpread} setGoogleSpread={setGoogleSpread} googleLink={googleLink} setGoogleLink={setGoogleLink} wrongWords={wrongWords} setMistakeTest={setMistakeTest} setShowApiExamples={setShowApiExamples} showApiExamples={showApiExamples} />}

@@ -6,7 +6,7 @@ import { LanguageIcon } from "@heroicons/react/24/solid";
 import i18n from '../../langConfig';
 import axios from 'axios';
 
-export const Flashcard = ({ sound, workArray, currentItem, showApiExamples, isTrans }) => {
+export const Flashcard = ({ sound, workArray, currentItem, showApiExamples, isTrans, examplesMode }) => {
     const [flipped, setFlipped] = useState(false);
     const [currentWord, setCurrentWord] = useState(workArray[currentItem].word);
     const [currentTranslation, setCurrentTranslation] = useState(getTranslation(workArray, currentItem));
@@ -65,7 +65,7 @@ export const Flashcard = ({ sound, workArray, currentItem, showApiExamples, isTr
             setCurrentWord(workArray[currentItem].word);
         }, 200);
 
-        setFlipped(prev => prev === true && false);
+        !examplesMode && setFlipped(prev => prev === true && false);
         
     }, [currentItem, workArray, showApiExamples]);
 

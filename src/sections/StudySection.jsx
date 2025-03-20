@@ -11,7 +11,7 @@ import { Flashcard } from '../components/study/FlashCard.jsx';
 import { getTranslation } from '../langConfig.js';
 import { PlayIcon } from "@heroicons/react/24/solid";
 import { speak, playSound } from '../Sound.js';
-import { LanguageIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
+import { LanguageIcon, ArrowPathIcon, AcademicCapIcon } from "@heroicons/react/24/solid";
 import axios from 'axios';
 import i18n from '../langConfig.js';
 
@@ -87,6 +87,7 @@ export default function StudySection({
 
         
     const [isTrans, setIsTrans] = useState(true);
+    const [examplesMode, setExamplesMode] = useState(false);
 
 
     return (
@@ -179,18 +180,27 @@ export default function StudySection({
                 <AnimatePresence>
                 { studyMode === "card" && 
                 <>
-                    <ArrowPathIcon 
-                        onClick={() => {
-                            playSound("click.mp3");
-                            setIsTrans(prev => !prev);
-                        }}
-                        className='w-5 h-5 fon-bold cursor-pointer hover:opacity-50'/>
+                    <div className='flex gap-2'>
+                        <ArrowPathIcon
+                            onClick={() => {
+                                playSound("click.mp3");
+                                setIsTrans(prev => !prev);
+                            }}
+                            className={`w-5 h-5 ${!isTrans ? "text-green-400" :""} cursor-pointer hover:opacity-50`} />
+                        <AcademicCapIcon
+                            onClick={() => {
+                                playSound("click.mp3");
+                                setExamplesMode(prev => !prev);
+                            }}
+                            className={`w-5 h-5 ${examplesMode ? "text-green-400" : ""} cursor-pointer hover:opacity-50`} />
+                    </div>
                             <Flashcard
                                 workArray={workArray}
                                 currentItem={currentItem}
                                 sound={sound}
                                 showApiExamples={showApiExamples}
                                 isTrans={isTrans}
+                                examplesMode={examplesMode}
                             />
                 </>
                 }
